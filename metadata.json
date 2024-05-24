@@ -1,0 +1,12 @@
+{
+  "name": "Custom Command List",
+  "description": "Run user defined terminal/shell commands by selecting them from a customizable drop-down menu at the top bar.",
+  "uuid": "custom-command-list@storageb.github.com",
+  "shell-version": [ "45", "46" ],
+  "version": 1,
+  "url": "https://github.com/StorageB/custom-command-list",
+  "settings-schema": "org.gnome.shell.extensions.custom-command-list",
+  "donations": {
+    "buymeacoffee": "StorageB"
+  }
+}
