@@ -1,1 +1,65 @@
-
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+  <schema id="org.gnome.shell.extensions.custom-command-list" path="/org/gnome/shell/extensions/custom-command-list/">
+    <key name="entryrow1a-setting" type="s">
+      <default>'Hello world!'</default>
+    </key>
+    <key name="entryrow1b-setting" type="s">
+      <default>'notify-send "Custom Command List" "Hello world!"'</default>
+    </key>
+    <key name="entryrow2a-setting" type="s">
+      <default>""</default>
+    </key>
+    <key name="entryrow2b-setting" type="s">
+      <default>""</default>
+    </key>
+    <key name="entryrow3a-setting" type="s">
+      <default>""</default>
+    </key>
+    <key name="entryrow3b-setting" type="s">
+      <default>""</default>
+    </key>
+    <key name="entryrow4a-setting" type="s">
+      <default>""</default>
+    </key>
+    <key name="entryrow4b-setting" type="s">
+      <default>""</default>
+    </key>
+    <key name="entryrow5a-setting" type="s">
+      <default>""</default>
+    </key>
+    <key name="entryrow5b-setting" type="s">
+      <default>""</default>
+    </key>
+    <key name="entryrow6a-setting" type="s">
+      <default>""</default>
+    </key>
+    <key name="entryrow6b-setting" type="s">
+      <default>""</default>
+    </key>
+    <key name="entryrow7a-setting" type="s">
+      <default>""</default>
+    </key>
+    <key name="entryrow7b-setting" type="s">
+      <default>""</default>
+    </key>
+    <key name="entryrow8a-setting" type="s">
+      <default>""</default>
+    </key>
+    <key name="entryrow8b-setting" type="s">
+      <default>""</default>
+    </key>
+    <key name="entryrow9a-setting" type="s">
+      <default>""</default>
+    </key>
+    <key name="entryrow9b-setting" type="s">
+      <default>""</default>
+    </key>
+    <key name="entryrow10a-setting" type="s">
+      <default>""</default>
+    </key>
+    <key name="entryrow10b-setting" type="s">
+      <default>""</default>
+    </key>
+  </schema>
+</schemalist>
