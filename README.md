@@ -13,7 +13,7 @@ Custom Command List is a GNOME extension to run user defined terminal/shell comm
 
 ## Installation
 
-Browse for and install this extension through the GNOME Extension tool or install through the [GNOME Extensions website](https://extensions.gnome.org/).
+Browse for and install this extension through the GNOME Extension tool or install through the [GNOME Extensions website](https://extensions.gnome.org/extension/7024/custom-command-list/).
 
 <br>
 
