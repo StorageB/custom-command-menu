@@ -22,6 +22,15 @@ Custom Command List is a GNOME extension to run user defined terminal/shell comm
 
 Browse for and install this extension through the GNOME Extension tool or install through the [GNOME Extensions website](https://extensions.gnome.org/extension/7024/custom-command-list/).
 
+OR
+
+Manual Installation:
+
+1. Download the  custom-command-list.zip file of the [latest release](https://github.com/StorageB/custom-command-list/releases/tag/v1). 
+2. Run the following command from the terminal:
+`gnome-extensions install --force custom-command-list.zip`
+3. Logout and login.
+
 <br>
 
 ## Configuration
