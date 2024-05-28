@@ -7,7 +7,14 @@ Custom Command List is a GNOME extension to run user defined terminal/shell comm
 
 <br>
 
-![Screenshot-main](screenshots/Screenshot-main-2.png)
+![Screenshot-main](screenshots/Screenshot-main-3.png)
+
+<br>
+
+## Features:
+
+- Run commands by selecting them from a drop-down menu at the top bar.
+- Enter commands directly into the extension preferences window without the need for configuring any external files.
 
 <br>
 
