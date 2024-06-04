@@ -42,7 +42,8 @@ From the extension's preferences, enter the terminal/shell commands to include i
 Tips:
 - Run multiple commands by using `&` between commands.
 - Chain multiple commands together to run one at a time using `&&` between commands.
-- Test the full command first by running it in the terminal before adding it to the extension to verify it is correct. Note that because the command is not running in a terminal window, there will not be any output or error messages.
+- Test the full command first by running it in the terminal before adding it to the extension to verify it is correct. Note that because the command is not running in a terminal window by default, there will not be any output or error messages.
+- To run a command in a terminal window, use `gnome-terminal -- command`. Note that by default the GNOME terminal will close after the command is complete, but that can be changed in the terminal preferences if needed.
 
 <br>
 
