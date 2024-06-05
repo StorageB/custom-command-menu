@@ -58,7 +58,7 @@ Here are some ideas on how this extension can be used:
 
 ## Contributing
 
-Contributions are welcome! Feel free to open an issue or submit a pull request to contribute to this project.
+Contributions are welcome! Feel free to open an issue to request features/upgrades or submit a pull request to contribute to this project.
 
 <br>
 
