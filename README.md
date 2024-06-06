@@ -1,8 +1,8 @@
-# Custom Command List
+# Custom Command Menu
 
 #### A GNOME extension to run shell commands from a drop-down menu.
 
-Custom Command List is a GNOME extension to run user defined terminal/shell commands by selecting them from a drop-down menu at the top bar. 
+Custom Command Menu is a GNOME extension to run user defined terminal/shell commands by selecting them from a drop-down menu at the top bar. 
 
 
 <br>
@@ -58,7 +58,7 @@ Here are some ideas on how this extension can be used:
 
 ## Contributing
 
-Contributions are welcome! Feel free to open an issue to request features/upgrades or submit a pull request to contribute to this project.
+Contributions are welcome! Feel free to open an issue to request new features or submit a pull request to contribute to this project.
 
 <br>
 
