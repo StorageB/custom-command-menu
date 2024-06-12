@@ -2,7 +2,7 @@
 
 #### A GNOME extension to run shell commands from a drop-down menu.
 
-Custom Command Menu is a GNOME extension to run user defined terminal/shell commands by selecting them from a drop-down menu at the top bar. 
+Custom Command Menu is an extension for GNOME 45/46 to run user defined commands by selecting them from a drop-down menu at the top bar. 
 
 
 <br>
@@ -14,6 +14,7 @@ Custom Command Menu is a GNOME extension to run user defined terminal/shell comm
 ## Features:
 
 - Run commands by selecting them from a drop-down menu at the top bar.
+- Give each command entry a custom name and icon.
 - Enter commands directly into the extension preferences window without the need for configuring any external files.
 
 <br>
