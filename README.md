@@ -41,7 +41,7 @@ From the extension's preferences, enter the terminal/shell commands to include i
 For a list of available icons to use:
 https://github.com/StorageB/icons/blob/main/Yaru/icons.md 
 
-Alternatively, navigate to the icon directory for your system’s theme (located at `/usr/share/icons`).
+Alternatively, navigate to the icon directory for your system’s theme (located at /usr/share/icons), or use the [Icon Library app](https://flathub.org/apps/org.gnome.design.IconLibrary).
 
 Enter the name of the icon (without the file extension) you want to use. Note that icon appearance will vary depending on your systems's theme.
 
