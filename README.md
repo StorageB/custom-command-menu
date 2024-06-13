@@ -38,12 +38,12 @@ Manual Installation:
 
 From the extension's preferences, enter the terminal/shell commands to include in the drop-down menu and the associated display name for each command. If the name field is left empty, the command will not appear in the drop-down menu.
 
-For a list of available icons to use, refer to: 
+For a list of available icons to use:
 https://github.com/StorageB/icons/blob/main/Yaru/icons.md 
 
-Alternatively, navigate to the icon directory for your system’s theme (located at `/usr/share/icons`) and enter the name of the icon (without the extension) you want to use.
+Alternatively, navigate to the icon directory for your system’s theme (located at `/usr/share/icons`).
 
-Note that icon appearance will vary depending on your systems's theme.
+Enter the name of the icon (without the file extension) you want to use. Note that icon appearance will vary depending on your systems's theme.
 
 ![Screenshot-commands](screenshots/Screenshot-command-4.png)
 
