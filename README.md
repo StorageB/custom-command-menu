@@ -7,7 +7,7 @@ Custom Command Menu is an extension for GNOME 45/46 to run user defined commands
 
 <br>
 
-![Screenshot-main](screenshots/Screenshot-main-3.png)
+![Screenshot-main](screenshots/Screenshot-main-4.png)
 
 <br>
 
@@ -38,7 +38,14 @@ Manual Installation:
 
 From the extension's preferences, enter the terminal/shell commands to include in the drop-down menu and the associated display name for each command. If the name field is left empty, the command will not appear in the drop-down menu.
 
-![Screenshot-commands](screenshots/Screenshot-command.png)
+For a list of available icons to use, refer to: 
+https://github.com/StorageB/icons/blob/main/Yaru/icons.md 
+
+Alternatively, navigate to the icon directory for your system’s theme (located at `/usr/share/icons`) and enter the name of the icon (without the extension) you want to use.
+
+Note that icon appearance will vary depending on your systems's theme.
+
+![Screenshot-commands](screenshots/Screenshot-command-4.png)
 
 Tips:
 - Run multiple commands by using `&` between commands.
@@ -53,7 +60,7 @@ Tips:
 Here are some ideas on how this extension can be used:
 - Create a command that automatically launches all the applications and web pages you need opened.
 - Launch custom bash scripts or python scripts.
-- Create a command to create a backup of your documents.
+- Create a command to backup or sync your documents with another directory.
 
 <br>
 
