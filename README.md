@@ -29,7 +29,7 @@ Manual Installation:
 
 1. Download the  custom-command-list.zip file of the [latest release](https://github.com/StorageB/custom-command-list/releases/tag/v1). 
 2. Run the following command from the terminal:
-`gnome-extensions install --force custom-command-list.zip`
+`gnome-extensions install --force custom-command-menu.zip`
 3. Logout and login.
 
 <br>
