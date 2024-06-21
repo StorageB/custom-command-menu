@@ -32,7 +32,7 @@ export default class CustomCommandListPreferences extends ExtensionPreferences {
             });
             const entryrowA = new Adw.EntryRow({
                 title: _('Name:'),
-            });            
+            });
             const entryrowB = new Adw.EntryRow({
                 title: _('Command:'),
             });
@@ -44,7 +44,7 @@ export default class CustomCommandListPreferences extends ExtensionPreferences {
             expanderRow.add_row(entryrowA);
             expanderRow.add_row(entryrowB);
             expanderRow.add_row(entryrowC);
-
+            
             // Bind settings 
             window._settings = this.getSettings();
             window._settings.bind(`entryrow${i}a-setting`, entryrowA, 'text', Gio.SettingsBindFlags.DEFAULT);
@@ -53,7 +53,7 @@ export default class CustomCommandListPreferences extends ExtensionPreferences {
 
             // Connect signals to update title and subtitle of ExpanderRow
             entryrowA.connect('notify::text', () => {
-                expanderRow.title = entryrowA.text
+                expanderRow.title = entryrowA.text;
                 expanderRow.subtitle = (entryrowA.text === '' && entryrowB.text === '') ? ('(not assigned)') : entryrowB.text.replace(/&/g, '&amp;');
             });
             entryrowB.connect('notify::text', () => {
@@ -103,7 +103,7 @@ export default class CustomCommandListPreferences extends ExtensionPreferences {
             Gio.app_info_launch_default_for_uri('https://github.com/StorageB/icons/blob/main/Yaru/icons.md', null);
         });
         configRow3.add_prefix(new Gtk.Image({icon_name: 'web-browser-symbolic'}));
-        configRow3.add_suffix(new Gtk.Image({icon_name: 'external-link-symbolic'}));
+        configRow3.add_suffix(new Gtk.Image({icon_name: 'go-next-symbolic'}));
         
         const configRow4 = new Adw.ActionRow({
             title: _('Local Icons'),
@@ -114,7 +114,7 @@ export default class CustomCommandListPreferences extends ExtensionPreferences {
             Gio.app_info_launch_default_for_uri('file:///usr/share/icons', null);
         });
         configRow4.add_prefix(new Gtk.Image({icon_name: 'folder-symbolic'}));
-        configRow4.add_suffix(new Gtk.Image({icon_name: 'external-link-symbolic'}));
+        configRow4.add_suffix(new Gtk.Image({icon_name: 'go-next-symbolic'}));
         
         const aboutGroup = new Adw.PreferencesGroup({
             title: _('About'),
@@ -129,7 +129,7 @@ export default class CustomCommandListPreferences extends ExtensionPreferences {
             Gio.app_info_launch_default_for_uri('https://github.com/StorageB/custom-command-menu', null);
         });
         aboutRow1.add_prefix(new Gtk.Image({icon_name: 'go-home-symbolic'}));
-        aboutRow1.add_suffix(new Gtk.Image({icon_name: 'external-link-symbolic'}));
+        aboutRow1.add_suffix(new Gtk.Image({icon_name: 'go-next-symbolic'}));
         
         const aboutRow2 = new Adw.ActionRow({
             title: _('Extension Page'),
@@ -140,7 +140,7 @@ export default class CustomCommandListPreferences extends ExtensionPreferences {
             Gio.app_info_launch_default_for_uri('https://extensions.gnome.org/extension/7024/custom-command-list/', null);
         });
         aboutRow2.add_prefix(new Gtk.Image({icon_name: 'web-browser-symbolic'}));
-        aboutRow2.add_suffix(new Gtk.Image({icon_name: 'external-link-symbolic'}));
+        aboutRow2.add_suffix(new Gtk.Image({icon_name: 'go-next-symbolic'}));
         
 
         page2.add(configGroup1);
