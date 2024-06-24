@@ -21,13 +21,13 @@ Custom Command Menu is an extension for GNOME 45/46 to run user defined commands
 
 ## Installation
 
+### Recommended
+
 Browse for and install this extension through the GNOME Extension tool or install through the [GNOME Extensions website](https://extensions.gnome.org/extension/7024/custom-command-list/).
 
-OR
+### Manual
 
-Manual Installation:
-
-1. Download the  custom-command-menu.zip file of the [latest release](https://github.com/StorageB/custom-command-menu/releases/tag/v2). 
+1. Download the  custom-command-menu.zip file of the [latest release](https://github.com/StorageB/custom-command-menu/releases/tag/v3). 
 2. Run the following command from the terminal:
 `gnome-extensions install --force custom-command-menu.zip`
 3. Logout and login.
