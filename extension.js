@@ -50,11 +50,21 @@ class CommandMenu extends PanelMenu.Button {
     constructor() {
         super(0.5, _('Commands'));
 
+        // Use this label to create the Commands menu text
         let label = new St.Label({
             text: _('Commands'),
             y_expand: true,
             y_align: Clutter.ActorAlign.CENTER,
         });
+        
+        // Use this label to create an icon for the menu instead of the Commands text
+        /*-------------------------------------
+        let label = new St.Icon({
+            icon_name: 'go-down-symbolic', 
+            style_class: 'system-status-icon',
+        });
+        --------------------------------------*/
+
         this.add_child(label);
 
         if (entryrow1a.trim() !== '') {
