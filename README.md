@@ -5,17 +5,16 @@
 Custom Command Menu is an extension for GNOME 45/46 to run user defined commands by selecting them from a drop-down menu at the top bar. 
 
 
-<br>
-
 ![Screenshot-main](screenshots/Screenshot-main-4.png)
 
 <br>
 
-## Features:
+## Features
 
 - Run commands by selecting them from a drop-down menu at the top bar.
 - Give each command entry a custom name and icon.
 - Enter commands directly into the extension preferences window without the need for configuring any external files.
+- Support for up to 20 commands.
 
 <br>
 
@@ -39,7 +38,8 @@ Browse for and install this extension through the GNOME Extension tool or instal
 From the extension's preferences, enter the terminal/shell commands to include in the drop-down menu and the associated display name for each command. If the name field is left empty, the command will not appear in the drop-down menu.
 
 For a list of available icons to use:
-https://github.com/StorageB/icons/blob/main/Yaru/icons.md 
+https://github.com/StorageB/icons/blob/main/GNOME46Adwaita/icons.md
+
 Alternatively, navigate to the icon directory for your system’s theme (located at /usr/share/icons), or use the [Icon Library app](https://flathub.org/apps/org.gnome.design.IconLibrary).
 
 Enter the name of the icon without the file extension. Note that icon appearance will vary depending on your systems's theme.
