@@ -91,5 +91,96 @@
     <key name="entryrow10c-setting" type="s">
       <default>""</default>
     </key>
+
+    <key name="entryrow11a-setting" type="s">
+      <default>""</default>
+    </key>
+    <key name="entryrow11b-setting" type="s">
+      <default>""</default>
+    </key>
+    <key name="entryrow11c-setting" type="s">
+      <default>""</default>
+    </key>   
+    <key name="entryrow12a-setting" type="s">
+      <default>""</default>
+    </key>
+    <key name="entryrow12b-setting" type="s">
+      <default>""</default>
+    </key>
+    <key name="entryrow12c-setting" type="s">
+      <default>""</default>
+    </key>
+    <key name="entryrow13a-setting" type="s">
+      <default>""</default>
+    </key>
+    <key name="entryrow13b-setting" type="s">
+      <default>""</default>
+    </key>
+    <key name="entryrow13c-setting" type="s">
+      <default>""</default>
+    </key>
+    <key name="entryrow14a-setting" type="s">
+      <default>""</default>
+    </key>
+    <key name="entryrow14b-setting" type="s">
+      <default>""</default>
+    </key>
+    <key name="entryrow14c-setting" type="s">
+      <default>""</default>
+    </key>
+    <key name="entryrow15a-setting" type="s">
+      <default>""</default>
+    </key>
+    <key name="entryrow15b-setting" type="s">
+      <default>""</default>
+    </key>
+    <key name="entryrow15c-setting" type="s">
+      <default>""</default>
+    </key>
+    <key name="entryrow16a-setting" type="s">
+      <default>""</default>
+    </key>
+    <key name="entryrow16b-setting" type="s">
+      <default>""</default>
+    </key>
+    <key name="entryrow16c-setting" type="s">
+      <default>""</default>
+    </key>
+    <key name="entryrow17a-setting" type="s">
+      <default>""</default>
+    </key>
+    <key name="entryrow17b-setting" type="s">
+      <default>""</default>
+    </key>
+    <key name="entryrow17c-setting" type="s">
+      <default>""</default>
+    </key>
+    <key name="entryrow18a-setting" type="s">
+      <default>""</default>
+    </key>
+    <key name="entryrow18b-setting" type="s">
+      <default>""</default>
+    </key>
+    <key name="entryrow18c-setting" type="s">
+      <default>""</default>
+    </key>
+    <key name="entryrow19a-setting" type="s">
+      <default>""</default>
+    </key>
+    <key name="entryrow19b-setting" type="s">
+      <default>""</default>
+    </key>
+    <key name="entryrow19c-setting" type="s">
+      <default>""</default>
+    </key>
+    <key name="entryrow20a-setting" type="s">
+      <default>""</default>
+    </key>
+    <key name="entryrow20b-setting" type="s">
+      <default>""</default>
+    </key>
+    <key name="entryrow20c-setting" type="s">
+      <default>""</default>
+    </key>
   </schema>
 </schemalist>

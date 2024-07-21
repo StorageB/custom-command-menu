@@ -20,7 +20,7 @@ export default class CustomCommandListPreferences extends ExtensionPreferences {
         page.add(group0);
 
         // Create groups and entry rows for commands
-        for (let i = 1; i <= 10; i++) {
+        for (let i = 1; i <= 20; i++) {
             const group = new Adw.PreferencesGroup({});
             page.add(group);
 
@@ -53,11 +53,11 @@ export default class CustomCommandListPreferences extends ExtensionPreferences {
 
             // Connect signals to update title and subtitle of ExpanderRow
             entryrowA.connect('notify::text', () => {
-                expanderRow.title = entryrowA.text;
-                expanderRow.subtitle = (entryrowA.text === '' && entryrowB.text === '') ? ('(not assigned)') : entryrowB.text.replace(/&/g, '&amp;');
+                expanderRow.title = entryrowA.text.replace(/&/g, '&amp;');
+                expanderRow.subtitle = (entryrowA.text === '' && entryrowB.text === '') ? (`(${i})`) : entryrowB.text.replace(/&/g, '&amp;');
             });
             entryrowB.connect('notify::text', () => {
-                expanderRow.subtitle = (entryrowA.text === '' && entryrowB.text === '') ? ('(not assigned)') : entryrowB.text.replace(/&/g, '&amp;');
+                expanderRow.subtitle = (entryrowA.text === '' && entryrowB.text === '') ? (`(${i})`) : entryrowB.text.replace(/&/g, '&amp;');
             });
 
             // Initialize title and subtitle
@@ -100,7 +100,7 @@ export default class CustomCommandListPreferences extends ExtensionPreferences {
             activatable: true,
         });
         configRow3.connect('activated', () => {
-            Gio.app_info_launch_default_for_uri('https://github.com/StorageB/icons/blob/main/Yaru/icons.md', null);
+            Gio.app_info_launch_default_for_uri('https://github.com/StorageB/icons/blob/main/GNOME46Adwaita/icons.md', null);
         });
         configRow3.add_prefix(new Gtk.Image({icon_name: 'web-browser-symbolic'}));
         configRow3.add_suffix(new Gtk.Image({icon_name: 'go-next-symbolic'}));
