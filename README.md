@@ -26,7 +26,7 @@ Browse for and install this extension through the GNOME Extension tool or instal
 
 ### Manual
 
-1. Download the  custom-command-menu.zip file of the [latest release](https://github.com/StorageB/custom-command-menu/releases/tag/v3). 
+1. Download the  custom-command-menu.zip file of the [latest release](https://github.com/StorageB/custom-command-menu/releases/tag/v4). 
 2. Run the following command from the terminal:
 `gnome-extensions install --force custom-command-menu.zip`
 3. Logout and login.
