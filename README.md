@@ -2,7 +2,7 @@
 
 #### A GNOME extension to run shell commands from a drop-down menu.
 
-Custom Command Menu is an extension for GNOME 45/46 to run user defined commands by selecting them from a drop-down menu at the top bar. 
+Custom Command Menu is an extension for GNOME 45/46/47 to run user defined commands from a drop-down menu at the top bar. 
 
 
 ![Screenshot-main](screenshots/Screenshot-main-4.png)
@@ -14,7 +14,8 @@ Custom Command Menu is an extension for GNOME 45/46 to run user defined commands
 - Run commands by selecting them from a drop-down menu at the top bar.
 - Give each command entry a custom name and icon.
 - Enter commands directly into the extension preferences window without the need for configuring any external files.
-- Support for up to 20 commands.
+- Backup and restore the command list to an easily editable configuration file.
+
 
 <br>
 
@@ -26,7 +27,7 @@ Browse for and install this extension through the GNOME Extension tool or instal
 
 ### Manual
 
-1. Download the  custom-command-menu.zip file of the [latest release](https://github.com/StorageB/custom-command-menu/releases/tag/v4). 
+1. Download the  custom-command-menu.zip file of the [latest release](https://github.com/StorageB/custom-command-menu/releases/). 
 2. Run the following command from the terminal:
 `gnome-extensions install --force custom-command-menu.zip`
 3. Logout and login.
@@ -54,6 +55,18 @@ Command tips:
 - Sudo commands require a password input from the terminal, so they will not directly work by themselves since commands run without a terminal window by default. However, you can use `gnome-terminal -- command` to run the command in the terminal. For example, `gnome-terminal -- sudo apt-get update` will open a terminal, prompt for your password, and then run the command.
 
 <br>
+
+## Backup and Restore
+
+The export option will save the current list of commands, along with their associated names and icons, to a commands.ini file in the user's home directory. The import option restores commands from the commands.ini file overwriting the existing list of commands.
+
+Example commands.ini entry:
+```
+[Command 1]
+Name=Hello world!
+Command=notify-send "Custom Command Menu" "Hello world!"
+Icon=face-smile-symbolic
+```
 
 <!--
 ## Usage Examples and Suggestions

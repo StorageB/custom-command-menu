@@ -3,8 +3,14 @@
 import Gio from 'gi://Gio';
 import Adw from 'gi://Adw';
 import Gtk from 'gi://Gtk';
+import GLib from 'gi://GLib';
 
 import { ExtensionPreferences, gettext as _ } from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js';
+import {releaseNotes} from './about.js';
+
+let numberOfCommands = 20;
+let fileName = 'commands.ini';
+let filePath = GLib.build_filenamev([GLib.get_home_dir(), fileName]);
 
 export default class CustomCommandListPreferences extends ExtensionPreferences {
     fillPreferencesWindow(window) {
@@ -20,7 +26,7 @@ export default class CustomCommandListPreferences extends ExtensionPreferences {
         page.add(group0);
 
         // Create groups and entry rows for commands
-        for (let i = 1; i <= 20; i++) {
+        for (let i = 1; i <= numberOfCommands; i++) {
             const group = new Adw.PreferencesGroup({});
             page.add(group);
 
@@ -67,13 +73,142 @@ export default class CustomCommandListPreferences extends ExtensionPreferences {
 
 
         const page2 = new Adw.PreferencesPage({
-            title: _('Information'),
-            icon_name: 'help-about-symbolic',
+            title: _('Configuration'),
+            icon_name: 'applications-system-symbolic',
         });
         window.add(page2);
 
+        const settingsGroup1 = new Adw.PreferencesGroup({
+            title: _('Backup and Restore'),
+        });
+
+        const exportRow = new Adw.ActionRow({
+            title: _('Export Command List'),
+            subtitle: _(`Click to export ${fileName} configuration file to user's home directory`),
+            activatable: true,
+        });
+        exportRow.add_prefix(new Gtk.Image({icon_name: 'emblem-documents-symbolic'}));
+        
+        exportRow.connect('activated', () => {
+            let keyFile = new GLib.KeyFile();
+        
+            // Loop through command entries and write them to the keyfile
+            for (let i = 1; i <= numberOfCommands; i++) {
+                let name = window._settings.get_string(`entryrow${i}a-setting`);
+                let command = window._settings.get_string(`entryrow${i}b-setting`);
+                let icon = window._settings.get_string(`entryrow${i}c-setting`);
+                // Only write commands that are not blank
+                if (name !== '' || command !== '' || icon !== '') {
+                    keyFile.set_string(`Command ${i}`, 'Name', name);
+                    keyFile.set_string(`Command ${i}`, 'Command', command);
+                    keyFile.set_string(`Command ${i}`, 'Icon', icon);
+                }
+            }        
+        
+            // Try saving the keyfile to the file
+            try {
+                keyFile.save_to_file(filePath);
+                console.log(`Custom Command Menu extension exported commands to ${filePath}`);
+                const toast = Adw.Toast.new(_(`Commands exported to: ${filePath}`));
+                toast.set_timeout(3);
+                window.add_toast(toast);
+            } catch (e) {
+                console.log(`Custom Command Menu extension failed to export commands\n${e}`);
+                const toast = Adw.Toast.new(_(`Export Error`));
+                toast.set_timeout(3);
+                toast.set_button_label(_('Details'));
+                toast.connect('button-clicked', () => {
+                    let errorDialog = new Adw.MessageDialog({
+                        transient_for: window,
+                        modal: true,
+                        heading: _('Export Error'),
+                        body: _(`Failed to export command list\n\n${e}`),
+                    });
+                    errorDialog.add_response('ok', _('OK'));
+                    errorDialog.connect('response', () => errorDialog.destroy());
+                    errorDialog.show();
+                });
+                window.add_toast(toast);
+            }
+        });
+        
+        const importRow = new Adw.ActionRow({
+            title: _('Import Command List'),
+            subtitle: _(`Click to import ${fileName} configuration file from user's home directory`),
+            activatable: true,
+        });
+        importRow.add_prefix(new Gtk.Image({icon_name: 'emblem-documents-symbolic'}));
+
+        importRow.connect('activated', () => {
+            let filePath = GLib.build_filenamev([GLib.get_home_dir(), fileName]);
+            let keyFile = new GLib.KeyFile();
+        
+            // Check if the file exists
+            if (!GLib.file_test(filePath, GLib.FileTest.EXISTS)) {
+                const toast = Adw.Toast.new(_(`File not found`));
+                toast.set_timeout(3);
+                toast.set_button_label(_('Details'));
+                toast.connect('button-clicked', () => {
+                    let errorDialog = new Adw.MessageDialog({
+                        transient_for: window,
+                        modal: true,
+                        heading: _('File Not Found'),
+                        body: _(`The ${fileName} configuration file could not be found in the user's home directory. ` +
+                            `Verify the following file exists:\n\n` +
+                            `${filePath}`),
+                    });
+                    errorDialog.add_response('ok', _('OK'));
+                    errorDialog.connect('response', () => errorDialog.destroy());
+                    errorDialog.show();
+                });
+                window.add_toast(toast);
+                return; // Exit the function if file does not exist
+            }
+        
+            try {
+                keyFile.load_from_file(filePath, GLib.KeyFileFlags.NONE);
+                let commandCount = 0;
+                for (let i = 1; i <= numberOfCommands; i++) {
+                    if (keyFile.has_group(`Command ${i}`)) {
+                        let name = keyFile.get_string(`Command ${i}`, 'Name');
+                        let command = keyFile.get_string(`Command ${i}`, 'Command');
+                        let icon = keyFile.get_string(`Command ${i}`, 'Icon');
+                        window._settings.set_string(`entryrow${i}a-setting`, name);
+                        window._settings.set_string(`entryrow${i}b-setting`, command);
+                        window._settings.set_string(`entryrow${i}c-setting`, icon);
+                        commandCount++;
+                    } else {
+                        window._settings.set_string(`entryrow${i}a-setting`, "");
+                        window._settings.set_string(`entryrow${i}b-setting`, "");
+                        window._settings.set_string(`entryrow${i}c-setting`, "");
+                    }
+                }
+                console.log(`Custom Command Menu extension imported commands from ${filePath}`);
+                const toast = Adw.Toast.new(_(`Successfully imported ${commandCount} command${commandCount != 1 ? 's' : ''}`));
+                toast.set_timeout(3);
+                window.add_toast(toast);
+            } catch (e) {
+                console.log(`Custom Command Menu extension failed to import commands\n${e}`);
+                const toast = Adw.Toast.new(_(`Import Error`));
+                toast.set_timeout(3);
+                toast.set_button_label(_('Details'));
+                toast.connect('button-clicked', () => {
+                    let errorDialog = new Adw.MessageDialog({
+                        transient_for: window,
+                        modal: true,
+                        heading: _('Import Error'),
+                        body: _(`Failed to import command list\n\n${e}`),
+                    });
+                    errorDialog.add_response('ok', _('OK'));
+                    errorDialog.connect('response', () => errorDialog.destroy());
+                    errorDialog.show();
+                });
+                window.add_toast(toast);
+            }
+        });
+
         const configGroup1 = new Adw.PreferencesGroup({
-            title: _('Configuration'),
+            title: _('Setup'),
         });
 
         const configRow1 = new Adw.ActionRow({
@@ -117,8 +252,27 @@ export default class CustomCommandListPreferences extends ExtensionPreferences {
         configRow4.add_suffix(new Gtk.Image({icon_name: 'go-next-symbolic'}));
         
         const aboutGroup = new Adw.PreferencesGroup({
-            title: _('About'),
+            title: _('Information'),
         });
+
+        const aboutRow0 = new Adw.ActionRow({
+            title: _('What\'s New'),
+            subtitle: _('List of recent changes and improvements'),
+            activatable: true,
+        });
+        aboutRow0.connect('activated', () => {
+            const dialog = new Gtk.MessageDialog({
+                transient_for: window,
+                modal: true,
+                text: _('Release Notes'),
+                secondary_text: releaseNotes,
+                buttons: Gtk.ButtonsType.CLOSE,
+            });
+            dialog.connect('response', () => dialog.destroy());
+            dialog.show();
+        });
+        aboutRow0.add_prefix(new Gtk.Image({icon_name: 'dialog-information-symbolic'}));
+        aboutRow0.add_suffix(new Gtk.Image({icon_name: 'go-next-symbolic'}));
         
         const aboutRow1 = new Adw.ActionRow({
             title: _('Homepage'),
@@ -149,7 +303,12 @@ export default class CustomCommandListPreferences extends ExtensionPreferences {
         configGroup1.add(configRow3);
         configGroup1.add(configRow4);
 
+        page2.add(settingsGroup1);
+        settingsGroup1.add(exportRow);
+        settingsGroup1.add(importRow);
+
         page2.add(aboutGroup);
+        aboutGroup.add(aboutRow0);
         aboutGroup.add(aboutRow1);
         aboutGroup.add(aboutRow2);
 

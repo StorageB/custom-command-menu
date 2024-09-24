@@ -8,9 +8,10 @@
   "settings-schema": "org.gnome.shell.extensions.custom-command-list",
   "shell-version": [
     "45",
-    "46"
+    "46",
+    "47"
   ],
   "url": "https://github.com/StorageB/custom-command-menu",
   "uuid": "custom-command-list@storageb.github.com",
-  "version": 4
+  "version": 5
 }
