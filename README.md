@@ -21,16 +21,20 @@ Custom Command Menu is an extension for GNOME 45/46/47 to run user defined comma
 
 ## Installation
 
+<!--
 ### Recommended
+-->
 
 Browse for and install this extension through the GNOME Extension tool or install through the [GNOME Extensions website](https://extensions.gnome.org/extension/7024/custom-command-list/).
 
+<!--
 ### Manual
 
 1. Download the  custom-command-menu.zip file of the [latest release](https://github.com/StorageB/custom-command-menu/releases/). 
 2. Run the following command from the terminal:
 `gnome-extensions install --force custom-command-menu.zip`
 3. Logout and login.
+-->
 
 <br>
 
@@ -38,8 +42,9 @@ Browse for and install this extension through the GNOME Extension tool or instal
 
 From the extension's preferences, enter the terminal/shell commands to include in the drop-down menu and the associated display name for each command. If the name field is left empty, the command will not appear in the drop-down menu.
 
-For a list of available icons to use:
-https://github.com/StorageB/icons/blob/main/GNOME46Adwaita/icons.md
+For a list of available symbolic icons to use:
+https://github.com/StorageB/icons/blob/main/GNOME46Adwaita/icons.md or
+https://github.com/StorageB/icons/blob/main/Yaru/icons.md
 
 Alternatively, navigate to the icon directory for your system’s theme (located at /usr/share/icons), or use the [Icon Library app](https://flathub.org/apps/org.gnome.design.IconLibrary).
 
@@ -68,21 +73,6 @@ Command=notify-send "Custom Command Menu" "Hello world!"
 Icon=face-smile-symbolic
 ```
 
-<!--
-## Usage Examples and Suggestions
-
-Here are some ideas on how this extension can be used:
-- Create a command that automatically launches all the applications and web pages you need opened.
-- Launch custom bash scripts or python scripts.
-- Create a command to backup or sync your documents with another directory.
-
-<br>
--->
-
-## Contributing
-
-Contributions are welcome! Feel free to open an issue to request new features or submit a pull request to contribute to this project.
-
 <br>
 
 ## License
@@ -91,6 +81,6 @@ This project is licensed under the [GNU General Public License](http://www.gnu.o
 
 <br>
 
-#### I hope you found this extension helpful!
+#### I hope you found this extension useful!
 
 <a href="https://www.buymeacoffee.com/StorageB" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 36px !important;width: 131px !important;" ></a>

@@ -1,6 +1,8 @@
-/* extension.js */
-
-/*
+/* extension.js
+ *
+ * This file is part of the Custom Command Menu GNOME Shell extension
+ * https://github.com/StorageB/custom-command-menu
+ * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 2 of the License, or
@@ -39,24 +41,25 @@ class CommandMenu extends PanelMenu.Button {
 
     constructor(mySettings) {
         super(0.5, _('Commands'));
+        let labelText = _('Commands');
 
-        // Use this label to create the Commands menu text:
-        let label = new St.Label({
-            text: _('Commands'),
-            y_expand: true,
-            y_align: Clutter.ActorAlign.CENTER,
-        });
+        if (mySettings.get_int('menuoptions-setting') === 1) {
+            labelText = mySettings.get_string('menuicon-setting');
+            this._label = new St.Icon({
+                icon_name: labelText.trim(), 
+                style_class: 'system-status-icon',
+            });
+            this.add_child(this._label);
+        } else {
+            labelText = mySettings.get_string('menutitle-setting');
+            this._label = new St.Label({
+                text: labelText,
+                y_expand: true,
+                y_align: Clutter.ActorAlign.CENTER,
+            });
+            this.add_child(this._label);
+        }
         
-        // Use this label to create an icon for the menu instead of the Commands text:
-        //
-        // let label = new St.Icon({
-        //     icon_name: 'go-down-symbolic', 
-        //     style_class: 'system-status-icon',
-        // });
-        
-
-        this.add_child(label);
-
         for (let j = 1; j <= numberOfCommands; j++) {
             let entryRowA = mySettings.get_string(`entryrow${j}a-setting`);
             let entryRowB = mySettings.get_string(`entryrow${j}b-setting`);
@@ -93,6 +96,14 @@ class CommandMenu extends PanelMenu.Button {
         this.menu.addMenuItem(newItem);
     }
 
+    updateLabel(text) {
+        if (this._label instanceof St.Label) {
+            this._label.text = text;
+        } else if (this._label instanceof St.Icon) {
+            this._label.icon_name = text.trim();
+        }
+    }
+
 }
 
 
@@ -119,7 +130,20 @@ export default class CommandMenuExtension extends Extension {
             });
         }
 
-        // Refresh indicator at initial setup and if entry row text has changed
+        // Watch for changes to menu display settings
+        this._settings.connect('changed::menuoptions-setting', () => {
+            refreshIndicator.call(this);
+        });
+        this._settings.connect('changed::menutitle-setting', () => {
+            let newLabelText = this._settings.get_string('menutitle-setting');
+            this._indicator.updateLabel(newLabelText);
+        });
+        this._settings.connect('changed::menuicon-setting', () => {
+            let newLabelText = this._settings.get_string('menuicon-setting');
+            this._indicator.updateLabel(newLabelText);
+        });
+
+        // Refresh indicator if entry row text or menu display options have changed
         function refreshIndicator() {
             this._indicator.destroy();
             delete this._indicator;

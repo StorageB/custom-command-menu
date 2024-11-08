@@ -1,5 +1,24 @@
-/* prefs.js */
- 
+/* prefs.js
+ *
+ * This file is part of the Custom Command Menu GNOME Shell extension
+ * https://github.com/StorageB/custom-command-menu
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * SPDX-License-Identifier: GPL-2.0-or-later
+ */
+
 import Gio from 'gi://Gio';
 import Adw from 'gi://Adw';
 import Gtk from 'gi://Gtk';
@@ -78,7 +97,7 @@ export default class CustomCommandListPreferences extends ExtensionPreferences {
         });
         window.add(page2);
 
-        const settingsGroup1 = new Adw.PreferencesGroup({
+        const backupGroup1 = new Adw.PreferencesGroup({
             title: _('Backup and Restore'),
         });
 
@@ -105,12 +124,38 @@ export default class CustomCommandListPreferences extends ExtensionPreferences {
                 }
             }        
         
-            // Try saving the keyfile to the file
+            // Try saving the config file
             try {
                 keyFile.save_to_file(filePath);
                 console.log(`Custom Command Menu extension exported commands to ${filePath}`);
                 const toast = Adw.Toast.new(_(`Commands exported to: ${filePath}`));
                 toast.set_timeout(3);
+                toast.set_button_label(_('Open'));
+                toast.connect('button-clicked', () => {
+                    // Determine if there is a default text editor available and open the saved file
+                    let appInfo = Gio.AppInfo.get_default_for_type('text/plain', false);
+                    if (appInfo) {
+                        appInfo.launch_uris([`file://${filePath}`], null);
+                    } else {
+                        const noAppDialog = new Gtk.MessageDialog({
+                            transient_for: window,
+                            modal: true,
+                            text: _('Application Not Found'),
+                            secondary_text: _
+                                ('No default application found to open .ini files.\n\n' +
+                                 'The commands.ini configuration file can be opened and modified in any text editor. ' +
+                                 'To open the file, it may first be required to manually associate the .ini file ' +
+                                 'with the default text editor by doing the following:\n\n' +
+                                 '1. Open the home directory and locate the commands.ini file\n' +
+                                 '2. Right-click on the file and select "Open with..."\n' +
+                                 '3. Choose a default text editor, and select the option "Always use for this file type"'
+                                ),
+                            buttons: Gtk.ButtonsType.CLOSE,
+                        });
+                        noAppDialog.connect('response', () => noAppDialog.destroy());
+                        noAppDialog.show();
+                    }
+                });
                 window.add_toast(toast);
             } catch (e) {
                 console.log(`Custom Command Menu extension failed to export commands\n${e}`);
@@ -164,7 +209,8 @@ export default class CustomCommandListPreferences extends ExtensionPreferences {
                 window.add_toast(toast);
                 return; // Exit the function if file does not exist
             }
-        
+            
+            // Try importing the config file
             try {
                 keyFile.load_from_file(filePath, GLib.KeyFileFlags.NONE);
                 let commandCount = 0;
@@ -208,7 +254,7 @@ export default class CustomCommandListPreferences extends ExtensionPreferences {
         });
 
         const configGroup1 = new Adw.PreferencesGroup({
-            title: _('Setup'),
+            title: _('Setup Information'),
         });
 
         const configRow1 = new Adw.ActionRow({
@@ -251,8 +297,9 @@ export default class CustomCommandListPreferences extends ExtensionPreferences {
         configRow4.add_prefix(new Gtk.Image({icon_name: 'folder-symbolic'}));
         configRow4.add_suffix(new Gtk.Image({icon_name: 'go-next-symbolic'}));
         
-        const aboutGroup = new Adw.PreferencesGroup({
-            title: _('Information'),
+
+        const aboutGroup1 = new Adw.PreferencesGroup({
+            title: _('About'),
         });
 
         const aboutRow0 = new Adw.ActionRow({
@@ -295,7 +342,61 @@ export default class CustomCommandListPreferences extends ExtensionPreferences {
         });
         aboutRow2.add_prefix(new Gtk.Image({icon_name: 'web-browser-symbolic'}));
         aboutRow2.add_suffix(new Gtk.Image({icon_name: 'go-next-symbolic'}));
+
+
+        const settingsGroup1 = new Adw.PreferencesGroup({
+            title: _('Settings'),
+        });
+
+        const titleExpanderRow = new Adw.ExpanderRow({
+            title: _('Custom Menu Title'),
+            subtitle: _('Use custom text or a custom icon for the menu title'),
+            //expanded: false,
+        });
+
+        const menuOptionList = new Gtk.StringList();
+        [_('Text'), _('Icon')].forEach(choice => menuOptionList.append(choice));
+    
+        const menuComboRow = new Adw.ComboRow({
+            title: _('Menu Type'),
+            subtitle: _('Select menu type to be text or an icon'),
+            model: menuOptionList,
+            selected: window._settings.get_int('menuoptions-setting'),
+        });
+
+        const titleEntryRow = new Adw.EntryRow({
+            title: menuComboRow.selected === 1 ? _('Icon name:') : _('Menu title:'),
+        });
         
+        menuComboRow.connect('notify::selected', () => {
+            let selected = menuComboRow.selected; 
+            titleEntryRow.title = selected === 1 ? _('Icon name:') : _('Menu title:');  
+            titleEntryRow.text = selected === 1 
+                ? window._settings.get_string('menuicon-setting') || '' 
+                : window._settings.get_string('menutitle-setting') || '';
+        });
+
+        titleEntryRow.connect('changed', (entry) => {
+            let selected = menuComboRow.selected;
+                if (selected === 1) {
+                    window._settings.set_string('menuicon-setting', entry.get_text());
+                } else {
+                    window._settings.set_string('menutitle-setting', entry.get_text());
+                }   
+        });
+
+        window._settings.bind('menuoptions-setting', menuComboRow, 'selected', Gio.SettingsBindFlags.DEFAULT);
+        
+        if (window._settings.get_int('menuoptions-setting') === 1) {
+            titleEntryRow.text = window._settings.get_string('menuicon-setting') || '';
+        } else {
+            titleEntryRow.text = window._settings.get_string('menutitle-setting') || '';
+        }            
+
+
+        page2.add(backupGroup1);
+        backupGroup1.add(exportRow);
+        backupGroup1.add(importRow);
 
         page2.add(configGroup1);
         configGroup1.add(configRow1);
@@ -304,13 +405,14 @@ export default class CustomCommandListPreferences extends ExtensionPreferences {
         configGroup1.add(configRow4);
 
         page2.add(settingsGroup1);
-        settingsGroup1.add(exportRow);
-        settingsGroup1.add(importRow);
-
-        page2.add(aboutGroup);
-        aboutGroup.add(aboutRow0);
-        aboutGroup.add(aboutRow1);
-        aboutGroup.add(aboutRow2);
+        settingsGroup1.add(titleExpanderRow);
+        titleExpanderRow.add_row(menuComboRow);
+        titleExpanderRow.add_row(titleEntryRow);
+                
+        page2.add(aboutGroup1);
+        aboutGroup1.add(aboutRow0);
+        aboutGroup1.add(aboutRow1);
+        aboutGroup1.add(aboutRow2);
 
     }
 }
