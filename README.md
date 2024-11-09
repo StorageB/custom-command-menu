@@ -1,8 +1,8 @@
 # Custom Command Menu
 
-#### A GNOME extension to run shell commands from a drop-down menu.
+#### A GNOME extension to run commands from a drop-down menu.
 
-Custom Command Menu is an extension for GNOME 45/46/47 to run user defined commands from a drop-down menu at the top bar. 
+Custom Command Menu is an extension for GNOME 45/46/47 to run user defined commands from a customizable drop-down menu at the top bar. 
 
 
 ![Screenshot-main](screenshots/Screenshot-main-4.png)
@@ -42,9 +42,9 @@ Browse for and install this extension through the GNOME Extension tool or instal
 
 From the extension's preferences, enter the terminal/shell commands to include in the drop-down menu and the associated display name for each command. If the name field is left empty, the command will not appear in the drop-down menu.
 
-For a list of available symbolic icons to use:
-https://github.com/StorageB/icons/blob/main/GNOME46Adwaita/icons.md or
-https://github.com/StorageB/icons/blob/main/Yaru/icons.md
+For a list of available symbolic icons to use refer to:
+[GNOME default icons](https://github.com/StorageB/icons/blob/main/GNOME46Adwaita/icons.md) or
+[Ubuntu Yaru icons](https://github.com/StorageB/icons/blob/main/Yaru/icons.md)
 
 Alternatively, navigate to the icon directory for your system’s theme (located at /usr/share/icons), or use the [Icon Library app](https://flathub.org/apps/org.gnome.design.IconLibrary).
 
