@@ -88,7 +88,7 @@ class CommandMenu extends PanelMenu.Button {
         newItem.connect('activate', () => {
             // Run associated command when a menu item is clicked
             console.log(`Custom Command Menu extension attempting to execute command:\n${command}`);
-            let [success, pid] = GLib.spawn_async(null, ["/bin/bash", "-c", command], null, GLib.SpawnFlags.SEARCH_PATH, null);
+            let [success, pid] = GLib.spawn_async(null, ["/usr/bin/env", "bash", "-c", command], null, GLib.SpawnFlags.SEARCH_PATH, null);
             if (!success) {
                 console.log(`Error running command:\n${command}`);
             }
