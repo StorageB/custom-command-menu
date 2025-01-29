@@ -2,7 +2,7 @@
 
 #### A GNOME extension to run commands from a drop-down menu.
 
-Custom Command Menu is an extension for GNOME 45/46/47 to run user defined commands from a customizable drop-down menu at the top bar. 
+Custom Command Menu is an extension for GNOME 45/46/47/48 to run user defined commands from a customizable drop-down menu at the top bar. 
 
 
 ![Screenshot-main](screenshots/Screenshot-main-4.png)
@@ -57,7 +57,9 @@ Command tips:
 - Chain multiple commands together to run one at a time using `&&` between commands.
 - By default, commands do not run in a terminal window and will not show any output or error messages. Test the full command first by running it in the terminal before adding it to the extension to verify it is correct. 
 - To run a command in a terminal window, use `gnome-terminal -- command`. Note that by default the GNOME terminal will close after the command is complete, but that can be changed in the terminal preferences if needed.
-- Sudo commands require a password input from the terminal, so they will not directly work by themselves since commands run without a terminal window by default. However, you can use `gnome-terminal -- command` to run the command in the terminal. For example, `gnome-terminal -- sudo apt-get update` will open a terminal, prompt for your password, and then run the command.
+- For sudo commands that require a password, use `pkexec` before the command to get a password prompt. For example, `pkexec sudo command` will prompt for your password and then run the command. Alternatively, you can use `gnome-terminal -- sudo command` to open a terminal where you can enter your password.
+- To open the command configuration window for this extension directly, use the command `gnome-extensions prefs custom-command-list@storageb.github.com`.
+
 
 <br>
 
