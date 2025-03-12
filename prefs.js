@@ -39,6 +39,8 @@ export default class CustomCommandListPreferences extends ExtensionPreferences {
         });
         window.add(page);
 
+        
+        //#region Command List
         const group0 = new Adw.PreferencesGroup({
             title: _('Command List'),
         });
@@ -89,6 +91,7 @@ export default class CustomCommandListPreferences extends ExtensionPreferences {
             entryrowA.notify('text');
             entryrowB.notify('text');
         }
+        //#endregion Command List
 
 
         const page2 = new Adw.PreferencesPage({
@@ -101,12 +104,13 @@ export default class CustomCommandListPreferences extends ExtensionPreferences {
             title: _('Backup and Restore'),
         });
 
+        //#region Export 
         const exportRow = new Adw.ActionRow({
             title: _('Export Command List'),
             subtitle: _(`Click to export ${fileName} configuration file to user's home directory`),
             activatable: true,
         });
-        exportRow.add_prefix(new Gtk.Image({icon_name: 'emblem-documents-symbolic'}));
+        exportRow.add_prefix(new Gtk.Image({icon_name: 'x-office-document-symbolic'}));
         
         exportRow.connect('activated', () => {
             let keyFile = new GLib.KeyFile();
@@ -127,7 +131,7 @@ export default class CustomCommandListPreferences extends ExtensionPreferences {
             // Try saving the config file
             try {
                 keyFile.save_to_file(filePath);
-                console.log(`Custom Command Menu extension exported commands to ${filePath}`);
+                console.log(`[Custom Command Menu] Commands exported to ${filePath}`);
                 const toast = Adw.Toast.new(_(`Commands exported to: ${filePath}`));
                 toast.set_timeout(3);
                 toast.set_button_label(_('Open'));
@@ -158,7 +162,7 @@ export default class CustomCommandListPreferences extends ExtensionPreferences {
                 });
                 window.add_toast(toast);
             } catch (e) {
-                console.log(`Custom Command Menu extension failed to export commands\n${e}`);
+                console.log(`[Custom Command Menu] Failed to export commands\n${e}`);
                 const toast = Adw.Toast.new(_(`Export Error`));
                 toast.set_timeout(3);
                 toast.set_button_label(_('Details'));
@@ -176,13 +180,16 @@ export default class CustomCommandListPreferences extends ExtensionPreferences {
                 window.add_toast(toast);
             }
         });
+        //#endregion Export
         
+
+        //#region Import
         const importRow = new Adw.ActionRow({
             title: _('Import Command List'),
             subtitle: _(`Click to import ${fileName} configuration file from user's home directory`),
             activatable: true,
         });
-        importRow.add_prefix(new Gtk.Image({icon_name: 'emblem-documents-symbolic'}));
+        importRow.add_prefix(new Gtk.Image({icon_name: 'x-office-document-symbolic'}));
 
         importRow.connect('activated', () => {
             let filePath = GLib.build_filenamev([GLib.get_home_dir(), fileName]);
@@ -229,12 +236,12 @@ export default class CustomCommandListPreferences extends ExtensionPreferences {
                         window._settings.set_string(`entryrow${i}c-setting`, "");
                     }
                 }
-                console.log(`Custom Command Menu extension imported commands from ${filePath}`);
+                console.log(`[Custom Command Menu] Commands imported from ${filePath}`);
                 const toast = Adw.Toast.new(_(`Successfully imported ${commandCount} command${commandCount != 1 ? 's' : ''}`));
                 toast.set_timeout(3);
                 window.add_toast(toast);
             } catch (e) {
-                console.log(`Custom Command Menu extension failed to import commands\n${e}`);
+                console.log(`[Custom Command Menu] Failed to import commands\n${e}`);
                 const toast = Adw.Toast.new(_(`Import Error`));
                 toast.set_timeout(3);
                 toast.set_button_label(_('Details'));
@@ -252,7 +259,10 @@ export default class CustomCommandListPreferences extends ExtensionPreferences {
                 window.add_toast(toast);
             }
         });
+        //#endregion Import
 
+
+        //#region Setup Information
         const configGroup1 = new Adw.PreferencesGroup({
             title: _('Setup Information'),
         });
@@ -296,8 +306,10 @@ export default class CustomCommandListPreferences extends ExtensionPreferences {
         });
         configRow4.add_prefix(new Gtk.Image({icon_name: 'folder-symbolic'}));
         configRow4.add_suffix(new Gtk.Image({icon_name: 'go-next-symbolic'}));
+        //#endregion Setup Information
         
 
+        //#region About
         const aboutGroup1 = new Adw.PreferencesGroup({
             title: _('About'),
         });
@@ -342,8 +354,10 @@ export default class CustomCommandListPreferences extends ExtensionPreferences {
         });
         aboutRow2.add_prefix(new Gtk.Image({icon_name: 'web-browser-symbolic'}));
         aboutRow2.add_suffix(new Gtk.Image({icon_name: 'go-next-symbolic'}));
+        //#endregion About
 
 
+        //#region Settings
         const settingsGroup1 = new Adw.PreferencesGroup({
             title: _('Settings'),
         });
@@ -351,7 +365,6 @@ export default class CustomCommandListPreferences extends ExtensionPreferences {
         const titleExpanderRow = new Adw.ExpanderRow({
             title: _('Custom Menu Title'),
             subtitle: _('Use custom text or a custom icon for the menu title'),
-            //expanded: false,
         });
 
         const menuOptionList = new Gtk.StringList();
@@ -391,9 +404,11 @@ export default class CustomCommandListPreferences extends ExtensionPreferences {
             titleEntryRow.text = window._settings.get_string('menuicon-setting') || '';
         } else {
             titleEntryRow.text = window._settings.get_string('menutitle-setting') || '';
-        }            
+        }
+        //#endregion Settings
 
 
+        //#region Layout
         page2.add(backupGroup1);
         backupGroup1.add(exportRow);
         backupGroup1.add(importRow);
@@ -413,6 +428,7 @@ export default class CustomCommandListPreferences extends ExtensionPreferences {
         aboutGroup1.add(aboutRow0);
         aboutGroup1.add(aboutRow1);
         aboutGroup1.add(aboutRow2);
+        //#endregion Layout
 
     }
 }
