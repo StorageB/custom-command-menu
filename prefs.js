@@ -291,7 +291,7 @@ export default class CustomCommandListPreferences extends ExtensionPreferences {
             activatable: true,
         });
         configRow3.connect('activated', () => {
-            Gio.app_info_launch_default_for_uri('https://github.com/StorageB/icons/blob/main/GNOME46Adwaita/icons.md', null);
+            Gio.app_info_launch_default_for_uri('https://github.com/StorageB/icons/blob/main/GNOME48Adwaita/icons.md', null);
         });
         configRow3.add_prefix(new Gtk.Image({icon_name: 'web-browser-symbolic'}));
         configRow3.add_suffix(new Gtk.Image({icon_name: 'go-next-symbolic'}));
