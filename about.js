@@ -1,14 +1,21 @@
 /* about.js */
 
 export const releaseNotes = `
+
+[v9-beta1]
+
 What's new in this version:
 
-•  Updated icons for compatibility with GNOME 48.
-•  Improved code readability.
+•  Redesigned user interface for configuring commands.
+•  Drag-and-drop support for reordering commands.
+•  Checkbox option to show or hide commands in the drop-down menu.
+•  Add and delete commands as needed instead of showing blank rows.
+•  Option to duplicate existing commands.
+•  Increased maximum supported commands to 30.
 
 Previous version:
 
-•  Support added for GNOME 48.
-•  Fixed a compatibility issue with some systems (such as NixOS) by switching from /bin/bash to /usr/bin/env bash for command execution.
+•  Updated icons for compatibility with GNOME 48.
+•  Improved code readability.
 
 `;

@@ -11,6 +11,11 @@
     <key name="menuicon-setting" type="s">
       <default>'utilities-terminal-symbolic'</default>
     </key>
+
+    <key type="ai" name="command-order">
+        <default>[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30]</default>
+        <summary>Order of commands</summary>
+    </key>
     
     <key name="entryrow1a-setting" type="s">
       <default>'Hello world!'</default>
@@ -20,7 +25,10 @@
     </key>
     <key name="entryrow1c-setting" type="s">
       <default>'face-smile-symbolic'</default>
-    </key>   
+    </key>
+    <key name="visible1-setting" type="b">
+      <default>true</default>
+    </key>
     <key name="entryrow2a-setting" type="s">
       <default>""</default>
     </key>
@@ -30,6 +38,9 @@
     <key name="entryrow2c-setting" type="s">
       <default>""</default>
     </key>
+    <key name="visible2-setting" type="b">
+      <default>true</default>
+    </key>    
     <key name="entryrow3a-setting" type="s">
       <default>""</default>
     </key>
@@ -39,6 +50,9 @@
     <key name="entryrow3c-setting" type="s">
       <default>""</default>
     </key>
+    <key name="visible3-setting" type="b">
+      <default>true</default>
+    </key>    
     <key name="entryrow4a-setting" type="s">
       <default>""</default>
     </key>
@@ -48,6 +62,9 @@
     <key name="entryrow4c-setting" type="s">
       <default>""</default>
     </key>
+    <key name="visible4-setting" type="b">
+      <default>true</default>
+    </key>    
     <key name="entryrow5a-setting" type="s">
       <default>""</default>
     </key>
@@ -57,6 +74,9 @@
     <key name="entryrow5c-setting" type="s">
       <default>""</default>
     </key>
+    <key name="visible5-setting" type="b">
+      <default>true</default>
+    </key>    
     <key name="entryrow6a-setting" type="s">
       <default>""</default>
     </key>
@@ -66,6 +86,9 @@
     <key name="entryrow6c-setting" type="s">
       <default>""</default>
     </key>
+    <key name="visible6-setting" type="b">
+      <default>true</default>
+    </key>    
     <key name="entryrow7a-setting" type="s">
       <default>""</default>
     </key>
@@ -75,6 +98,9 @@
     <key name="entryrow7c-setting" type="s">
       <default>""</default>
     </key>
+    <key name="visible7-setting" type="b">
+      <default>true</default>
+    </key>    
     <key name="entryrow8a-setting" type="s">
       <default>""</default>
     </key>
@@ -84,6 +110,9 @@
     <key name="entryrow8c-setting" type="s">
       <default>""</default>
     </key>
+    <key name="visible8-setting" type="b">
+      <default>true</default>
+    </key>    
     <key name="entryrow9a-setting" type="s">
       <default>""</default>
     </key>
@@ -93,6 +122,9 @@
     <key name="entryrow9c-setting" type="s">
       <default>""</default>
     </key>
+    <key name="visible9-setting" type="b">
+      <default>true</default>
+    </key>    
     <key name="entryrow10a-setting" type="s">
       <default>""</default>
     </key>
@@ -102,6 +134,9 @@
     <key name="entryrow10c-setting" type="s">
       <default>""</default>
     </key>
+    <key name="visible10-setting" type="b">
+      <default>true</default>
+    </key>    
     <key name="entryrow11a-setting" type="s">
       <default>""</default>
     </key>
@@ -110,7 +145,10 @@
     </key>
     <key name="entryrow11c-setting" type="s">
       <default>""</default>
-    </key>   
+    </key>
+    <key name="visible11-setting" type="b">
+      <default>true</default>
+    </key>
     <key name="entryrow12a-setting" type="s">
       <default>""</default>
     </key>
@@ -120,6 +158,9 @@
     <key name="entryrow12c-setting" type="s">
       <default>""</default>
     </key>
+    <key name="visible12-setting" type="b">
+      <default>true</default>
+    </key>    
     <key name="entryrow13a-setting" type="s">
       <default>""</default>
     </key>
@@ -128,6 +169,9 @@
     </key>
     <key name="entryrow13c-setting" type="s">
       <default>""</default>
+    </key>
+    <key name="visible13-setting" type="b">
+      <default>true</default>
     </key>
     <key name="entryrow14a-setting" type="s">
       <default>""</default>
@@ -138,6 +182,9 @@
     <key name="entryrow14c-setting" type="s">
       <default>""</default>
     </key>
+    <key name="visible14-setting" type="b">
+      <default>true</default>
+    </key>    
     <key name="entryrow15a-setting" type="s">
       <default>""</default>
     </key>
@@ -147,6 +194,9 @@
     <key name="entryrow15c-setting" type="s">
       <default>""</default>
     </key>
+    <key name="visible15-setting" type="b">
+      <default>true</default>
+    </key>    
     <key name="entryrow16a-setting" type="s">
       <default>""</default>
     </key>
@@ -156,6 +206,9 @@
     <key name="entryrow16c-setting" type="s">
       <default>""</default>
     </key>
+    <key name="visible16-setting" type="b">
+      <default>true</default>
+    </key>    
     <key name="entryrow17a-setting" type="s">
       <default>""</default>
     </key>
@@ -165,6 +218,9 @@
     <key name="entryrow17c-setting" type="s">
       <default>""</default>
     </key>
+    <key name="visible17-setting" type="b">
+      <default>true</default>
+    </key>    
     <key name="entryrow18a-setting" type="s">
       <default>""</default>
     </key>
@@ -174,6 +230,9 @@
     <key name="entryrow18c-setting" type="s">
       <default>""</default>
     </key>
+    <key name="visible18-setting" type="b">
+      <default>true</default>
+    </key>    
     <key name="entryrow19a-setting" type="s">
       <default>""</default>
     </key>
@@ -183,6 +242,9 @@
     <key name="entryrow19c-setting" type="s">
       <default>""</default>
     </key>
+    <key name="visible19-setting" type="b">
+      <default>true</default>
+    </key>    
     <key name="entryrow20a-setting" type="s">
       <default>""</default>
     </key>
@@ -192,5 +254,128 @@
     <key name="entryrow20c-setting" type="s">
       <default>""</default>
     </key>
+    <key name="visible20-setting" type="b">
+      <default>true</default>
+    </key>
+    <key name="entryrow21a-setting" type="s">
+      <default>""</default>
+    </key>
+    <key name="entryrow21b-setting" type="s">
+      <default>""</default>
+    </key>
+    <key name="entryrow21c-setting" type="s">
+      <default>""</default>
+    </key>
+    <key name="visible21-setting" type="b">
+      <default>true</default>
+    </key>
+    <key name="entryrow22a-setting" type="s">
+      <default>""</default>
+    </key>
+    <key name="entryrow22b-setting" type="s">
+      <default>""</default>
+    </key>
+    <key name="entryrow22c-setting" type="s">
+      <default>""</default>
+    </key>
+    <key name="visible22-setting" type="b">
+      <default>true</default>
+    </key>
+    <key name="entryrow23a-setting" type="s">
+      <default>""</default>
+    </key>
+    <key name="entryrow23b-setting" type="s">
+      <default>""</default>
+    </key>
+    <key name="entryrow23c-setting" type="s">
+      <default>""</default>
+    </key>
+    <key name="visible23-setting" type="b">
+      <default>true</default>
+    </key>
+    <key name="entryrow24a-setting" type="s">
+      <default>""</default>
+    </key>
+    <key name="entryrow24b-setting" type="s">
+      <default>""</default>
+    </key>
+    <key name="entryrow24c-setting" type="s">
+      <default>""</default>
+    </key>
+    <key name="visible24-setting" type="b">
+      <default>true</default>
+    </key>
+    <key name="entryrow25a-setting" type="s">
+      <default>""</default>
+    </key>
+    <key name="entryrow25b-setting" type="s">
+      <default>""</default>
+    </key>
+    <key name="entryrow25c-setting" type="s">
+      <default>""</default>
+    </key>
+    <key name="visible25-setting" type="b">
+      <default>true</default>
+    </key>
+    <key name="entryrow26a-setting" type="s">
+      <default>""</default>
+    </key>
+    <key name="entryrow26b-setting" type="s">
+      <default>""</default>
+    </key>
+    <key name="entryrow26c-setting" type="s">
+      <default>""</default>
+    </key>
+    <key name="visible26-setting" type="b">
+      <default>true</default>
+    </key>
+    <key name="entryrow27a-setting" type="s">
+      <default>""</default>
+    </key>
+    <key name="entryrow27b-setting" type="s">
+      <default>""</default>
+    </key>
+    <key name="entryrow27c-setting" type="s">
+      <default>""</default>
+    </key>
+    <key name="visible27-setting" type="b">
+      <default>true</default>
+    </key>
+    <key name="entryrow28a-setting" type="s">
+      <default>""</default>
+    </key>
+    <key name="entryrow28b-setting" type="s">
+      <default>""</default>
+    </key>
+    <key name="entryrow28c-setting" type="s">
+      <default>""</default>
+    </key>
+    <key name="visible28-setting" type="b">
+      <default>true</default>
+    </key>
+    <key name="entryrow29a-setting" type="s">
+      <default>""</default>
+    </key>
+    <key name="entryrow29b-setting" type="s">
+      <default>""</default>
+    </key>
+    <key name="entryrow29c-setting" type="s">
+      <default>""</default>
+    </key>
+    <key name="visible29-setting" type="b">
+      <default>true</default>
+    </key>
+    <key name="entryrow30a-setting" type="s">
+      <default>""</default>
+    </key>
+    <key name="entryrow30b-setting" type="s">
+      <default>""</default>
+    </key>
+    <key name="entryrow30c-setting" type="s">
+      <default>""</default>
+    </key>
+    <key name="visible30-setting" type="b">
+      <default>true</default>
+    </key> 
   </schema>
 </schemalist>

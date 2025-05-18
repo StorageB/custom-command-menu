@@ -32,7 +32,7 @@ import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
 import GLib from 'gi://GLib';
 import St from 'gi://St';
 
-let numberOfCommands = 20;
+let numberOfCommands = 30;
 
 class CommandMenu extends PanelMenu.Button {
     static {
@@ -60,12 +60,15 @@ class CommandMenu extends PanelMenu.Button {
             this.add_child(this._label);
         }
         
-        for (let j = 1; j <= numberOfCommands; j++) {
+        const commandOrder = mySettings.get_value('command-order').deep_unpack();
+        for (let j of commandOrder) {
+            if (j < 1 || j > numberOfCommands) continue;
+
             let entryRowA = mySettings.get_string(`entryrow${j}a-setting`);
             let entryRowB = mySettings.get_string(`entryrow${j}b-setting`);
             let entryRowC = mySettings.get_string(`entryrow${j}c-setting`);
 
-            if (entryRowA.trim() !== '') {
+            if (entryRowA !== '' && mySettings.get_boolean(`visible${j}-setting`)) {
                 this._addMenuItem(entryRowA, entryRowB, entryRowC.trim());
             }
         }
@@ -87,10 +90,10 @@ class CommandMenu extends PanelMenu.Button {
         
         newItem.connect('activate', () => {
             // Run associated command when a menu item is clicked
-            console.log(`Custom Command Menu extension attempting to execute command:\n${command}`);
+            console.log(`[Custom Command Menu] Attempting to execute command:\n${command}`);
             let [success, pid] = GLib.spawn_async(null, ["/usr/bin/env", "bash", "-c", command], null, GLib.SpawnFlags.SEARCH_PATH, null);
             if (!success) {
-                console.log(`Error running command:\n${command}`);
+                console.log(`[Custom Command Menu] Error running command:\n${command}`);
             }
         });
         this.menu.addMenuItem(newItem);
@@ -128,6 +131,9 @@ export default class CommandMenuExtension extends Extension {
             this._settings.connect(`changed::entryrow${k}c-setting`, (settings, key) => {
                 refreshIndicator.call(this);
             });
+            this._settings.connect(`changed::visible${k}-setting`, (settings, key) => {
+                refreshIndicator.call(this);
+            });
         }
 
         // Watch for changes to menu display settings
@@ -142,8 +148,12 @@ export default class CommandMenuExtension extends Extension {
             let newLabelText = this._settings.get_string('menuicon-setting');
             this._indicator.updateLabel(newLabelText);
         });
+        this._settings.connect('changed::command-order', () => {
+            refreshIndicator.call(this);
+            const newCommandOrder = this._settings.get_value('command-order').deep_unpack();
+            console.log('[Custom Command Menu] command-order settings changed:\n', newCommandOrder.join(', '));  
+        });
 
-        // Refresh indicator if entry row text or menu display options have changed
         function refreshIndicator() {
             this._indicator.destroy();
             delete this._indicator;

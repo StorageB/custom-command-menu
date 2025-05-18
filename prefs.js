@@ -26,73 +26,23 @@ import GLib from 'gi://GLib';
 
 import { ExtensionPreferences, gettext as _ } from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js';
 import {releaseNotes} from './about.js';
+import commandsUI from "./commandsUI.js";
 
-let numberOfCommands = 20;
+let numberOfCommands = 30;
 let fileName = 'commands.ini';
 let filePath = GLib.build_filenamev([GLib.get_home_dir(), fileName]);
 
+
 export default class CustomCommandListPreferences extends ExtensionPreferences {
     fillPreferencesWindow(window) {
-        const page = new Adw.PreferencesPage({
+        window._settings = this.getSettings();
+
+        let page = new commandsUI({
             title: _('Commands'),
             icon_name: 'utilities-terminal-symbolic',
+            Settings: window._settings,
         });
         window.add(page);
-
-        
-        //#region Command List
-        const group0 = new Adw.PreferencesGroup({
-            title: _('Command List'),
-        });
-        page.add(group0);
-
-        // Create groups and entry rows for commands
-        for (let i = 1; i <= numberOfCommands; i++) {
-            const group = new Adw.PreferencesGroup({});
-            page.add(group);
-
-            const expanderRow = new Adw.ExpanderRow({
-                title: '',
-                subtitle: '',
-                expanded: false,
-                //show_enable_switch: true,
-            });
-            const entryrowA = new Adw.EntryRow({
-                title: _('Name:'),
-            });
-            const entryrowB = new Adw.EntryRow({
-                title: _('Command:'),
-            });
-            const entryrowC = new Adw.EntryRow({
-                title: _('Icon:'),
-            });
-
-            group.add(expanderRow);
-            expanderRow.add_row(entryrowA);
-            expanderRow.add_row(entryrowB);
-            expanderRow.add_row(entryrowC);
-            
-            // Bind settings 
-            window._settings = this.getSettings();
-            window._settings.bind(`entryrow${i}a-setting`, entryrowA, 'text', Gio.SettingsBindFlags.DEFAULT);
-            window._settings.bind(`entryrow${i}b-setting`, entryrowB, 'text', Gio.SettingsBindFlags.DEFAULT);
-            window._settings.bind(`entryrow${i}c-setting`, entryrowC, 'text', Gio.SettingsBindFlags.DEFAULT);
-
-            // Connect signals to update title and subtitle of ExpanderRow
-            entryrowA.connect('notify::text', () => {
-                expanderRow.title = entryrowA.text.replace(/&/g, '&amp;');
-                expanderRow.subtitle = (entryrowA.text === '' && entryrowB.text === '') ? (`(${i})`) : entryrowB.text.replace(/&/g, '&amp;');
-            });
-            entryrowB.connect('notify::text', () => {
-                expanderRow.subtitle = (entryrowA.text === '' && entryrowB.text === '') ? (`(${i})`) : entryrowB.text.replace(/&/g, '&amp;');
-            });
-
-            // Initialize title and subtitle
-            entryrowA.notify('text');
-            entryrowB.notify('text');
-        }
-        //#endregion Command List
-
 
         const page2 = new Adw.PreferencesPage({
             title: _('Configuration'),
@@ -104,6 +54,7 @@ export default class CustomCommandListPreferences extends ExtensionPreferences {
             title: _('Backup and Restore'),
         });
 
+
         //#region Export 
         const exportRow = new Adw.ActionRow({
             title: _('Export Command List'),
@@ -114,17 +65,22 @@ export default class CustomCommandListPreferences extends ExtensionPreferences {
         
         exportRow.connect('activated', () => {
             let keyFile = new GLib.KeyFile();
+            let commandOrderArray = window._settings.get_value('command-order').deep_unpack();
+            let commandNumber = 0;
         
             // Loop through command entries and write them to the keyfile
             for (let i = 1; i <= numberOfCommands; i++) {
-                let name = window._settings.get_string(`entryrow${i}a-setting`);
-                let command = window._settings.get_string(`entryrow${i}b-setting`);
-                let icon = window._settings.get_string(`entryrow${i}c-setting`);
+                let name = window._settings.get_string(`entryrow${commandOrderArray[i-1]}a-setting`);
+                let command = window._settings.get_string(`entryrow${commandOrderArray[i-1]}b-setting`);
+                let icon = window._settings.get_string(`entryrow${commandOrderArray[i-1]}c-setting`);
+                let visible = window._settings.get_boolean(`visible${commandOrderArray[i-1]}-setting`);
                 // Only write commands that are not blank
                 if (name !== '' || command !== '' || icon !== '') {
-                    keyFile.set_string(`Command ${i}`, 'Name', name);
-                    keyFile.set_string(`Command ${i}`, 'Command', command);
-                    keyFile.set_string(`Command ${i}`, 'Icon', icon);
+                    commandNumber ++;
+                    keyFile.set_string(`Command ${commandNumber}`, 'Name', name);
+                    keyFile.set_string(`Command ${commandNumber}`, 'Command', command);
+                    keyFile.set_string(`Command ${commandNumber}`, 'Icon', icon);
+                    keyFile.set_boolean(`Command ${commandNumber}`, 'Visible', visible);
                 }
             }        
         
@@ -225,17 +181,22 @@ export default class CustomCommandListPreferences extends ExtensionPreferences {
                     if (keyFile.has_group(`Command ${i}`)) {
                         let name = keyFile.get_string(`Command ${i}`, 'Name');
                         let command = keyFile.get_string(`Command ${i}`, 'Command');
-                        let icon = keyFile.get_string(`Command ${i}`, 'Icon');
+                        let icon = ""; try { icon = keyFile.get_string(`Command ${i}`, 'Icon'); } catch (_) {}
+                        let visible = true; try { visible = keyFile.get_boolean(`Command ${i}`, 'Visible'); } catch (_) {}
                         window._settings.set_string(`entryrow${i}a-setting`, name);
                         window._settings.set_string(`entryrow${i}b-setting`, command);
                         window._settings.set_string(`entryrow${i}c-setting`, icon);
+                        window._settings.set_boolean(`visible${i}-setting`, visible);
                         commandCount++;
                     } else {
                         window._settings.set_string(`entryrow${i}a-setting`, "");
                         window._settings.set_string(`entryrow${i}b-setting`, "");
                         window._settings.set_string(`entryrow${i}c-setting`, "");
+                        window._settings.set_boolean(`visible${i}-setting`, "");
                     }
                 }
+                window._settings.set_value('command-order', new GLib.Variant('ai', Array.from({ length: numberOfCommands }, (_, i) => i + 1)));
+                page.refreshCommandList(); // refresh the list of commands in the prefrences window
                 console.log(`[Custom Command Menu] Commands imported from ${filePath}`);
                 const toast = Adw.Toast.new(_(`Successfully imported ${commandCount} command${commandCount != 1 ? 's' : ''}`));
                 toast.set_timeout(3);
@@ -270,8 +231,8 @@ export default class CustomCommandListPreferences extends ExtensionPreferences {
         const configRow1 = new Adw.ActionRow({
             title: _('Commands'),
             subtitle: _(
-                        'Enter the display names and associated commands to appear in the drop-down menu. ' +
-                        'Leave the name field blank to exclude an entry from the menu. ' 
+                        'Enter the display names and associated commands for the drop-down menu. ' +
+                        'Drag and drop to reorder commands, and toggle the checkbox to show or hide a command.' 
                        ),
             activatable: false,
         });
@@ -279,8 +240,9 @@ export default class CustomCommandListPreferences extends ExtensionPreferences {
         const configRow2 = new Adw.ActionRow({
             title: _('Icons'),
             subtitle: _(
-                        'For a list of available icons, refer to the link below or navigate to the icon directory for your system\'s theme. ' +
-                        'Enter the name of the icon (without the file extension), or leave blank for no icon. '
+                        'For a list of available system icons, refer to the link below. ' +
+                        'Enter the name of the icon, or leave blank for no icon. ' +
+                        'Refer to the Github page for more icon configuration options.'
                        ),
             activatable: false,
         });
@@ -334,7 +296,7 @@ export default class CustomCommandListPreferences extends ExtensionPreferences {
         aboutRow0.add_suffix(new Gtk.Image({icon_name: 'go-next-symbolic'}));
         
         const aboutRow1 = new Adw.ActionRow({
-            title: _('Homepage'),
+            title: _('GitHub Page'),
             subtitle: _('GitHub page for additional information and bug reporting'),
             activatable: true,
         });
@@ -417,7 +379,7 @@ export default class CustomCommandListPreferences extends ExtensionPreferences {
         configGroup1.add(configRow1);
         configGroup1.add(configRow2);
         configGroup1.add(configRow3);
-        configGroup1.add(configRow4);
+        //configGroup1.add(configRow4);
 
         page2.add(settingsGroup1);
         settingsGroup1.add(titleExpanderRow);
