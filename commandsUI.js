@@ -170,7 +170,6 @@ export default class commandsUI extends Adw.PreferencesPage {
             image.set_from_icon_name(newIcon);
             this._settings.set_boolean(`visible${rowNumber}-setting`, newIcon === 'checkbox-checked-symbolic');
 
-            // Add/remove 'dim-label' class on the row
             if (newIcon === 'checkbox-checked-symbolic')
                 row.remove_css_class('dim-label');
             else
@@ -251,6 +250,7 @@ export default class commandsUI extends Adw.PreferencesPage {
         }
 
         if (!Array.isArray(savedOrder) || savedOrder.length !== numberOfCommands) {
+            console.log('[Custom Command Menu] Invalid savedOrder array');
             savedOrder = Array.from({ length: numberOfCommands }, (_, i) => i + 1);
         }
 
@@ -278,14 +278,8 @@ export default class commandsUI extends Adw.PreferencesPage {
             icon_name: 'list-add-symbolic',
             pixel_size: 16,
         });
-        icon.add_css_class('dim-label');
-
-        const label = new Gtk.Label({ label: _('Add Command') });
-        label.add_css_class('dim-label');
-        label.set_xalign(0.5);
-
         buttonBox.append(icon);
-        buttonBox.append(label);
+        
         this._addCommandButton.set_child(buttonBox);
 
         const clickGesture = new Gtk.GestureClick();

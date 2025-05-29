@@ -240,9 +240,9 @@ export default class CustomCommandListPreferences extends ExtensionPreferences {
         const configRow2 = new Adw.ActionRow({
             title: _('Icons'),
             subtitle: _(
-                        'For a list of available system icons, refer to the link below. ' +
+                        'For a list of available system icons, refer to the Icon List link below. ' +
                         'Enter the name of the icon, or leave blank for no icon. ' +
-                        'Refer to the Github page for more icon configuration options.'
+                        'Refer to the Github Homepage for more icon configuration options.'
                        ),
             activatable: false,
         });
@@ -296,7 +296,7 @@ export default class CustomCommandListPreferences extends ExtensionPreferences {
         aboutRow0.add_suffix(new Gtk.Image({icon_name: 'go-next-symbolic'}));
         
         const aboutRow1 = new Adw.ActionRow({
-            title: _('GitHub Page'),
+            title: _('Homepage'),
             subtitle: _('GitHub page for additional information and bug reporting'),
             activatable: true,
         });
