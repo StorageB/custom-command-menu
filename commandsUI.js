@@ -29,6 +29,7 @@ import GLib from 'gi://GLib';
 import GObject from 'gi://GObject';
 
 let numberOfCommands = 30;
+let draggedRow = null;
 
 export default class commandsUI extends Adw.PreferencesPage {
     static {
@@ -54,9 +55,18 @@ export default class commandsUI extends Adw.PreferencesPage {
         this._commandBoxList = new Gtk.ListBox();
         this._commandBoxList.add_css_class('boxed-list');
 
-        const clamp = new Adw.Clamp({ child: this._commandBoxList });
+        this._scroller = new Gtk.ScrolledWindow({
+            vexpand: true,
+        });
+        this._scroller.set_child(this._commandBoxList);
+
+        const clamp = new Adw.Clamp({ child: this._scroller });
+
+        this._overlay = new Adw.ToastOverlay();
+        this._overlay.set_child(clamp);
+        
         const box = new Gtk.Box({ orientation: Gtk.Orientation.VERTICAL });
-        box.append(clamp);
+        box.append(this._overlay);
 
         const group = new Adw.PreferencesGroup();
         group.add(box);
@@ -89,37 +99,31 @@ export default class commandsUI extends Adw.PreferencesPage {
         row.title = entryRowName.text.replace(/&/g, '&amp;');
 
         //#region (menuButton)
+        const gMenu = new Gio.Menu();
+        gMenu.append(_('Insert new'), 'row.insert');
+        gMenu.append(_('Duplicate'), 'row.duplicate');
+        gMenu.append(_('Delete'), 'row.delete');
+
         const menuButton = new Gtk.MenuButton({
             icon_name: 'view-more-symbolic',
             valign: Gtk.Align.CENTER,
             has_frame: false,
+            menu_model: gMenu,
         });
+        const actionGroup = new Gio.SimpleActionGroup();
+        
 
-        const popover = new Gtk.Popover({ autohide: true });
-        const menuBox = new Gtk.Box({ orientation: Gtk.Orientation.VERTICAL });
-
-        const createFlatButton = (labelText, onClick) => {
-            const button = new Gtk.Button({
-                child: new Gtk.Label({ label: labelText, xalign: 0 }),
-                has_frame: false,
-            });
-            button.connect('clicked', () => {
-                onClick();
-                popover.popdown();
-            });
-            return button;
-        };
-
-        //#region (duplicate)
-        menuBox.append(createFlatButton(_('Duplicate'), () => {
+        //#region (insert)
+        const insertAction = new Gio.SimpleAction({ name: 'insert' });
+        insertAction.connect('activate', () => {
+            let inserted = false;
             for (const child of this._commandBoxList) {
                 if (child instanceof Adw.ExpanderRow && !child.visible) {
-                    const newRowNumber = child._rowNumber;
 
-                    this._settings.set_string(`entryrow${newRowNumber}a-setting`, this._settings.get_string(`entryrow${row._rowNumber}a-setting`) + ' (copy)');
-                    this._settings.set_string(`entryrow${newRowNumber}b-setting`, this._settings.get_string(`entryrow${row._rowNumber}b-setting`));
-                    this._settings.set_string(`entryrow${newRowNumber}c-setting`, this._settings.get_string(`entryrow${row._rowNumber}c-setting`));
-                    this._settings.set_boolean(`visible${newRowNumber}-setting`, true);
+                    this._settings.set_string(`entryrow${child._rowNumber}a-setting`, "");
+                    this._settings.set_string(`entryrow${child._rowNumber}b-setting`, "");
+                    this._settings.set_string(`entryrow${child._rowNumber}c-setting`, "");
+                    this._settings.set_boolean(`visible${child._rowNumber}-setting`, true);
                     child._checkButton.get_child().set_from_icon_name("checkbox-checked-symbolic");
                     child.remove_css_class('dim-label');
                     
@@ -128,27 +132,83 @@ export default class commandsUI extends Adw.PreferencesPage {
                     const insertIndex = updatedRows.indexOf(row) + 1;
                     this._commandBoxList.insert(child, insertIndex);
 
-                    child.set_visible(true);
-                    child.set_expanded(true);
+                    child.visible = true;
+                    child.expanded = true;
                     this._emitReorder();
 
+                    inserted = true;
                     break;
                 }
             }
-        }));
+            if (!inserted) this._overlay.add_toast(new Adw.Toast({ title: _('Maximum row limit reached') }));
+        });    
+        actionGroup.add_action(insertAction);    
+
+        
+        //#region (duplicate)
+        const duplicateAction = new Gio.SimpleAction({ name: 'duplicate' });
+        duplicateAction.connect('activate', () => {
+            let inserted = false;
+            for (const child of this._commandBoxList) {
+                if (child instanceof Adw.ExpanderRow && !child.visible) {
+
+                    this._settings.set_string(`entryrow${child._rowNumber}a-setting`, this._settings.get_string(`entryrow${row._rowNumber}a-setting`) + ' (copy)');
+                    this._settings.set_string(`entryrow${child._rowNumber}b-setting`, this._settings.get_string(`entryrow${row._rowNumber}b-setting`));
+                    this._settings.set_string(`entryrow${child._rowNumber}c-setting`, this._settings.get_string(`entryrow${row._rowNumber}c-setting`));
+                    this._settings.set_boolean(`visible${child._rowNumber}-setting`, true);
+                    child._checkButton.get_child().set_from_icon_name("checkbox-checked-symbolic");
+                    child.remove_css_class('dim-label');
+                    
+                    this._commandBoxList.remove(child);
+                    const updatedRows = this._getListBoxRows(this._commandBoxList);
+                    const insertIndex = updatedRows.indexOf(row) + 1;
+                    this._commandBoxList.insert(child, insertIndex);
+
+                    child.visible = true;
+                    child.expanded = true;
+                    this._emitReorder();
+
+                    inserted = true;
+                    break;
+                }
+            }
+            if (!inserted) this._overlay.add_toast(new Adw.Toast({ title: _('Maximum row limit reached') }));
+        });
+        actionGroup.add_action(duplicateAction);    
+
 
         //#region (delete)
-        menuBox.append(createFlatButton(_('Delete'), () => {
+        const deleteAction = new Gio.SimpleAction({ name: 'delete' });
+        deleteAction.connect('activate', () => {
+
+            const adjustment = this._scroller.get_vadjustment();
+            const scrollValue = adjustment.get_value();
+            draggedRow = null;
+
             row.visible = false;
             this._settings.set_string(`entryrow${rowNumber}a-setting`, '');
             this._settings.set_string(`entryrow${rowNumber}b-setting`, '');
             this._settings.set_string(`entryrow${rowNumber}c-setting`, '');
             this._settings.set_boolean(`visible${rowNumber}-setting`, true);
-        }));
 
-        popover.set_child(menuBox);
-        menuButton.set_popover(popover);
+            GLib.idle_add(GLib.PRIORITY_DEFAULT_IDLE, () => {
+                adjustment.set_value(scrollValue);
+                return GLib.SOURCE_REMOVE;
+            });
+
+            const clock = this._scroller.get_frame_clock?.();
+            if (clock) {
+                const handlerId = clock.connect('after-paint', () => {
+                    adjustment.set_value(scrollValue);
+                    clock.disconnect(handlerId);
+                });
+            }
+        });
+        actionGroup.add_action(deleteAction);  
+        
         row.add_suffix(menuButton);
+        row.insert_action_group('row', actionGroup);
+
 
         //#region (checkbox)
         let checkButtonIcon = this._settings.get_boolean(`visible${rowNumber}-setting`) ? 'checkbox-checked-symbolic' : 'checkbox-symbolic';
@@ -187,6 +247,7 @@ export default class commandsUI extends Adw.PreferencesPage {
             css_classes: ['dim-label'],
         }));
 
+
         //#region (drag)
         let dragX, dragY;
         const dropController = new Gtk.DropControllerMotion();
@@ -205,6 +266,7 @@ export default class commandsUI extends Adw.PreferencesPage {
         });
 
         dragSource.connect('drag-begin', (_source, drag) => {
+            draggedRow = row;
             const dragWidget = new Gtk.ListBox();
             dragWidget.set_size_request(row.get_width(), row.get_height());
             dragWidget.add_css_class('boxed-list');
@@ -284,36 +346,34 @@ export default class commandsUI extends Adw.PreferencesPage {
 
         const clickGesture = new Gtk.GestureClick();
         clickGesture.connect('released', () => {
+            let inserted = false;
             for (const child of this._commandBoxList) {
-                if (child instanceof Adw.ExpanderRow) {
-                    const name = this._settings.get_string(`entryrow${child._rowNumber}a-setting`);
-                    const command = this._settings.get_string(`entryrow${child._rowNumber}b-setting`);
-                    const icon = this._settings.get_string(`entryrow${child._rowNumber}c-setting`);
-        
-                    if (name === '' && command === '' && icon === '') {
-                        // Remove and reinsert at end (before add button)
-                        this._commandBoxList.remove(child);
-                        const index = Array.from(this._commandBoxList).indexOf(this._addCommandButton);
-                        this._commandBoxList.insert(child, index);
-        
-                        // Update command-order setting
-                        let order = this._settings.get_value('command-order').deep_unpack();
-                        // Remove old position of this rowNumber, if it exists
-                        order = order.filter(n => n !== child._rowNumber);
-                        // Push to the end
-                        order.push(child._rowNumber);
-                        this._settings.set_value('command-order', new GLib.Variant('ai', order));
-                        
-                        this._settings.set_boolean(`visible${child._rowNumber}-setting`, true);
-                        child._checkButton.get_child().set_from_icon_name("checkbox-checked-symbolic");
-                        child.remove_css_class('dim-label');
-        
-                        child.visible = true;
-                        child.expanded = true;
-                        break;
-                    }
-                }
+                if (child instanceof Adw.ExpanderRow && !child.visible) {
+
+                    this._settings.set_string(`entryrow${child._rowNumber}a-setting`, "");
+                    this._settings.set_string(`entryrow${child._rowNumber}b-setting`, "");
+                    this._settings.set_string(`entryrow${child._rowNumber}c-setting`, "");
+                    this._settings.set_boolean(`visible${child._rowNumber}-setting`, true);
+                    child._checkButton.get_child().set_from_icon_name("checkbox-checked-symbolic");
+                    child.remove_css_class('dim-label');
+
+                    this._commandBoxList.remove(child);
+                    const index = Array.from(this._commandBoxList).indexOf(this._addCommandButton);
+                    this._commandBoxList.insert(child, index);
+    
+                    let order = this._settings.get_value('command-order').deep_unpack();
+                    order = order.filter(n => n !== child._rowNumber);
+                    order.push(child._rowNumber);
+                    this._settings.set_value('command-order', new GLib.Variant('ai', order));
+    
+                    child.visible = true;
+                    child.expanded = true;
+
+                    inserted = true;
+                    break;
+                } 
             }
+            if (!inserted) this._overlay.add_toast(new Adw.Toast({ title: _('Maximum row limit reached') }));
         });
 
         this._addCommandButton.add_controller(clickGesture);
@@ -335,20 +395,21 @@ export default class commandsUI extends Adw.PreferencesPage {
     //#region functions
     _onTargetDropped(_drop, value, _x, y, listbox) {
         const targetRow = listbox.get_row_at_y(y);
-        if (!value || !targetRow) return false;
+        if (!value || !targetRow || !draggedRow) return false;
 
         this._commandBoxList.drag_unhighlight_row();
 
-        if (targetRow === this._addCommandButton) return;
+        if (targetRow === draggedRow || targetRow === this._addCommandButton) return false;
 
-        for (const row of this._commandBoxList) {
-            if (row === value) {
-                this._commandBoxList.remove(value);
-                break;
-            }
-        }
+        const children = Array.from(this._commandBoxList);
+        const fromIndex = children.indexOf(draggedRow);
+        const toIndex = children.indexOf(targetRow);
+        if (fromIndex === -1 || toIndex === -1 || fromIndex === toIndex) return false;
 
-        listbox.insert(value, targetRow.get_index());
+        this._commandBoxList.remove(draggedRow);
+        const adjustedIndex = fromIndex < toIndex ? toIndex - 1 : toIndex;
+        this._commandBoxList.insert(draggedRow, adjustedIndex);
+
         this._emitReorder();
         return true;
     }
@@ -399,6 +460,11 @@ export default class commandsUI extends Adw.PreferencesPage {
         // Make sure "Add Command" button stays at the end
         this._commandBoxList.remove(this._addCommandButton);
         this._commandBoxList.append(this._addCommandButton);
+    }
+
+    _showToast(message) {
+        const toast = new Adw.Toast({ title: message });
+        this._overlay.add_toast(toast);
     }
     //#endregion functions
 }
