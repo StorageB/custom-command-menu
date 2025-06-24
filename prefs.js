@@ -22,6 +22,7 @@
 import Gio from 'gi://Gio';
 import Adw from 'gi://Adw';
 import Gtk from 'gi://Gtk';
+import Gdk from 'gi://Gdk';
 import GLib from 'gi://GLib';
 
 import { ExtensionPreferences, gettext as _ } from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js';
@@ -35,6 +36,7 @@ let filePath = GLib.build_filenamev([GLib.get_home_dir(), fileName]);
 
 export default class CustomCommandListPreferences extends ExtensionPreferences {
     fillPreferencesWindow(window) {
+        window.set_default_size(700, 950);
         window._settings = this.getSettings();
 
         let page = new commandsUI({
@@ -390,7 +392,71 @@ export default class CustomCommandListPreferences extends ExtensionPreferences {
         aboutGroup1.add(aboutRow0);
         aboutGroup1.add(aboutRow1);
         aboutGroup1.add(aboutRow2);
-        //#endregion Layout
 
+        this.addMaximizeButton(window);
+        //#endregion Layout
     }
+
+
+    //#region addMaximizeButton
+    addMaximizeButton(window) {
+        const icon = new Gtk.Image({
+            icon_name: 'window-maximize-symbolic',
+            pixel_size: 16,
+        });
+        const button = new Gtk.Button({
+            valign: Gtk.Align.CENTER,
+            child: icon,
+        });
+        button.add_css_class('circular');
+        button.set_size_request(24, 24);
+
+        const cssProvider = new Gtk.CssProvider();
+        cssProvider.load_from_data(`
+        button.circular {
+            padding: 0;
+            min-width: 24px;
+            min-height: 24px;
+            max-width: 24px;
+            max-height: 24px;
+        }
+        `, -1);
+        Gtk.StyleContext.add_provider_for_display(
+            Gdk.Display.get_default(),
+            cssProvider,
+            Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION
+        );
+
+        button.connect('clicked', () => {
+            if (window.is_maximized()) window.unmaximize();
+            else window.maximize();
+        });
+
+        window.connect('notify::maximized', () => {
+            icon.set_from_icon_name(window.is_maximized() ? 'window-restore-symbolic' : 'window-maximize-symbolic');
+        });
+
+        const header = this.findWidgetByType(window.get_content(), Adw.HeaderBar);
+        if (header) {
+            header.pack_end(button);
+            button.show();
+        } else {
+            console.log('[Custom Command Menu] Error adding maximize button');
+        }
+
+        return button;
+    }
+    //#endregion addMaximizeButton
+
+    
+    //#region findWidgetByType
+    findWidgetByType(parent, type) {
+        for (const child of [...parent]) {
+            if (child instanceof type) return child;
+            const found = this.findWidgetByType(child, type);
+            if (found) return found;
+        }
+        return null;
+    }
+    //#endregion findWidgetByType
 }

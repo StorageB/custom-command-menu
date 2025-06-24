@@ -55,9 +55,9 @@ export default class commandsUI extends Adw.PreferencesPage {
         this._commandBoxList = new Gtk.ListBox();
         this._commandBoxList.add_css_class('boxed-list');
 
-        this._scroller = new Gtk.ScrolledWindow({
-            vexpand: true,
-        });
+        this._scroller = new Gtk.ScrolledWindow();
+        this._scroller.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC);
+        this._scroller.set_propagate_natural_height(true);
         this._scroller.set_child(this._commandBoxList);
 
         const clamp = new Adw.Clamp({ child: this._scroller });
@@ -303,6 +303,7 @@ export default class commandsUI extends Adw.PreferencesPage {
     _initDragMenu() {
         const commandBoxTarget = Gtk.DropTarget.new(Gtk.ListBoxRow, Gdk.DragAction.MOVE);
         this._commandBoxList.add_controller(commandBoxTarget);
+        this._commandBoxList.set_vexpand(false);
 
         let savedOrder = [];
         try {
@@ -406,11 +407,28 @@ export default class commandsUI extends Adw.PreferencesPage {
         const toIndex = children.indexOf(targetRow);
         if (fromIndex === -1 || toIndex === -1 || fromIndex === toIndex) return false;
 
+        const adjustment = this._scroller.get_vadjustment();
+        const scrollValue = adjustment.get_value();
+
         this._commandBoxList.remove(draggedRow);
         const adjustedIndex = fromIndex < toIndex ? toIndex - 1 : toIndex;
         this._commandBoxList.insert(draggedRow, adjustedIndex);
 
+        GLib.idle_add(GLib.PRIORITY_DEFAULT_IDLE, () => {
+                adjustment.set_value(scrollValue);
+                return GLib.SOURCE_REMOVE;
+        });
+
+        const clock = this._scroller.get_frame_clock?.();
+        if (clock) {
+            const handlerId = clock.connect('after-paint', () => {
+                adjustment.set_value(scrollValue);
+                clock.disconnect(handlerId);
+            });
+        }
+
         this._emitReorder();
+        draggedRow = null;
         return true;
     }
 
