@@ -118,9 +118,11 @@ export default class commandsUI extends Adw.PreferencesPage {
             if (isSeparator(text)) {
                 entryRowCommand.hide();
                 entryRowIcon.hide();
+                entryRowName.title = _('Separator Row');
             } else {
                 entryRowCommand.show();
                 entryRowIcon.show();
+                entryRowName.title = _('Name:');
             }
         }
 
