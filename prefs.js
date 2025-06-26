@@ -36,7 +36,7 @@ let filePath = GLib.build_filenamev([GLib.get_home_dir(), fileName]);
 
 export default class CustomCommandListPreferences extends ExtensionPreferences {
     fillPreferencesWindow(window) {
-        window.set_default_size(700, 950);
+        window.set_default_size(700, 900);
         window._settings = this.getSettings();
 
         let page = new commandsUI({
@@ -233,8 +233,11 @@ export default class CustomCommandListPreferences extends ExtensionPreferences {
         const configRow1 = new Adw.ActionRow({
             title: _('Commands'),
             subtitle: _(
-                        'Enter the display names and associated commands for the drop-down menu. ' +
-                        'Drag and drop to reorder commands, and toggle the checkbox to show or hide a command.' 
+                        'Enter the display names and associated commands for the drop-down menu.\n' +
+                        '•  Type --- or ~~~ in the name field to create a visual separator line in the menu.\n' +
+                        '•  Adding text after --- or ~~~ creates a labeled separator.\n' +
+                        '•  Toggle the checkbox to show or hide a command.\n' +
+                        '•  Drag and drop to reorder commands.'
                        ),
             activatable: false,
         });
@@ -242,7 +245,7 @@ export default class CustomCommandListPreferences extends ExtensionPreferences {
         const configRow2 = new Adw.ActionRow({
             title: _('Icons'),
             subtitle: _(
-                        'For a list of available system icons, refer to the Icon List link below. ' +
+                        'For a list of available icons, refer to the Icon List link below. ' +
                         'Enter the name of the icon, or leave blank for no icon. ' +
                         'Refer to the Github Homepage for more icon configuration options.'
                        ),

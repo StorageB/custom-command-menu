@@ -77,6 +77,16 @@ export default class commandsUI extends Adw.PreferencesPage {
 
     //#region addRow
     _addRow(dragBox, rowNumber, index) {
+
+        const separators = ['~~~', '---', '───'];
+        function isSeparator(text) {
+            if (!text) return false;
+            text = text.trim();
+            return separators.some(prefix => 
+                text === prefix || (text.startsWith(prefix) && text.length > prefix.length)
+            );
+        }
+
         const row = new Adw.ExpanderRow({
             title: '',
             selectable: false,
@@ -95,6 +105,24 @@ export default class commandsUI extends Adw.PreferencesPage {
         this._settings.bind(`entryrow${rowNumber}a-setting`, entryRowName, 'text', Gio.SettingsBindFlags.DEFAULT);
         this._settings.bind(`entryrow${rowNumber}b-setting`, entryRowCommand, 'text', Gio.SettingsBindFlags.DEFAULT);
         this._settings.bind(`entryrow${rowNumber}c-setting`, entryRowIcon, 'text', Gio.SettingsBindFlags.DEFAULT);
+
+        GLib.idle_add(GLib.PRIORITY_DEFAULT_IDLE, () => {
+            updateRow();
+            return GLib.SOURCE_REMOVE;
+        });
+
+        function updateRow() {
+            const text = entryRowName.text;
+            row.title = text.replace(/&/g, '&amp;');
+
+            if (isSeparator(text)) {
+                entryRowCommand.hide();
+                entryRowIcon.hide();
+            } else {
+                entryRowCommand.show();
+                entryRowIcon.show();
+            }
+        }
 
         row.title = entryRowName.text.replace(/&/g, '&amp;');
 
@@ -240,6 +268,7 @@ export default class commandsUI extends Adw.PreferencesPage {
 
         entryRowName.connect('notify::text', () => {
             row.title = entryRowName.text.replace(/&/g, '&amp;');
+            updateRow();
         });
 
         row.add_prefix(new Gtk.Image({

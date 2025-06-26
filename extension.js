@@ -62,17 +62,52 @@ class CommandMenu extends PanelMenu.Button {
         
         const commandOrder = mySettings.get_value('command-order').deep_unpack();
         for (let j of commandOrder) {
+            
             if (j < 1 || j > numberOfCommands) continue;
+            if (!mySettings.get_boolean(`visible${j}-setting`)) continue;
 
             let entryRowA = mySettings.get_string(`entryrow${j}a-setting`);
             let entryRowB = mySettings.get_string(`entryrow${j}b-setting`);
             let entryRowC = mySettings.get_string(`entryrow${j}c-setting`);
 
-            if (entryRowA !== '' && mySettings.get_boolean(`visible${j}-setting`)) {
+            const separators = ['~~~', '---', '───'];
+            // menu entry for separator
+            if (separators.some(prefix => entryRowA.trim() === prefix)) {
+                this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
+                continue;
+            }
+
+            // menu entry for labeled separator
+            if (separators.some(prefix => entryRowA.trimStart().startsWith(prefix) && entryRowA.trimStart().length > prefix.length)) {
+                const matchingSeparator = separators.find(prefix => entryRowA.trimStart().startsWith(prefix));
+                const sectionLabel = new PopupMenu.PopupBaseMenuItem({
+                    reactive: false,
+                    style_class: 'section-label-menu-item',
+                });
+
+                const label = new St.Label({
+                    text: entryRowA.trimStart().slice(matchingSeparator.length).trim(),
+                    style_class: 'popup-subtitle-menu-item',
+                    x_expand: true,
+                    x_align: Clutter.ActorAlign.START,
+                    y_align: Clutter.ActorAlign.CENTER,
+                });
+
+                label.set_style('font-size: 0.8em; padding: 0em; margin: 0em; line-height: 1em;');
+                sectionLabel.actor.set_style('padding-top: 0px; padding-bottom: 0px; min-height: 0;');
+                sectionLabel.actor.add_child(label);
+
+                this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
+                if (matchingSeparator !== '───') this.menu.addMenuItem(sectionLabel);
+
+                continue;
+            }
+            
+            // menu entry for command
+            if (entryRowA.trim() !== '') {
                 this._addMenuItem(entryRowA, entryRowB, entryRowC.trim());
             }
         }
-
     }
 
 

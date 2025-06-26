@@ -2,12 +2,14 @@
 
 export const releaseNotes = `
 
-Version 10-beta2
+Version 10
 
 What's new in this version:
 
-•  Added an "Insert new" option to the row menu (alongside "Duplicate" and "Delete") to allow inserting a new row below an existing one.
-•  Added a maximize button to the preferences window and changed the default window size to be more appropriate.
+•  Typing --- or ~~~ in the name field now creates a visual separator line in the menu.
+•  Adding text after --- or ~~~ creates a labeled separator.
+•  An "Insert new" option was added to the row menu (alongside "Duplicate" and "Delete") to allow inserting a new row below an existing one.
+•  A maximize button was added to the preferences window, and the default window size has been changed to better suit a list of commands.
 •  A notification will now appear when the maximum number of command rows is reached.
 •  Fixed a bug where dragging and dropping a row to the same location caused it to jump to the top or bottom of the list.
 •  Fixed a bug where dragging and dropping or deleting a row sometimes caused the view to scroll to a different location.
