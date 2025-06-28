@@ -4,17 +4,18 @@
 
 Custom Command Menu is an extension for GNOME 45/46/47/48 to run user-defined commands from a customizable drop-down menu at the top bar. 
 
-![Screenshot-main](screenshots/screenshot-main-6.png)
+![Screenshot-main](screenshots/screenshot-main-10.png)
 
 <br>
 
 ## Features
 
-- Run commands by selecting them from a drop-down menu at the top bar.
+- Run commands from a drop-down menu at the top bar.
 - Configure commands directly from the extension preferences without the need for configuring any external files.
 - Give each command entry a custom name and icon.
 - Drag-and-drop to reorder commands.
 - Toggle visibility of individual commands.
+- Create standard or labeled separators in the menu.
 - Export and import command list using an easily editable configuration file.
 
 
@@ -53,6 +54,8 @@ Open the extension preferences via the Extension Manager or run
 ### Commands
 
 Enter a name and command for each entry to include it in the drop-down menu.
+- Type --- or ~~~ in the name field to create a visual separator line in the menu.
+- Adding text after --- or ~~~ creates a labeled separator.
 - Use the **☑ checkbox** to toggle a command's visibility.
 - Select the **⋮ more options** button to duplicate or delete a command.
 
