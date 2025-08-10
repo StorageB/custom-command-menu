@@ -69,14 +69,15 @@ Command tips:
 
 ### Icons
 
-Enter the name of a system icon (without the file extension). 
+Enter the name of a system icon. 
+
 **For a list of available symbolic icons refer to:**
 - [GNOME default icons](https://github.com/StorageB/icons/blob/main/GNOME48Adwaita/icons.md)
 - [Ubuntu Yaru icons](https://github.com/StorageB/icons/blob/main/Yaru/icons.md)
 
-Alternatively, browse the icon directory for your system’s theme (typically /usr/share/icons), or use the [Icon Library app](https://flathub.org/apps/org.gnome.design.IconLibrary).
+Alternatively, browse the icon directory for your system’s theme (typically /usr/share/icons) and enter the name of an icon (without the file extension).
 
-To use a custom icon, place an SVG icon in: `~/.local/share/icons/hicolor/scalable/apps/`. Reboot and then enter the icon name (without the file extension). 
+To use a custom icon, place an SVG icon in: `~/.local/share/icons`. Reboot and then enter the icon name (without the file extension). 
 
 
 <br>
