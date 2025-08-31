@@ -372,6 +372,18 @@ export default class CustomCommandListPreferences extends ExtensionPreferences {
         } else {
             titleEntryRow.text = window._settings.get_string('menutitle-setting') || '';
         }
+
+        const menuLocationList = new Gtk.StringList();
+        [_('Left'), _('Right')].forEach(choice => menuLocationList.append(choice));
+    
+        const menuLocationComboRow = new Adw.ComboRow({
+            title: _('Menu Location'),
+            subtitle: _('Select location for the menu in the top bar'),
+            model: menuLocationList,
+            selected: window._settings.get_int('menulocation-setting'),
+        });
+
+        window._settings.bind('menulocation-setting', menuLocationComboRow, 'selected', Gio.SettingsBindFlags.DEFAULT);
         //#endregion Settings
 
 
@@ -390,6 +402,7 @@ export default class CustomCommandListPreferences extends ExtensionPreferences {
         settingsGroup1.add(titleExpanderRow);
         titleExpanderRow.add_row(menuComboRow);
         titleExpanderRow.add_row(titleEntryRow);
+        settingsGroup1.add(menuLocationComboRow);
                 
         page2.add(aboutGroup1);
         aboutGroup1.add(aboutRow0);

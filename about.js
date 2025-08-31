@@ -2,9 +2,14 @@
 
 export const releaseNotes = `
 
-Version 10
+Version 11
 
 What's new in this version:
+
+•  Option added to move menu to the right side of the top bar.
+•  Support for GNOME 49.
+
+Previous version:
 
 •  Typing --- or ~~~ in the name field creates a separator line in the menu.
 •  Adding text after --- or ~~~ creates a labeled separator.
@@ -14,13 +19,4 @@ What's new in this version:
 •  Fixed a bug where dragging and dropping a row to the same location caused it to jump to the top or bottom of the list.
 •  Fixed a bug where dragging and dropping or deleting a row sometimes caused the view to scroll to a different location.
 •  Fixed a bug where the row menu sometimes didn't register a selection.
-
-Previous version:
-
-•  Redesigned user interface for configuring commands.
-•  Drag-and-drop support to reorder commands.
-•  Checkbox option to show or hide commands in the drop-down menu.
-•  Add and delete commands as needed instead of showing blank rows.
-•  Duplicate existing command entries.
-•  Increased maximum number of supported commands to 30.
 `;
