@@ -17,6 +17,7 @@ Custom Command Menu is an extension for GNOME 45/46/47/48/49 to run user-defined
 - Toggle visibility of individual commands.
 - Create standard or labeled separators in the menu.
 - Export and import command list using an easily editable configuration file.
+- Customize location of menu in the top bar.
 
 
 <br>
