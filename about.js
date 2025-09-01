@@ -1,12 +1,11 @@
 /* about.js */
 
 export const releaseNotes = `
-Version 11
+Version 11 - What's new:
 
-What's new in this version:
-
-•  Added option to customize menu location in the top bar.
+•  Option to customize menu location in the top bar.
 •  Support for GNOME 49.
+
 
 Previous version:
 
