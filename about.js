@@ -1,12 +1,11 @@
 /* about.js */
 
 export const releaseNotes = `
-
 Version 11
 
 What's new in this version:
 
-•  Option added to move menu to the right side of the top bar.
+•  Added option to customize menu location in the top bar.
 •  Support for GNOME 49.
 
 Previous version:

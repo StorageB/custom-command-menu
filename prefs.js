@@ -374,7 +374,7 @@ export default class CustomCommandListPreferences extends ExtensionPreferences {
         }
 
         const menuLocationList = new Gtk.StringList();
-        [_('Left'), _('Right')].forEach(choice => menuLocationList.append(choice));
+        [_('Default'), _('Left'), _('Right')].forEach(choice => menuLocationList.append(choice));
     
         const menuLocationComboRow = new Adw.ComboRow({
             title: _('Menu Location'),
@@ -383,7 +383,25 @@ export default class CustomCommandListPreferences extends ExtensionPreferences {
             selected: window._settings.get_int('menulocation-setting'),
         });
 
+        menuLocationComboRow.connect('notify::selected', () => {
+            menuPositionSpinRow.visible = menuLocationComboRow.selected !== 0;
+        });        
+
         window._settings.bind('menulocation-setting', menuLocationComboRow, 'selected', Gio.SettingsBindFlags.DEFAULT);
+
+        const menuPositionSpinRow = new Adw.SpinRow({
+            title: _('Menu Position'),
+            subtitle: _('Adjust position of the menu in the top bar'),
+            adjustment: new Gtk.Adjustment({
+                lower: 0,
+                upper: 20,
+                step_increment: 1,
+            }),
+            value: window._settings.get_int('menuposition-setting'),
+        });
+        menuPositionSpinRow.visible = menuLocationComboRow.selected !== 0;
+
+        window._settings.bind('menuposition-setting', menuPositionSpinRow, 'value', Gio.SettingsBindFlags.DEFAULT);        
         //#endregion Settings
 
 
@@ -403,6 +421,7 @@ export default class CustomCommandListPreferences extends ExtensionPreferences {
         titleExpanderRow.add_row(menuComboRow);
         titleExpanderRow.add_row(titleEntryRow);
         settingsGroup1.add(menuLocationComboRow);
+        settingsGroup1.add(menuPositionSpinRow);
                 
         page2.add(aboutGroup1);
         aboutGroup1.add(aboutRow0);

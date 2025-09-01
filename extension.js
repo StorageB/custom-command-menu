@@ -152,9 +152,10 @@ export default class CommandMenuExtension extends Extension {
         this._settings = this.getSettings();
 
         this._indicator = new CommandMenu(this._settings);
-        let location = this._settings.get_int('menulocation-setting') === 1 ? 'right' : 'left';
-        let pos = location === 'left' ? Main.sessionMode.panel.left.length : Main.sessionMode.panel.right.length;
-        Main.panel.addToStatusArea('command-menu', this._indicator, pos, location);
+        let location = this._settings.get_int('menulocation-setting') === 2 ? 'right' : 'left';
+        let pos = this._settings.get_int('menuposition-setting');
+        if (this._settings.get_int('menulocation-setting') === 0) {Main.panel.addToStatusArea('command-menu', this._indicator, Main.sessionMode.panel.left.length, 'left');}
+        else {Main.panel.addToStatusArea('command-menu', this._indicator, pos, location);}
 
         // Watch for changes to text entry fields:
         for (let k = 1; k <= numberOfCommands; k++) {
@@ -190,21 +191,20 @@ export default class CommandMenuExtension extends Extension {
             console.log('[Custom Command Menu] command-order settings changed:\n', newCommandOrder.join(', '));  
         });
         this._settings.connect('changed::menulocation-setting', () => {
-            this._indicator.destroy();
-            delete this._indicator;
-            this._indicator = new CommandMenu(this._settings);
-            let location = this._settings.get_int('menulocation-setting') === 1 ? 'right' : 'left';
-            let pos = location === 'left' ? Main.sessionMode.panel.left.length : Main.sessionMode.panel.right.length;
-            Main.panel.addToStatusArea('command-menu', this._indicator, pos, location);
+            refreshIndicator.call(this);
         });
+        this._settings.connect('changed::menuposition-setting', () => {
+            refreshIndicator.call(this);
+        });        
 
         function refreshIndicator() {
             this._indicator.destroy();
             delete this._indicator;
             this._indicator = new CommandMenu(this._settings);
-            let location = this._settings.get_int('menulocation-setting') === 1 ? 'right' : 'left';
-            let pos = location === 'left' ? Main.sessionMode.panel.left.length : Main.sessionMode.panel.right.length;
-            Main.panel.addToStatusArea('command-menu', this._indicator, pos, location);
+            let location = this._settings.get_int('menulocation-setting') === 2 ? 'right' : 'left';
+            let pos = this._settings.get_int('menuposition-setting');
+            if (this._settings.get_int('menulocation-setting') === 0) {Main.panel.addToStatusArea('command-menu', this._indicator, Main.sessionMode.panel.left.length, 'left');}
+            else {Main.panel.addToStatusArea('command-menu', this._indicator, pos, location);}
         }
     }
 
