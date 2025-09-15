@@ -41,7 +41,7 @@ class CommandMenu extends PanelMenu.Button {
 
     constructor(mySettings) {
         super(0.5, _('Commands'));
-        let labelText = _('Commands');
+        let labelText;
 
         if (mySettings.get_int('menuoptions-setting') === 1) {
             labelText = mySettings.get_string('menuicon-setting');
@@ -51,7 +51,7 @@ class CommandMenu extends PanelMenu.Button {
             });
             this.add_child(this._label);
         } else {
-            labelText = mySettings.get_string('menutitle-setting');
+            labelText = _('Commands'); 
             this._label = new St.Label({
                 text: labelText,
                 y_expand: true,
@@ -125,10 +125,10 @@ class CommandMenu extends PanelMenu.Button {
         
         newItem.connect('activate', () => {
             // Run associated command when a menu item is clicked
-            console.log(`[Custom Command Menu] Attempting to execute command:\n${command}`);
+            console.log(_('[Custom Command Menu] Attempting to execute command:\n%s').replace('%s', command));
             let [success, pid] = GLib.spawn_async(null, ["/usr/bin/env", "bash", "-c", command], null, GLib.SpawnFlags.SEARCH_PATH, null);
             if (!success) {
-                console.log(`[Custom Command Menu] Error running command:\n${command}`);
+                console.log(_('[Custom Command Menu] Error running command:\n%s').replace('%s', command));
             }
         });
         this.menu.addMenuItem(newItem);
