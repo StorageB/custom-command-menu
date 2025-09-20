@@ -43,14 +43,22 @@ class CommandMenu extends PanelMenu.Button {
         super(0.5, _('Commands'));
         let labelText;
 
-        if (mySettings.get_int('menuoptions-setting') === 1) {
+        if (mySettings.get_int('menuoptions-setting') === 2) {
             labelText = mySettings.get_string('menuicon-setting');
             this._label = new St.Icon({
                 icon_name: labelText.trim(), 
                 style_class: 'system-status-icon',
             });
             this.add_child(this._label);
-        } else {
+        } else if (mySettings.get_int('menuoptions-setting') === 1) {
+    		labelText = mySettings.get_string('menutitle-setting');
+    		this._label = new St.Label({
+        	text: labelText,
+        	y_expand: true,
+        	y_align: Clutter.ActorAlign.CENTER,
+    		});
+    		this.add_child(this._label);
+    	} else {
             labelText = _('Commands'); 
             this._label = new St.Label({
                 text: labelText,

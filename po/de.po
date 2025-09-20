@@ -1,0 +1,309 @@
+# German translations for PACKAGE package.
+# Copyright (C) 2025 THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# Il Craccatore 2011, 2025.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-09-20 17:24+0200\n"
+"PO-Revision-Date: 2025-09-20 17:24+0200\n"
+"Last-Translator: Il Craccatore 2011\n"
+"Language-Team: none\n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: commandsUI.js:97 commandsUI.js:125
+msgid "Name:"
+msgstr "Name:"
+
+#: commandsUI.js:98
+msgid "Command:"
+msgstr "Befehl:"
+
+#: commandsUI.js:99
+msgid "Icon:"
+msgstr "Symbol:"
+
+#: commandsUI.js:121
+msgid "Separator Row"
+msgstr "Trennzeile"
+
+#: commandsUI.js:133
+msgid "Insert new"
+msgstr "Neu einfügen"
+
+#: commandsUI.js:134
+msgid "Duplicate"
+msgstr "Duplizieren"
+
+#: commandsUI.js:135
+msgid "Delete"
+msgstr "Löschen"
+
+#: commandsUI.js:173 commandsUI.js:205 commandsUI.js:408
+msgid "Maximum row limit reached"
+msgstr "Maximale Zeilenanzahl erreicht"
+
+#: extension.js:43 extension.js:62 prefs.js:43 prefs.js:238
+msgid "Commands"
+msgstr "Befehle"
+
+#: extension.js:136
+#, javascript-format
+msgid "[Custom Command Menu] Attempting to execute command:\n%s"
+msgstr "[Benutzerdefiniertes Befehlsmenü] Versuch, Befehl auszuführen:\n%s"
+
+#: extension.js:139
+#, javascript-format
+msgid "[Custom Command Menu] Error running command:\n%s"
+msgstr "[Benutzerdefiniertes Befehlsmenü] Fehler beim Ausführen des Befehls:\n%s"
+
+#: prefs.js:50
+msgid "Configuration"
+msgstr "Konfiguration"
+
+#: prefs.js:56
+msgid "Backup and Restore"
+msgstr "Sicherung und Wiederherstellung"
+
+#: prefs.js:62
+msgid "Export Command List"
+msgstr "Befehlsliste exportieren"
+
+#: prefs.js:63
+#, javascript-format
+msgid "Click to export %s configuration file to user's home directory"
+msgstr "Klicken, um die %s Konfigurationsdatei in das Benutzerverzeichnis zu exportieren"
+
+#: prefs.js:94
+#, javascript-format
+msgid "Commands exported to: %s"
+msgstr "Befehle exportiert nach: %s"
+
+#: prefs.js:96
+msgid "Open"
+msgstr "Öffnen"
+
+#: prefs.js:106
+msgid "Application Not Found"
+msgstr "Anwendung nicht gefunden"
+
+#: prefs.js:108
+msgid ""
+"No default application found to open .ini files.\n"
+"\n"
+"The commands.ini configuration file can be opened and modified in any text editor. To open the file, it may first be required to manually associate the .ini file with the default text editor by doing the following:\n"
+"\n"
+"1. Open the home directory and locate the commands.ini file\n"
+"2. Right-click on the file and select \"Open with...\"\n"
+"3. Choose a default text editor, and select the option \"Always use for this file type\""
+msgstr ""
+"Keine Standardanwendung zum Öffnen von .ini-Dateien gefunden.\n"
+"\n"
+"Die Konfigurationsdatei commands.ini kann mit jedem Texteditor geöffnet und bearbeitet werden. Um die Datei zu öffnen, muss möglicherweise zuerst die .ini-Datei manuell mit dem Standard-Texteditor verknüpft werden, indem Sie Folgendes tun:\n"
+"\n"
+"1. Öffnen Sie das Benutzerverzeichnis und suchen Sie die Datei commands.ini\n"
+"2. Rechtsklicken Sie auf die Datei und wählen Sie \"Öffnen mit...\"\n"
+"3. Wählen Sie einen Standard-Texteditor aus und aktivieren Sie die Option \"Immer für diesen Dateityp verwenden\""
+
+#: prefs.js:125 prefs.js:132
+msgid "Export Error"
+msgstr "Exportfehler"
+
+#: prefs.js:127 prefs.js:161 prefs.js:214
+msgid "Details"
+msgstr "Details"
+
+#: prefs.js:133
+#, javascript-format
+msgid "Failed to export command list\n\n%s"
+msgstr "Export der Befehlsliste fehlgeschlagen\n\n%s"
+
+#: prefs.js:135 prefs.js:170 prefs.js:222
+msgid "OK"
+msgstr "OK"
+
+#: prefs.js:147
+msgid "Import Command List"
+msgstr "Befehlsliste importieren"
+
+#: prefs.js:148
+#, javascript-format
+msgid "Click to import %s configuration file from user's home directory"
+msgstr "Klicken, um die %s Konfigurationsdatei aus dem Benutzerverzeichnis zu importieren"
+
+#: prefs.js:159
+msgid "File not found"
+msgstr "Datei nicht gefunden"
+
+#: prefs.js:166
+msgid "File Not Found"
+msgstr "Datei nicht gefunden"
+
+#: prefs.js:167
+#, javascript-format
+msgid "The %s configuration file could not be found in the user's home directory. Verify the following file exists:\n\n%s"
+msgstr "Die Konfigurationsdatei %s wurde im Benutzerverzeichnis nicht gefunden. Überprüfen Sie, ob die folgende Datei existiert:\n\n%s"
+
+#: prefs.js:205
+msgid "Successfully imported 1 command"
+msgstr "1 Befehl erfolgreich importiert"
+
+#: prefs.js:206
+#, javascript-format
+msgid "Successfully imported %d commands"
+msgstr "%d Befehle erfolgreich importiert"
+
+#: prefs.js:212 prefs.js:219
+msgid "Import Error"
+msgstr "Importfehler"
+
+#: prefs.js:220
+#, javascript-format
+msgid "Failed to import command list\n\n%s"
+msgstr "Import der Befehlsliste fehlgeschlagen\n\n%s"
+
+#: prefs.js:234
+msgid "Setup Information"
+msgstr "Einrichtungsinformationen"
+
+#: prefs.js:240
+msgid ""
+"Enter the display names and associated commands for the drop-down menu.\n"
+"•  Type --- or ~~~ in the name field to create a visual separator line in the menu.\n"
+"•  Adding text after --- or ~~~ creates a labeled separator.\n"
+"•  Toggle the checkbox to show or hide a command.\n"
+"•  Drag and drop to reorder commands."
+msgstr ""
+"Geben Sie die Anzeigenamen und zugehörigen Befehle für das Dropdown-Menü ein.\n"
+"•  Geben Sie --- oder ~~~ im Namensfeld ein, um eine visuelle Trennlinie im Menü zu erstellen.\n"
+"•  Text nach --- oder ~~~ erstellt einen beschrifteten Trenner.\n"
+"•  Aktivieren oder deaktivieren Sie das Kontrollkästchen, um einen Befehl anzuzeigen oder auszublenden.\n"
+"•  Ziehen Sie die Befehle, um sie neu anzuordnen."
+
+#: prefs.js:250
+msgid "Icons"
+msgstr "Symbole"
+
+#: prefs.js:252
+msgid ""
+"For a list of available icons, refer to the Icon List link below. Enter the name of the icon, or leave blank for no icon. Refer to the Github Homepage for more icon configuration options."
+msgstr ""
+"Für eine Liste verfügbarer Symbole siehe den unten stehenden Link zur Symbol-Liste. Geben Sie den Namen des Symbols ein oder lassen Sie das Feld für kein Symbol leer. Weitere Optionen zur Symbolkonfiguration finden Sie auf der GitHub-Startseite."
+
+#: prefs.js:260
+msgid "Icon List"
+msgstr "Symbol-Liste"
+
+#: prefs.js:261
+msgid "List of default symbolic icons"
+msgstr "Liste der standardmäßigen symbolischen Symbole"
+
+#: prefs.js:271
+msgid "Local Icons"
+msgstr "Lokale Symbole"
+
+#: prefs.js:272
+msgid "Local icon directory (/usr/share/icons)"
+msgstr "Lokales Symbolverzeichnis (/usr/share/icons)"
+
+#: prefs.js:285
+msgid "About"
+msgstr "Über"
+
+#: prefs.js:289
+msgid "What's New"
+msgstr "Neuigkeiten"
+
+#: prefs.js:290
+msgid "List of recent changes and improvements"
+msgstr "Liste der letzten Änderungen und Verbesserungen"
+
+#: prefs.js:297
+msgid "Release Notes"
+msgstr "Versionshinweise"
+
+#: prefs.js:308
+msgid "Homepage"
+msgstr "Homepage"
+
+#: prefs.js:309
+msgid "GitHub page for additional information and bug reporting"
+msgstr "GitHub-Seite für weitere Informationen und Fehlerberichte"
+
+#: prefs.js:319
+msgid "Extension Page"
+msgstr "Erweiterungsseite"
+
+#: prefs.js:320
+msgid "GNOME extension page"
+msgstr "GNOME-Erweiterungsseite"
+
+#: prefs.js:333
+msgid "Settings"
+msgstr "Einstellungen"
+
+#: prefs.js:337
+msgid "Custom Menu Title"
+msgstr "Benutzerdefinierter Menü-Titel"
+
+#: prefs.js:338
+msgid "Use custom text or a custom icon for the menu title"
+msgstr "Benutzerdefinierten Text oder ein benutzerdefiniertes Symbol für den Menütitel verwenden"
+
+#: prefs.js:342 prefs.js:395
+msgid "Default"
+msgstr "Standard"
+
+#: prefs.js:342
+msgid "Text"
+msgstr "Text"
+
+#: prefs.js:342
+msgid "Icon"
+msgstr "Symbol"
+
+#: prefs.js:345
+msgid "Menu Type"
+msgstr "Menütyp"
+
+#: prefs.js:346
+msgid "Select menu type to be text or an icon"
+msgstr "Menütyp auswählen: Text oder Symbol"
+
+#: prefs.js:352 prefs.js:362
+msgid "Icon name:"
+msgstr "Symbolname:"
+
+#: prefs.js:352 prefs.js:366
+msgid "Menu title:"
+msgstr "Menütitel:"
+
+#: prefs.js:395
+msgid "Left"
+msgstr "Links"
+
+#: prefs.js:395
+msgid "Right"
+msgstr "Rechts"
+
+#: prefs.js:398
+msgid "Menu Location"
+msgstr "Menüposition"
+
+#: prefs.js:399
+msgid "Select location for the menu in the top bar"
+msgstr "Position des Menüs in der oberen Leiste auswählen"
+
+#: prefs.js:411
+msgid "Menu Position"
+msgstr "Menüposition"
+
+#: prefs.js:412
+msgid "Adjust position of the menu in the top bar"
+msgstr "Position des Menüs in der oberen Leiste anpassen"

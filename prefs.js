@@ -339,7 +339,7 @@ export default class CustomCommandListPreferences extends ExtensionPreferences {
         });
 
         const menuOptionList = new Gtk.StringList();
-        [_('Text'), _('Icon')].forEach(choice => menuOptionList.append(choice));
+        [_('Default'), _('Text'), _('Icon')].forEach(choice => menuOptionList.append(choice));
     
         const menuComboRow = new Adw.ComboRow({
             title: _('Menu Type'),
@@ -349,33 +349,47 @@ export default class CustomCommandListPreferences extends ExtensionPreferences {
         });
 
         const titleEntryRow = new Adw.EntryRow({
-            title: menuComboRow.selected === 1 ? _('Icon name:') : _('Menu title:'),
-        });
+    	title: (menuComboRow.selected === 1) ? _('Icon name:') : (menuComboRow.selected === 2) ? _('Menu title:') : '',
+	});
         
         menuComboRow.connect('notify::selected', () => {
             let selected = menuComboRow.selected; 
-            titleEntryRow.title = selected === 1 ? _('Icon name:') : _('Menu title:');  
-            titleEntryRow.text = selected === 1 
-                ? window._settings.get_string('menuicon-setting') || '' 
-                : window._settings.get_string('menutitle-setting') || '';
+            if (selected === 0) {
+        	titleEntryRow.title = '';
+        	titleEntryRow.text = '';
+        	titleEntryRow.visible = false;
+    	} else if (selected === 2) {
+        	titleEntryRow.title = _('Icon name:');
+        	titleEntryRow.text = window._settings.get_string('menuicon-setting') || '';
+        	titleEntryRow.visible = true;
+    	} else if (selected === 1) {
+        	titleEntryRow.title = _('Menu title:');
+        	titleEntryRow.text = window._settings.get_string('menutitle-setting') || '';
+        	titleEntryRow.visible = true;
+    		}
         });
 
         titleEntryRow.connect('changed', (entry) => {
             let selected = menuComboRow.selected;
-                if (selected === 1) {
-                    window._settings.set_string('menuicon-setting', entry.get_text());
-                } else {
-                    window._settings.set_string('menutitle-setting', entry.get_text());
-                }   
+                if (selected === 2) {
+        	window._settings.set_string('menuicon-setting', entry.get_text());
+    		} else if (selected === 1) {
+        	window._settings.set_string('menutitle-setting', entry.get_text());
+    		}
         });
 
         window._settings.bind('menuoptions-setting', menuComboRow, 'selected', Gio.SettingsBindFlags.DEFAULT);
         
-        if (window._settings.get_int('menuoptions-setting') === 1) {
-            titleEntryRow.text = window._settings.get_string('menuicon-setting') || '';
-        } else {
-            titleEntryRow.text = window._settings.get_string('menutitle-setting') || '';
-        }
+        if (window._settings.get_int('menuoptions-setting') === 2) {
+    	titleEntryRow.text = window._settings.get_string('menuicon-setting') || '';
+     	titleEntryRow.visible = true;
+	} else if (window._settings.get_int('menuoptions-setting') === 1) {
+    	titleEntryRow.text = window._settings.get_string('menutitle-setting') || '';
+     	titleEntryRow.visible = true;
+	} else {
+    	titleEntryRow.text = ''; 
+     	titleEntryRow.visible = false;
+	}
 
         const menuLocationList = new Gtk.StringList();
         [_('Default'), _('Left'), _('Right')].forEach(choice => menuLocationList.append(choice));
