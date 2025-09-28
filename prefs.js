@@ -59,11 +59,11 @@ export default class CustomCommandListPreferences extends ExtensionPreferences {
 
         //#region Export 
         const exportRow = new Adw.ActionRow({
-            title: _('Export Command List'),
-            subtitle: _(`Click to export ${fileName} configuration file to user's home directory`),
-            activatable: true,
-        });
-        exportRow.add_prefix(new Gtk.Image({icon_name: 'x-office-document-symbolic'}));
+    	title: _('Export Command List'),
+    	subtitle: _('Click to export %s configuration file to user\'s home directory').format(fileName),
+    	activatable: true,
+	});
+	exportRow.add_prefix(new Gtk.Image({ icon_name: 'x-office-document-symbolic' }));
         
         exportRow.connect('activated', () => {
             let keyFile = new GLib.KeyFile();
@@ -88,39 +88,40 @@ export default class CustomCommandListPreferences extends ExtensionPreferences {
         
             // Try saving the config file
             try {
-                keyFile.save_to_file(filePath);
-                console.log(`[Custom Command Menu] Commands exported to ${filePath}`);
-                const toast = Adw.Toast.new(_(`Commands exported to: ${filePath}`));
-                toast.set_timeout(3);
-                toast.set_button_label(_('Open'));
-                toast.connect('button-clicked', () => {
-                    // Determine if there is a default text editor available and open the saved file
-                    let appInfo = Gio.AppInfo.get_default_for_type('text/plain', false);
-                    if (appInfo) {
-                        appInfo.launch_uris([`file://${filePath}`], null);
-                    } else {
-                        const noAppDialog = new Gtk.MessageDialog({
-                            transient_for: window,
-                            modal: true,
-                            text: _('Application Not Found'),
-                            secondary_text: _
-                                ('No default application found to open .ini files.\n\n' +
-                                 'The commands.ini configuration file can be opened and modified in any text editor. ' +
-                                 'To open the file, it may first be required to manually associate the .ini file ' +
-                                 'with the default text editor by doing the following:\n\n' +
-                                 '1. Open the home directory and locate the commands.ini file\n' +
-                                 '2. Right-click on the file and select "Open with..."\n' +
-                                 '3. Choose a default text editor, and select the option "Always use for this file type"'
-                                ),
-                            buttons: Gtk.ButtonsType.CLOSE,
-                        });
-                        noAppDialog.connect('response', () => noAppDialog.destroy());
-                        noAppDialog.show();
-                    }
+        keyFile.save_to_file(filePath);
+        console.log('[Custom Command Menu] Commands exported to %s'.format(filePath));
+
+        const toast = Adw.Toast.new(_('Commands exported to: %s').format(filePath));
+        toast.set_timeout(3);
+        toast.set_button_label(_('Open'));
+
+        toast.connect('button-clicked', () => {
+            let appInfo = Gio.AppInfo.get_default_for_type('text/plain', false);
+            if (appInfo) {
+                appInfo.launch_uris([`file://${filePath}`], null);
+            } else {
+                const noAppDialog = new Gtk.MessageDialog({
+                    transient_for: window,
+                    modal: true,
+                    text: _('Application Not Found'),
+                    secondary_text: _(
+                        'No default application found to open .ini files.\n\n' +
+                        'The commands.ini configuration file can be opened and modified in any text editor. ' +
+                        'To open the file, it may first be required to manually associate the .ini file ' +
+                        'with the default text editor by doing the following:\n\n' +
+                        '1. Open the home directory and locate the commands.ini file\n' +
+                        '2. Right-click on the file and select "Open with..."\n' +
+                        '3. Choose a default text editor, and select the option "Always use for this file type"'
+                    ),
+                    buttons: Gtk.ButtonsType.CLOSE,
                 });
+                noAppDialog.connect('response', () => noAppDialog.destroy());
+                noAppDialog.show();
+            	}
+        	});
                 window.add_toast(toast);
             } catch (e) {
-                console.log(`[Custom Command Menu] Failed to export commands\n${e}`);
+                 console.log('[Custom Command Menu] Failed to export commands\n%s'.format(e));
                 const toast = Adw.Toast.new(_(`Export Error`));
                 toast.set_timeout(3);
                 toast.set_button_label(_('Details'));
@@ -129,7 +130,7 @@ export default class CustomCommandListPreferences extends ExtensionPreferences {
                         transient_for: window,
                         modal: true,
                         heading: _('Export Error'),
-                        body: _(`Failed to export command list\n\n${e}`),
+                        body: _('Failed to export command list\n\n%s').format(e),
                     });
                     errorDialog.add_response('ok', _('OK'));
                     errorDialog.connect('response', () => errorDialog.destroy());
@@ -143,10 +144,10 @@ export default class CustomCommandListPreferences extends ExtensionPreferences {
 
         //#region Import
         const importRow = new Adw.ActionRow({
-            title: _('Import Command List'),
-            subtitle: _(`Click to import ${fileName} configuration file from user's home directory`),
-            activatable: true,
-        });
+    	title: _('Import Command List'),
+    	subtitle: _('Click to import %s configuration file from user\'s home directory').format(fileName),
+    	activatable: true,
+	});
         importRow.add_prefix(new Gtk.Image({icon_name: 'x-office-document-symbolic'}));
 
         importRow.connect('activated', () => {
@@ -163,10 +164,9 @@ export default class CustomCommandListPreferences extends ExtensionPreferences {
                         transient_for: window,
                         modal: true,
                         heading: _('File Not Found'),
-                        body: _(`The ${fileName} configuration file could not be found in the user's home directory. ` +
-                            `Verify the following file exists:\n\n` +
-                            `${filePath}`),
-                    });
+                        body: _('The %s configuration file could not be found in the user\'s home directory. Verify the following file exists:\n\n%s')
+                    .format(fileName, filePath),
+            	});
                     errorDialog.add_response('ok', _('OK'));
                     errorDialog.connect('response', () => errorDialog.destroy());
                     errorDialog.show();
@@ -199,12 +199,16 @@ export default class CustomCommandListPreferences extends ExtensionPreferences {
                 }
                 window._settings.set_value('command-order', new GLib.Variant('ai', Array.from({ length: numberOfCommands }, (_, i) => i + 1)));
                 page.refreshCommandList(); // refresh the list of commands in the prefrences window
-                console.log(`[Custom Command Menu] Commands imported from ${filePath}`);
-                const toast = Adw.Toast.new(_(`Successfully imported ${commandCount} command${commandCount != 1 ? 's' : ''}`));
+                console.log('[Custom Command Menu] Commands imported from %s'.format(filePath));
+        	const toast = Adw.Toast.new(
+            	commandCount === 1
+                	? _('Successfully imported 1 command')
+                	: _('Successfully imported %d commands').format(commandCount)
+        	);
                 toast.set_timeout(3);
                 window.add_toast(toast);
             } catch (e) {
-                console.log(`[Custom Command Menu] Failed to import commands\n${e}`);
+                console.log('[Custom Command Menu] Failed to import commands\n%s'.format(e));
                 const toast = Adw.Toast.new(_(`Import Error`));
                 toast.set_timeout(3);
                 toast.set_button_label(_('Details'));
@@ -213,7 +217,7 @@ export default class CustomCommandListPreferences extends ExtensionPreferences {
                         transient_for: window,
                         modal: true,
                         heading: _('Import Error'),
-                        body: _(`Failed to import command list\n\n${e}`),
+                        body: _('Failed to import command list\n\n%s').format(e),
                     });
                     errorDialog.add_response('ok', _('OK'));
                     errorDialog.connect('response', () => errorDialog.destroy());
@@ -335,7 +339,7 @@ export default class CustomCommandListPreferences extends ExtensionPreferences {
         });
 
         const menuOptionList = new Gtk.StringList();
-        [_('Text'), _('Icon')].forEach(choice => menuOptionList.append(choice));
+        [_('Default'), _('Text'), _('Icon')].forEach(choice => menuOptionList.append(choice));
     
         const menuComboRow = new Adw.ComboRow({
             title: _('Menu Type'),
@@ -345,33 +349,47 @@ export default class CustomCommandListPreferences extends ExtensionPreferences {
         });
 
         const titleEntryRow = new Adw.EntryRow({
-            title: menuComboRow.selected === 1 ? _('Icon name:') : _('Menu title:'),
-        });
+    	title: (menuComboRow.selected === 1) ? _('Icon name:') : (menuComboRow.selected === 2) ? _('Menu title:') : '',
+	});
         
         menuComboRow.connect('notify::selected', () => {
             let selected = menuComboRow.selected; 
-            titleEntryRow.title = selected === 1 ? _('Icon name:') : _('Menu title:');  
-            titleEntryRow.text = selected === 1 
-                ? window._settings.get_string('menuicon-setting') || '' 
-                : window._settings.get_string('menutitle-setting') || '';
+            if (selected === 0) {
+        	titleEntryRow.title = '';
+        	titleEntryRow.text = '';
+        	titleEntryRow.visible = false;
+    	} else if (selected === 2) {
+        	titleEntryRow.title = _('Icon name:');
+        	titleEntryRow.text = window._settings.get_string('menuicon-setting') || '';
+        	titleEntryRow.visible = true;
+    	} else if (selected === 1) {
+        	titleEntryRow.title = _('Menu title:');
+        	titleEntryRow.text = window._settings.get_string('menutitle-setting') || '';
+        	titleEntryRow.visible = true;
+    		}
         });
 
         titleEntryRow.connect('changed', (entry) => {
             let selected = menuComboRow.selected;
-                if (selected === 1) {
-                    window._settings.set_string('menuicon-setting', entry.get_text());
-                } else {
-                    window._settings.set_string('menutitle-setting', entry.get_text());
-                }   
+                if (selected === 2) {
+        	window._settings.set_string('menuicon-setting', entry.get_text());
+    		} else if (selected === 1) {
+        	window._settings.set_string('menutitle-setting', entry.get_text());
+    		}
         });
 
         window._settings.bind('menuoptions-setting', menuComboRow, 'selected', Gio.SettingsBindFlags.DEFAULT);
         
-        if (window._settings.get_int('menuoptions-setting') === 1) {
-            titleEntryRow.text = window._settings.get_string('menuicon-setting') || '';
-        } else {
-            titleEntryRow.text = window._settings.get_string('menutitle-setting') || '';
-        }
+        if (window._settings.get_int('menuoptions-setting') === 2) {
+    	titleEntryRow.text = window._settings.get_string('menuicon-setting') || '';
+     	titleEntryRow.visible = true;
+	} else if (window._settings.get_int('menuoptions-setting') === 1) {
+    	titleEntryRow.text = window._settings.get_string('menutitle-setting') || '';
+     	titleEntryRow.visible = true;
+	} else {
+    	titleEntryRow.text = ''; 
+     	titleEntryRow.visible = false;
+	}
 
         const menuLocationList = new Gtk.StringList();
         [_('Default'), _('Left'), _('Right')].forEach(choice => menuLocationList.append(choice));

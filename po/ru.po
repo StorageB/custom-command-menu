@@ -1,0 +1,310 @@
+# Russian translations for PACKAGE package.
+# Copyright (C) 2025 THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# Il Craccatore 2011, 2025.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-09-20 17:24+0200\n"
+"PO-Revision-Date: 2025-09-20 17:24+0200\n"
+"Last-Translator: Il Craccatore 2011\n"
+"Language-Team: none\n"
+"Language: ru\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+#: commandsUI.js:97 commandsUI.js:125
+msgid "Name:"
+msgstr "Имя:"
+
+#: commandsUI.js:98
+msgid "Command:"
+msgstr "Команда:"
+
+#: commandsUI.js:99
+msgid "Icon:"
+msgstr "Иконка:"
+
+#: commandsUI.js:121
+msgid "Separator Row"
+msgstr "Разделитель"
+
+#: commandsUI.js:133
+msgid "Insert new"
+msgstr "Вставить новый"
+
+#: commandsUI.js:134
+msgid "Duplicate"
+msgstr "Дублировать"
+
+#: commandsUI.js:135
+msgid "Delete"
+msgstr "Удалить"
+
+#: commandsUI.js:173 commandsUI.js:205 commandsUI.js:408
+msgid "Maximum row limit reached"
+msgstr "Достигнут максимальный лимит строк"
+
+#: extension.js:43 extension.js:62 prefs.js:43 prefs.js:238
+msgid "Commands"
+msgstr "Команды"
+
+#: extension.js:136
+#, javascript-format
+msgid "[Custom Command Menu] Attempting to execute command:\n%s"
+msgstr "[Меню пользовательских команд] Попытка выполнить команду:\n%s"
+
+#: extension.js:139
+#, javascript-format
+msgid "[Custom Command Menu] Error running command:\n%s"
+msgstr "[Меню пользовательских команд] Ошибка при выполнении команды:\n%s"
+
+#: prefs.js:50
+msgid "Configuration"
+msgstr "Конфигурация"
+
+#: prefs.js:56
+msgid "Backup and Restore"
+msgstr "Резервное копирование и восстановление"
+
+#: prefs.js:62
+msgid "Export Command List"
+msgstr "Экспорт списка команд"
+
+#: prefs.js:63
+#, javascript-format
+msgid "Click to export %s configuration file to user's home directory"
+msgstr "Нажмите, чтобы экспортировать файл конфигурации %s в домашний каталог пользователя"
+
+#: prefs.js:94
+#, javascript-format
+msgid "Commands exported to: %s"
+msgstr "Команды экспортированы в: %s"
+
+#: prefs.js:96
+msgid "Open"
+msgstr "Открыть"
+
+#: prefs.js:106
+msgid "Application Not Found"
+msgstr "Приложение не найдено"
+
+#: prefs.js:108
+msgid ""
+"No default application found to open .ini files.\n"
+"\n"
+"The commands.ini configuration file can be opened and modified in any text editor. To open the file, it may first be required to manually associate the .ini file with the default text editor by doing the following:\n"
+"\n"
+"1. Open the home directory and locate the commands.ini file\n"
+"2. Right-click on the file and select \"Open with...\"\n"
+"3. Choose a default text editor, and select the option \"Always use for this file type\""
+msgstr ""
+"Не найдено приложение по умолчанию для открытия файлов .ini.\n"
+"\n"
+"Файл конфигурации commands.ini можно открыть и изменить в любом текстовом редакторе. Чтобы открыть файл, возможно, потребуется вручную связать файл .ini с редактором по умолчанию, выполнив следующие действия:\n"
+"\n"
+"1. Откройте домашний каталог и найдите файл commands.ini\n"
+"2. Щелкните правой кнопкой мыши на файле и выберите «Открыть с помощью...»\n"
+"3. Выберите текстовый редактор по умолчанию и отметьте опцию «Всегда использовать для этого типа файлов»"
+
+#: prefs.js:125 prefs.js:132
+msgid "Export Error"
+msgstr "Ошибка экспорта"
+
+#: prefs.js:127 prefs.js:161 prefs.js:214
+msgid "Details"
+msgstr "Подробности"
+
+#: prefs.js:133
+#, javascript-format
+msgid "Failed to export command list\n\n%s"
+msgstr "Не удалось экспортировать список команд\n\n%s"
+
+#: prefs.js:135 prefs.js:170 prefs.js:222
+msgid "OK"
+msgstr "ОК"
+
+#: prefs.js:147
+msgid "Import Command List"
+msgstr "Импорт списка команд"
+
+#: prefs.js:148
+#, javascript-format
+msgid "Click to import %s configuration file from user's home directory"
+msgstr "Нажмите, чтобы импортировать файл конфигурации %s из домашнего каталога пользователя"
+
+#: prefs.js:159
+msgid "File not found"
+msgstr "Файл не найден"
+
+#: prefs.js:166
+msgid "File Not Found"
+msgstr "Файл не найден"
+
+#: prefs.js:167
+#, javascript-format
+msgid "The %s configuration file could not be found in the user's home directory. Verify the following file exists:\n\n%s"
+msgstr "Файл конфигурации %s не найден в домашнем каталоге пользователя. Убедитесь, что существует следующий файл:\n\n%s"
+
+#: prefs.js:205
+msgid "Successfully imported 1 command"
+msgstr "1 команда успешно импортирована"
+
+#: prefs.js:206
+#, javascript-format
+msgid "Successfully imported %d commands"
+msgstr "%d команд успешно импортировано"
+
+#: prefs.js:212 prefs.js:219
+msgid "Import Error"
+msgstr "Ошибка импорта"
+
+#: prefs.js:220
+#, javascript-format
+msgid "Failed to import command list\n\n%s"
+msgstr "Не удалось импортировать список команд\n\n%s"
+
+#: prefs.js:234
+msgid "Setup Information"
+msgstr "Информация о настройках"
+
+#: prefs.js:240
+msgid ""
+"Enter the display names and associated commands for the drop-down menu.\n"
+"•  Type --- or ~~~ in the name field to create a visual separator line in the menu.\n"
+"•  Adding text after --- or ~~~ creates a labeled separator.\n"
+"•  Toggle the checkbox to show or hide a command.\n"
+"•  Drag and drop to reorder commands."
+msgstr ""
+"Введите отображаемые имена и соответствующие команды для выпадающего меню.\n"
+"• Введите --- или ~~~ в поле имени, чтобы создать визуальную разделительную линию в меню.\n"
+"• Добавление текста после --- или ~~~ создаёт разделитель с меткой.\n"
+"• Установите или снимите флажок, чтобы показать или скрыть команду.\n"
+"• Перетаскивайте команды для изменения их порядка."
+
+#: prefs.js:250
+msgid "Icons"
+msgstr "Иконки"
+
+#: prefs.js:252
+msgid ""
+"For a list of available icons, refer to the Icon List link below. Enter the name of the icon, or leave blank for no icon. Refer to the Github Homepage for more icon configuration options."
+msgstr ""
+"Для списка доступных иконок см. ссылку «Список иконок» ниже. Введите имя иконки или оставьте поле пустым для отсутствия иконки. Дополнительные параметры настройки иконок см. на странице Github."
+
+#: prefs.js:260
+msgid "Icon List"
+msgstr "Список иконок"
+
+#: prefs.js:261
+msgid "List of default symbolic icons"
+msgstr "Список стандартных символических иконок"
+
+#: prefs.js:271
+msgid "Local Icons"
+msgstr "Локальные иконки"
+
+#: prefs.js:272
+msgid "Local icon directory (/usr/share/icons)"
+msgstr "Локальный каталог иконок (/usr/share/icons)"
+
+#: prefs.js:285
+msgid "About"
+msgstr "О программе"
+
+#: prefs.js:289
+msgid "What's New"
+msgstr "Что нового"
+
+#: prefs.js:290
+msgid "List of recent changes and improvements"
+msgstr "Список последних изменений и улучшений"
+
+#: prefs.js:297
+msgid "Release Notes"
+msgstr "Примечания к выпуску"
+
+#: prefs.js:308
+msgid "Homepage"
+msgstr "Домашняя страница"
+
+#: prefs.js:309
+msgid "GitHub page for additional information and bug reporting"
+msgstr "Страница GitHub для дополнительной информации и сообщения об ошибках"
+
+#: prefs.js:319
+msgid "Extension Page"
+msgstr "Страница расширения"
+
+#: prefs.js:320
+msgid "GNOME extension page"
+msgstr "Страница расширения GNOME"
+
+#: prefs.js:333
+msgid "Settings"
+msgstr "Настройки"
+
+#: prefs.js:337
+msgid "Custom Menu Title"
+msgstr "Пользовательский заголовок меню"
+
+#: prefs.js:338
+msgid "Use custom text or a custom icon for the menu title"
+msgstr "Использовать пользовательский текст или иконку для заголовка меню"
+
+#: prefs.js:342 prefs.js:395
+msgid "Default"
+msgstr "По умолчанию"
+
+#: prefs.js:342
+msgid "Text"
+msgstr "Текст"
+
+#: prefs.js:342
+msgid "Icon"
+msgstr "Иконка"
+
+#: prefs.js:345
+msgid "Menu Type"
+msgstr "Тип меню"
+
+#: prefs.js:346
+msgid "Select menu type to be text or an icon"
+msgstr "Выберите тип меню: текст или иконка"
+
+#: prefs.js:352 prefs.js:362
+msgid "Icon name:"
+msgstr "Имя иконки:"
+
+#: prefs.js:352 prefs.js:366
+msgid "Menu title:"
+msgstr "Заголовок меню:"
+
+#: prefs.js:395
+msgid "Left"
+msgstr "Слева"
+
+#: prefs.js:395
+msgid "Right"
+msgstr "Справа"
+
+#: prefs.js:398
+msgid "Menu Location"
+msgstr "Расположение меню"
+
+#: prefs.js:399
+msgid "Select location for the menu in the top bar"
+msgstr "Выберите расположение меню в верхней панели"
+
+#: prefs.js:411
+msgid "Menu Position"
+msgstr "Позиция меню"
+
+#: prefs.js:412
+msgid "Adjust position of the menu in the top bar"
+msgstr "Настройте позицию меню в верхней панели"
