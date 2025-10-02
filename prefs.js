@@ -333,11 +333,6 @@ export default class CustomCommandListPreferences extends ExtensionPreferences {
             title: _('Settings'),
         });
 
-        const titleExpanderRow = new Adw.ExpanderRow({
-            title: _('Custom Menu Title'),
-            subtitle: _('Use custom text or a custom icon for the menu title'),
-        });
-
         const menuOptionList = new Gtk.StringList();
         [_('Default'), _('Text'), _('Icon')].forEach(choice => menuOptionList.append(choice));
     
@@ -435,9 +430,8 @@ export default class CustomCommandListPreferences extends ExtensionPreferences {
         //configGroup1.add(configRow4);
 
         page2.add(settingsGroup1);
-        settingsGroup1.add(titleExpanderRow);
-        titleExpanderRow.add_row(menuComboRow);
-        titleExpanderRow.add_row(titleEntryRow);
+        settingsGroup1.add(menuComboRow);
+        settingsGroup1.add(titleEntryRow);
         settingsGroup1.add(menuLocationComboRow);
         settingsGroup1.add(menuPositionSpinRow);
                 
