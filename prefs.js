@@ -29,7 +29,7 @@ import { ExtensionPreferences, gettext as _ } from 'resource:///org/gnome/Shell/
 import {releaseNotes} from './about.js';
 import commandsUI from "./commandsUI.js";
 
-let numberOfCommands = 30;
+let numberOfCommands = 99;
 let fileName = 'commands.ini';
 let filePath = GLib.build_filenamev([GLib.get_home_dir(), fileName]);
 
@@ -52,6 +52,31 @@ export default class CustomCommandListPreferences extends ExtensionPreferences {
         });
         window.add(page2);
 
+        const menuButton = new Gtk.Button({
+            icon_name: "go-up-symbolic",
+            can_focus: false,
+        });
+        menuButton.add_css_class("flat");
+        menuButton.set_tooltip_text(_('Collapse all'));
+
+        menuButton.connect("clicked", () => {
+            page.collapseAll();
+        });
+
+        const pagesStack = page.get_parent();
+        const contentStack = pagesStack.get_parent().get_parent(); // GtkStack
+        const preferences = contentStack.get_parent(); // GtkBox
+        
+        const headerBar = preferences
+            .get_first_child()
+            .get_next_sibling()
+            .get_first_child()
+            .get_first_child()
+            .get_first_child(); // This gets the AdwHeaderBar
+        
+        headerBar.pack_start(menuButton);
+        
+
         const backupGroup1 = new Adw.PreferencesGroup({
             title: _('Backup and Restore'),
         });
@@ -59,11 +84,11 @@ export default class CustomCommandListPreferences extends ExtensionPreferences {
 
         //#region Export 
         const exportRow = new Adw.ActionRow({
-    	title: _('Export Command List'),
-    	subtitle: _('Click to export %s configuration file to user\'s home directory').format(fileName),
-    	activatable: true,
-	});
-	exportRow.add_prefix(new Gtk.Image({ icon_name: 'x-office-document-symbolic' }));
+            title: _('Export Command List'),
+            subtitle: _('Click to export %s configuration file to user\'s home directory').format(fileName),
+            activatable: true,
+	    });
+	    exportRow.add_prefix(new Gtk.Image({ icon_name: 'x-office-document-symbolic' }));
         
         exportRow.connect('activated', () => {
             let keyFile = new GLib.KeyFile();
@@ -88,40 +113,40 @@ export default class CustomCommandListPreferences extends ExtensionPreferences {
         
             // Try saving the config file
             try {
-        keyFile.save_to_file(filePath);
-        console.log('[Custom Command Menu] Commands exported to %s'.format(filePath));
+                keyFile.save_to_file(filePath);
+                console.log('[Custom Command Menu] Commands exported to %s'.format(filePath));
 
-        const toast = Adw.Toast.new(_('Commands exported to: %s').format(filePath));
-        toast.set_timeout(3);
-        toast.set_button_label(_('Open'));
+                const toast = Adw.Toast.new(_('Commands exported to: %s').format(filePath));
+                toast.set_timeout(3);
+                toast.set_button_label(_('Open'));
 
-        toast.connect('button-clicked', () => {
-            let appInfo = Gio.AppInfo.get_default_for_type('text/plain', false);
-            if (appInfo) {
-                appInfo.launch_uris([`file://${filePath}`], null);
-            } else {
-                const noAppDialog = new Gtk.MessageDialog({
-                    transient_for: window,
-                    modal: true,
-                    text: _('Application Not Found'),
-                    secondary_text: _(
-                        'No default application found to open .ini files.\n\n' +
-                        'The commands.ini configuration file can be opened and modified in any text editor. ' +
-                        'To open the file, it may first be required to manually associate the .ini file ' +
-                        'with the default text editor by doing the following:\n\n' +
-                        '1. Open the home directory and locate the commands.ini file\n' +
-                        '2. Right-click on the file and select "Open with..."\n' +
-                        '3. Choose a default text editor, and select the option "Always use for this file type"'
-                    ),
-                    buttons: Gtk.ButtonsType.CLOSE,
-                });
-                noAppDialog.connect('response', () => noAppDialog.destroy());
-                noAppDialog.show();
-            	}
-        	});
+                toast.connect('button-clicked', () => {
+                    let appInfo = Gio.AppInfo.get_default_for_type('text/plain', false);
+                    if (appInfo) {
+                        appInfo.launch_uris([`file://${filePath}`], null);
+                    } else {
+                        const noAppDialog = new Gtk.MessageDialog({
+                            transient_for: window,
+                            modal: true,
+                            text: _('Application Not Found'),
+                            secondary_text: _(
+                                'No default application found to open .ini files.\n\n' +
+                                'The commands.ini configuration file can be opened and modified in any text editor. ' +
+                                'To open the file, it may first be required to manually associate the .ini file ' +
+                                'with the default text editor by doing the following:\n\n' +
+                                '1. Open the home directory and locate the commands.ini file\n' +
+                                '2. Right-click on the file and select "Open with..."\n' +
+                                '3. Choose a default text editor, and select the option "Always use for this file type"'
+                            ),
+                            buttons: Gtk.ButtonsType.CLOSE,
+                        });
+                        noAppDialog.connect('response', () => noAppDialog.destroy());
+                        noAppDialog.show();
+                        }
+                    });
                 window.add_toast(toast);
             } catch (e) {
-                 console.log('[Custom Command Menu] Failed to export commands\n%s'.format(e));
+                console.log('[Custom Command Menu] Failed to export commands\n%s'.format(e));
                 const toast = Adw.Toast.new(_(`Export Error`));
                 toast.set_timeout(3);
                 toast.set_button_label(_('Details'));
@@ -144,10 +169,10 @@ export default class CustomCommandListPreferences extends ExtensionPreferences {
 
         //#region Import
         const importRow = new Adw.ActionRow({
-    	title: _('Import Command List'),
-    	subtitle: _('Click to import %s configuration file from user\'s home directory').format(fileName),
-    	activatable: true,
-	});
+            title: _('Import Command List'),
+            subtitle: _('Click to import %s configuration file from user\'s home directory').format(fileName),
+            activatable: true,
+	    });
         importRow.add_prefix(new Gtk.Image({icon_name: 'x-office-document-symbolic'}));
 
         importRow.connect('activated', () => {
@@ -194,7 +219,7 @@ export default class CustomCommandListPreferences extends ExtensionPreferences {
                         window._settings.set_string(`entryrow${i}a-setting`, "");
                         window._settings.set_string(`entryrow${i}b-setting`, "");
                         window._settings.set_string(`entryrow${i}c-setting`, "");
-                        window._settings.set_boolean(`visible${i}-setting`, "");
+                        window._settings.set_boolean(`visible${i}-setting`, true);
                     }
                 }
                 window._settings.set_value('command-order', new GLib.Variant('ai', Array.from({ length: numberOfCommands }, (_, i) => i + 1)));
@@ -238,10 +263,16 @@ export default class CustomCommandListPreferences extends ExtensionPreferences {
             title: _('Commands'),
             subtitle: _(
                         'Enter the display names and associated commands for the drop-down menu.\n' +
-                        '•  Type --- or ~~~ in the name field to create a visual separator line in the menu.\n' +
-                        '•  Adding text after --- or ~~~ creates a labeled separator.\n' +
-                        '•  Toggle the checkbox to show or hide a command.\n' +
-                        '•  Drag and drop to reorder commands.'
+                        'Drag and drop to reorder, and use the checkbox to show/hide commands.\n' +
+                        //'•  Toggle the checkbox to show or hide a command.\n' +
+                        '\n' +
+                        'Separators\n' +
+                        '•  Enter --- or ~~~ in the name field to insert a separator line.\n' +
+                        '•  Add text after --- or ~~~ to create a labeled separator.\n' +
+                        '\n' +
+                        'Submenus\n' +
+                        '•  Start a command name with * to place it in a submenu.\n' +
+                        '•  The submenu title is taken from the row above.'
                        ),
             activatable: false,
         });
@@ -262,21 +293,10 @@ export default class CustomCommandListPreferences extends ExtensionPreferences {
             activatable: true,
         });
         configRow3.connect('activated', () => {
-            Gio.app_info_launch_default_for_uri('https://github.com/StorageB/icons/blob/main/GNOME48Adwaita/icons.md', null);
+            Gio.app_info_launch_default_for_uri('https://github.com/StorageB/icons/tree/main/GNOME48Adwaita/icons.md', null);
         });
         configRow3.add_prefix(new Gtk.Image({icon_name: 'web-browser-symbolic'}));
         configRow3.add_suffix(new Gtk.Image({icon_name: 'go-next-symbolic'}));
-        
-        const configRow4 = new Adw.ActionRow({
-            title: _('Local Icons'),
-            subtitle: _('Local icon directory (/usr/share/icons)'),
-            activatable: true,
-        });
-        configRow4.connect('activated', () => {
-            Gio.app_info_launch_default_for_uri('file:///usr/share/icons', null);
-        });
-        configRow4.add_prefix(new Gtk.Image({icon_name: 'folder-symbolic'}));
-        configRow4.add_suffix(new Gtk.Image({icon_name: 'go-next-symbolic'}));
         //#endregion Setup Information
         
 
@@ -415,25 +435,60 @@ export default class CustomCommandListPreferences extends ExtensionPreferences {
         menuPositionSpinRow.visible = menuLocationComboRow.selected !== 0;
 
         window._settings.bind('menuposition-setting', menuPositionSpinRow, 'value', Gio.SettingsBindFlags.DEFAULT);        
+        
+        const resetRow = new Adw.ActionRow({
+            title: _('Reset to Defaults'),
+            subtitle: _('Click to restore all commands and settings to their default values'),
+            activatable: true,
+        });
+        resetRow.connect('activated', () => {
+            const dialog = new Adw.MessageDialog({
+                transient_for: window,
+                heading: _('Confirm Reset'),
+                body: _('All commands and extension settings will be reset to their default values. This action cannot be undone.'),
+                default_response: 'cancel',
+                close_response: 'cancel',
+            });
+
+            dialog.add_response('cancel', _('Cancel'));
+            dialog.add_response('reset', _('Reset'));
+            dialog.set_response_appearance('reset', Adw.ResponseAppearance.DESTRUCTIVE);
+
+            dialog.connect('response', (dlg, response) => {
+                if (response === 'reset') {
+                    try {
+                        for (const key of window._settings.list_keys()) {
+                            window._settings.reset(key);
+                        }
+                        page.refreshCommandList();
+                        window.add_toast(Adw.Toast.new(_('All settings reset to defaults')));
+                    } catch (e) {
+                        window.add_toast(Adw.Toast.new(_('Failed to reset settings')));
+                    }
+                }
+                dlg.destroy();
+            });
+            dialog.show();
+        });        
         //#endregion Settings
 
 
         //#region Layout
-        page2.add(backupGroup1);
-        backupGroup1.add(exportRow);
-        backupGroup1.add(importRow);
-
         page2.add(configGroup1);
         configGroup1.add(configRow1);
         configGroup1.add(configRow2);
         configGroup1.add(configRow3);
-        //configGroup1.add(configRow4);
+
+        page2.add(backupGroup1);
+        backupGroup1.add(exportRow);
+        backupGroup1.add(importRow);        
 
         page2.add(settingsGroup1);
         settingsGroup1.add(menuComboRow);
         settingsGroup1.add(titleEntryRow);
         settingsGroup1.add(menuLocationComboRow);
         settingsGroup1.add(menuPositionSpinRow);
+        settingsGroup1.add(resetRow);
                 
         page2.add(aboutGroup1);
         aboutGroup1.add(aboutRow0);

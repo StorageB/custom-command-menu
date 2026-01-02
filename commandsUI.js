@@ -28,7 +28,7 @@ import Gdk from 'gi://Gdk';
 import GLib from 'gi://GLib';
 import GObject from 'gi://GObject';
 
-let numberOfCommands = 30;
+let numberOfCommands = 99;
 let draggedRow = null;
 
 export default class commandsUI extends Adw.PreferencesPage {
@@ -40,6 +40,7 @@ export default class commandsUI extends Adw.PreferencesPage {
 
     _init(params = {}) {
         this._settings = params?.Settings;
+        this._expanderRows = [];
         let { Settings, ...args } = params;
         super._init(args);
 
@@ -78,21 +79,13 @@ export default class commandsUI extends Adw.PreferencesPage {
     //#region addRow
     _addRow(dragBox, rowNumber, index) {
 
-        const separators = ['~~~', '---', '───'];
-        function isSeparator(text) {
-            if (!text) return false;
-            text = text.trim();
-            return separators.some(prefix => 
-                text === prefix || (text.startsWith(prefix) && text.length > prefix.length)
-            );
-        }
-
         const row = new Adw.ExpanderRow({
             title: '',
             selectable: false,
             expanded: false,
         });
         row._rowNumber = rowNumber;
+        this._expanderRows.push(row);
 
         const entryRowName = new Adw.EntryRow({ title: _('Name:') });
         const entryRowCommand = new Adw.EntryRow({ title: _('Command:') });
@@ -102,29 +95,13 @@ export default class commandsUI extends Adw.PreferencesPage {
         row.add_row(entryRowCommand);
         row.add_row(entryRowIcon);
 
+        row._entryRowName = entryRowName;
+        row._entryRowCommand = entryRowCommand;
+        row._entryRowIcon = entryRowIcon;        
+
         this._settings.bind(`entryrow${rowNumber}a-setting`, entryRowName, 'text', Gio.SettingsBindFlags.DEFAULT);
         this._settings.bind(`entryrow${rowNumber}b-setting`, entryRowCommand, 'text', Gio.SettingsBindFlags.DEFAULT);
         this._settings.bind(`entryrow${rowNumber}c-setting`, entryRowIcon, 'text', Gio.SettingsBindFlags.DEFAULT);
-
-        GLib.idle_add(GLib.PRIORITY_DEFAULT_IDLE, () => {
-            updateRow();
-            return GLib.SOURCE_REMOVE;
-        });
-
-        function updateRow() {
-            const text = entryRowName.text;
-            row.title = text.replace(/&/g, '&amp;');
-
-            if (isSeparator(text)) {
-                entryRowCommand.hide();
-                entryRowIcon.hide();
-                entryRowName.title = _('Separator Row');
-            } else {
-                entryRowCommand.show();
-                entryRowIcon.show();
-                entryRowName.title = _('Name:');
-            }
-        }
 
         row.title = entryRowName.text.replace(/&/g, '&amp;');
 
@@ -171,6 +148,10 @@ export default class commandsUI extends Adw.PreferencesPage {
                 }
             }
             if (!inserted) this._overlay.add_toast(new Adw.Toast({ title: _('Maximum row limit reached') }));
+            GLib.idle_add(GLib.PRIORITY_DEFAULT_IDLE, () => {
+                this._refreshMenuTitles();
+                return GLib.SOURCE_REMOVE;
+            });            
         });    
         actionGroup.add_action(insertAction);    
 
@@ -203,6 +184,10 @@ export default class commandsUI extends Adw.PreferencesPage {
                 }
             }
             if (!inserted) this._overlay.add_toast(new Adw.Toast({ title: _('Maximum row limit reached') }));
+            GLib.idle_add(GLib.PRIORITY_DEFAULT_IDLE, () => {
+                this._refreshMenuTitles();
+                return GLib.SOURCE_REMOVE;
+            });            
         });
         actionGroup.add_action(duplicateAction);    
 
@@ -233,6 +218,10 @@ export default class commandsUI extends Adw.PreferencesPage {
                     clock.disconnect(handlerId);
                 });
             }
+            GLib.idle_add(GLib.PRIORITY_DEFAULT_IDLE, () => {
+                this._refreshMenuTitles();
+                return GLib.SOURCE_REMOVE;
+            });            
         });
         actionGroup.add_action(deleteAction);  
         
@@ -265,12 +254,20 @@ export default class commandsUI extends Adw.PreferencesPage {
             else
                 row.add_css_class('dim-label');
 
+            GLib.idle_add(GLib.PRIORITY_DEFAULT_IDLE, () => {
+                this._refreshMenuTitles();
+                return GLib.SOURCE_REMOVE;
+            });                 
+
         });
         row.add_suffix(checkButton);
 
         entryRowName.connect('notify::text', () => {
             row.title = entryRowName.text.replace(/&/g, '&amp;');
-            updateRow();
+            GLib.idle_add(GLib.PRIORITY_DEFAULT_IDLE, () => {
+                this._refreshMenuTitles();
+                return GLib.SOURCE_REMOVE;
+            });            
         });
 
         row.add_prefix(new Gtk.Image({
@@ -332,6 +329,7 @@ export default class commandsUI extends Adw.PreferencesPage {
 
     //#region initDragMenu
     _initDragMenu() {
+        this._expanderRows.length = 0;
         const commandBoxTarget = Gtk.DropTarget.new(Gtk.ListBoxRow, Gdk.DragAction.MOVE);
         this._commandBoxList.add_controller(commandBoxTarget);
         this._commandBoxList.set_vexpand(false);
@@ -420,6 +418,11 @@ export default class commandsUI extends Adw.PreferencesPage {
         commandBoxTarget.connect('drop', (target, value, x, y) =>
             this._onTargetDropped(target, value, x, y, this._commandBoxList)
         );
+
+        GLib.idle_add(GLib.PRIORITY_DEFAULT_IDLE, () => {
+            this._refreshMenuTitles();
+            return GLib.SOURCE_REMOVE;
+        });
     }
     //#endregion initDragMenu
 
@@ -459,6 +462,12 @@ export default class commandsUI extends Adw.PreferencesPage {
         }
 
         this._emitReorder();
+
+        GLib.idle_add(GLib.PRIORITY_DEFAULT_IDLE, () => {
+            this._refreshMenuTitles();
+            return GLib.SOURCE_REMOVE;
+        });     
+
         draggedRow = null;
         return true;
     }
@@ -486,6 +495,7 @@ export default class commandsUI extends Adw.PreferencesPage {
 
     
     refreshCommandList() {
+        this._expanderRows.length = 0;
         // Remove all current rows except the "Add Command" button
         const rowsToRemove = Array.from(this._commandBoxList).filter(child => child instanceof Adw.ExpanderRow);
         for (const row of rowsToRemove) {
@@ -511,9 +521,86 @@ export default class commandsUI extends Adw.PreferencesPage {
         this._commandBoxList.append(this._addCommandButton);
     }
 
+
     _showToast(message) {
         const toast = new Adw.Toast({ title: message });
         this._overlay.add_toast(toast);
+    }
+
+
+    _refreshMenuTitles() {
+        const order = this._settings.get_value('command-order').deep_unpack();
+        const separators = ['~~~', '---', '───'];
+
+        function isSeparator(text) {
+            if (!text) return false;
+            text = text.trim();
+            return separators.some(prefix => 
+                text === prefix || (text.startsWith(prefix) && text.length > prefix.length)
+            );
+        }
+
+        for (let i = 0; i < order.length; i++) {
+            const n = order[i];
+            if (n < 1 || n > numberOfCommands) continue;
+
+            const row = Array.from(this._commandBoxList).find(r => r._rowNumber === n);
+            if (!row) continue;
+
+            if (row._entryRowName) row._entryRowName.title = _('Name:');
+            if (row._entryRowName) row._entryRowName.show();
+            if (row._entryRowCommand) row._entryRowCommand.show();
+            if (row._entryRowIcon) row._entryRowIcon.show();
+
+            const text = row._entryRowName.text;
+            row.title = text.replace(/&/g, '&amp;');
+
+            if (isSeparator(text)) {
+                row._entryRowCommand.hide();
+                row._entryRowIcon.hide();
+                row._entryRowName.title = _('Separator Row');
+                continue;
+            } 
+
+            if (!this._settings.get_boolean(`visible${n}-setting`)) continue;
+
+            const entryA = this._settings.get_string(`entryrow${n}a-setting`).trim();
+            const entryB = this._settings.get_string(`entryrow${n}b-setting`).trim();
+            const entryC = this._settings.get_string(`entryrow${n}c-setting`).trim();
+
+            if (entryA === '' && entryB === '' && entryC === '') continue;
+
+            if (!entryA.startsWith('*')) {
+                let nextValid = null;
+
+                for (let j = i + 1; j < order.length; j++) {
+                    const nextRowNum = order[j];
+
+                    if (nextRowNum < 1 || nextRowNum > numberOfCommands) continue;
+                    if (!this._settings.get_boolean(`visible${nextRowNum}-setting`)) continue;
+
+                    const nextA = this._settings.get_string(`entryrow${nextRowNum}a-setting`).trim();
+                    const nextB = this._settings.get_string(`entryrow${nextRowNum}b-setting`).trim();
+                    const nextC = this._settings.get_string(`entryrow${nextRowNum}c-setting`).trim();
+
+                    if (nextA === '' && nextB === '' && nextC === '') continue;
+
+                    nextValid = nextA;
+                    break;
+                }
+
+                if (nextValid?.startsWith('*')) {
+                    row._entryRowName.title = _('Submenu Title:');
+                    row._entryRowCommand.hide();
+                    row._entryRowIcon.hide();
+                }
+            }
+        }
+    }
+
+    
+    collapseAll() {
+        for (const row of this._expanderRows) row.expanded = false;
     }
     //#endregion functions
 }

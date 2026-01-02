@@ -32,7 +32,7 @@ import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
 import GLib from 'gi://GLib';
 import St from 'gi://St';
 
-let numberOfCommands = 30;
+let numberOfCommands = 99;
 
 class CommandMenu extends PanelMenu.Button {
     static {
@@ -69,6 +69,11 @@ class CommandMenu extends PanelMenu.Button {
         }
         
         const commandOrder = mySettings.get_value('command-order').deep_unpack();
+        let menuTitle = '';
+        let currentSubMenu = null;
+        
+        let subMenuStatus = 0; // 0 - no sub menu; 1 - sub menu detected on next line; 2 - submenu creation in progress
+
         for (let j of commandOrder) {
             
             if (j < 1 || j > numberOfCommands) continue;
@@ -77,6 +82,48 @@ class CommandMenu extends PanelMenu.Button {
             let entryRowA = mySettings.get_string(`entryrow${j}a-setting`);
             let entryRowB = mySettings.get_string(`entryrow${j}b-setting`);
             let entryRowC = mySettings.get_string(`entryrow${j}c-setting`);
+
+            if (entryRowA === '' && entryRowB === '' && entryRowC === '') continue;
+
+            let currentIndex = commandOrder.indexOf(j);
+            let foundNext = false;
+
+            for (let m = currentIndex + 1; m < commandOrder.length; m++) {
+                let nextId = commandOrder[m];
+
+                if (nextId < 1 || nextId > numberOfCommands) continue;
+                if (!mySettings.get_boolean(`visible${nextId}-setting`)) continue;
+
+                const nextEntryRowA = mySettings.get_string(`entryrow${nextId}a-setting`);
+                const nextEntryRowB = mySettings.get_string(`entryrow${nextId}b-setting`);
+                const nextEntryRowC = mySettings.get_string(`entryrow${nextId}c-setting`);
+                
+                if (nextEntryRowA === '' && nextEntryRowB === '' && nextEntryRowC === '') continue;
+
+                const nextRow = mySettings.get_string(`entryrow${nextId}a-setting`).trim();
+
+                if (nextRow.startsWith('*')) {
+                    if (subMenuStatus === 0) subMenuStatus = 1;
+                    else if ( subMenuStatus === 1) subMenuStatus = 2;
+                } else {
+                    subMenuStatus = 0;
+                }
+
+                foundNext = true;
+                break;
+            }
+
+            if (!foundNext) subMenuStatus = 0;
+            if (subMenuStatus === 1) {
+                if (entryRowA.trim().startsWith('*')) {
+                    menuTitle = '';
+                } else {
+                    menuTitle = entryRowA.trim();
+                    currentSubMenu = null;
+                    continue;
+                }    
+            }
+
 
             const separators = ['~~~', '---', '───'];
             // menu entry for separator
@@ -110,7 +157,24 @@ class CommandMenu extends PanelMenu.Button {
 
                 continue;
             }
-            
+
+            const subMenuName = entryRowA.trim();
+            // submenu entry
+            if (subMenuName.startsWith('*')) {
+                if (!currentSubMenu) {
+                    const sub = new PopupMenu.PopupSubMenuMenuItem(menuTitle);
+                    this.menu.addMenuItem(sub);
+                    currentSubMenu = sub.menu;
+                }
+
+                const itemLabel = subMenuName.replace(/^\*\s*/, '');
+                this._addMenuItem(itemLabel, entryRowB, entryRowC.trim(), currentSubMenu);
+
+                continue;
+            } else {
+                currentSubMenu = null;
+            }
+
             // menu entry for command
             if (entryRowA.trim() !== '') {
                 this._addMenuItem(entryRowA, entryRowB, entryRowC.trim());
@@ -119,7 +183,7 @@ class CommandMenu extends PanelMenu.Button {
     }
 
 
-    _addMenuItem(label, command, icon) {
+    _addMenuItem(label, command, icon, targetMenu = this.menu) {
         let newItem = new PopupMenu.PopupMenuItem('');
         if (icon) {
             let commandIcon = new St.Icon({
@@ -139,7 +203,7 @@ class CommandMenu extends PanelMenu.Button {
                 console.log(_('[Custom Command Menu] Error running command:\n%s').replace('%s', command));
             }
         });
-        this.menu.addMenuItem(newItem);
+        targetMenu.addMenuItem(newItem); 
     }
 
     updateLabel(text) {
@@ -155,9 +219,13 @@ class CommandMenu extends PanelMenu.Button {
 
 export default class CommandMenuExtension extends Extension {
     enable() {
-
-        // Create a new GSettings object
         this._settings = this.getSettings();
+
+        // Update comand-order length from 30 to 99 for existing users
+        let order = this._settings.get_value('command-order').deep_unpack();
+        for (let i = order.length + 1; i <= 99; i++) order.push(i);
+        this._settings.set_value('command-order', new GLib.Variant('ai', order));
+
 
         this._indicator = new CommandMenu(this._settings);
         let location = this._settings.get_int('menulocation-setting') === 2 ? 'right' : 'left';
@@ -196,7 +264,7 @@ export default class CommandMenuExtension extends Extension {
         this._settings.connect('changed::command-order', () => {
             refreshIndicator.call(this);
             const newCommandOrder = this._settings.get_value('command-order').deep_unpack();
-            console.log('[Custom Command Menu] command-order settings changed:\n', newCommandOrder.join(', '));  
+            //console.log('[Custom Command Menu] command-order settings changed:\n', newCommandOrder.join(', '));  
         });
         this._settings.connect('changed::menulocation-setting', () => {
             refreshIndicator.call(this);
