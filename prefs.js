@@ -196,7 +196,8 @@ export default class CustomCommandListPreferences extends ExtensionPreferences {
                     }
                 }
                 window._settings.set_value('command-order', new GLib.Variant('ai', Array.from({ length: numberOfCommands }, (_, i) => i + 1)));
-                page.refreshCommandList(); // refresh the list of commands in the prefrences window
+                page.refreshCommandList();
+                page._refreshMenuTitles();
                 console.log('[Custom Command Menu] Commands imported from %s'.format(filePath));
                 const toast = Adw.Toast.new(
                     commandCount === 1
@@ -265,7 +266,7 @@ export default class CustomCommandListPreferences extends ExtensionPreferences {
             activatable: true,
         });
         configRow3.connect('activated', () => {
-            Gio.app_info_launch_default_for_uri('https://github.com/StorageB/icons/tree/main/GNOME48Adwaita/icons.md', null);
+            Gio.app_info_launch_default_for_uri('https://github.com/StorageB/icons/blob/main/GNOME48Adwaita/icons.md', null);
         });
         configRow3.add_prefix(new Gtk.Image({icon_name: 'web-browser-symbolic'}));
         configRow3.add_suffix(new Gtk.Image({icon_name: 'go-next-symbolic'}));
