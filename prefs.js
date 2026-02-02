@@ -28,6 +28,7 @@ import GLib from 'gi://GLib';
 import { ExtensionPreferences, gettext as _ } from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js';
 import {releaseNotes} from './about.js';
 import commandsUI from "./commandsUI.js";
+import {migrateSettings} from "./migration.js";
 
 let numberOfCommands = 99;
 let fileName = 'commands.ini';
@@ -36,8 +37,9 @@ let filePath = GLib.build_filenamev([GLib.get_home_dir(), fileName]);
 
 export default class CustomCommandListPreferences extends ExtensionPreferences {
     fillPreferencesWindow(window) {
-        window.set_default_size(700, 900);
+        window.set_default_size(700, 850);
         window._settings = this.getSettings();
+        migrateSettings(window._settings);
 
         let page = new commandsUI({
             title: _('Commands'),
@@ -51,32 +53,7 @@ export default class CustomCommandListPreferences extends ExtensionPreferences {
             icon_name: 'applications-system-symbolic',
         });
         window.add(page2);
-
-        const menuButton = new Gtk.Button({
-            icon_name: "go-up-symbolic",
-            can_focus: false,
-        });
-        menuButton.add_css_class("flat");
-        menuButton.set_tooltip_text(_('Collapse all'));
-
-        menuButton.connect("clicked", () => {
-            page.collapseAll();
-        });
-
-        const pagesStack = page.get_parent();
-        const contentStack = pagesStack.get_parent().get_parent(); // GtkStack
-        const preferences = contentStack.get_parent(); // GtkBox
         
-        const headerBar = preferences
-            .get_first_child()
-            .get_next_sibling()
-            .get_first_child()
-            .get_first_child()
-            .get_first_child(); // This gets the AdwHeaderBar
-        
-        headerBar.pack_start(menuButton);
-        
-
         const backupGroup1 = new Adw.PreferencesGroup({
             title: _('Backup and Restore'),
         });
@@ -95,21 +72,17 @@ export default class CustomCommandListPreferences extends ExtensionPreferences {
             let commandOrderArray = window._settings.get_value('command-order').deep_unpack();
             let commandNumber = 0;
         
-            // Loop through command entries and write them to the keyfile
             for (let i = 1; i <= numberOfCommands; i++) {
-                let name = window._settings.get_string(`entryrow${commandOrderArray[i-1]}a-setting`);
-                let command = window._settings.get_string(`entryrow${commandOrderArray[i-1]}b-setting`);
-                let icon = window._settings.get_string(`entryrow${commandOrderArray[i-1]}c-setting`);
-                let visible = window._settings.get_boolean(`visible${commandOrderArray[i-1]}-setting`);
-                // Only write commands that are not blank
+                const [name, command, icon, visible] = window._settings.get_value(`command${commandOrderArray[i - 1]}`).deep_unpack();
+                // Only export commands that are not blank
                 if (name !== '' || command !== '' || icon !== '') {
-                    commandNumber ++;
+                    commandNumber++;
                     keyFile.set_string(`Command ${commandNumber}`, 'Name', name);
                     keyFile.set_string(`Command ${commandNumber}`, 'Command', command);
                     keyFile.set_string(`Command ${commandNumber}`, 'Icon', icon);
                     keyFile.set_boolean(`Command ${commandNumber}`, 'Visible', visible);
                 }
-            }        
+            }
         
             // Try saving the config file
             try {
@@ -210,16 +183,16 @@ export default class CustomCommandListPreferences extends ExtensionPreferences {
                         let command = keyFile.get_string(`Command ${i}`, 'Command');
                         let icon = ""; try { icon = keyFile.get_string(`Command ${i}`, 'Icon'); } catch (_) {}
                         let visible = true; try { visible = keyFile.get_boolean(`Command ${i}`, 'Visible'); } catch (_) {}
-                        window._settings.set_string(`entryrow${i}a-setting`, name);
-                        window._settings.set_string(`entryrow${i}b-setting`, command);
-                        window._settings.set_string(`entryrow${i}c-setting`, icon);
-                        window._settings.set_boolean(`visible${i}-setting`, visible);
+                        window._settings.set_value(
+                            `command${i}`,
+                            new GLib.Variant('(sssb)', [name, command, icon, visible])
+                        );
                         commandCount++;
                     } else {
-                        window._settings.set_string(`entryrow${i}a-setting`, "");
-                        window._settings.set_string(`entryrow${i}b-setting`, "");
-                        window._settings.set_string(`entryrow${i}c-setting`, "");
-                        window._settings.set_boolean(`visible${i}-setting`, true);
+                        window._settings.set_value(
+                            `command${i}`,
+                            new GLib.Variant('(sssb)', ['', '', '', true])
+                        );
                     }
                 }
                 window._settings.set_value('command-order', new GLib.Variant('ai', Array.from({ length: numberOfCommands }, (_, i) => i + 1)));
@@ -227,8 +200,8 @@ export default class CustomCommandListPreferences extends ExtensionPreferences {
                 console.log('[Custom Command Menu] Commands imported from %s'.format(filePath));
                 const toast = Adw.Toast.new(
                     commandCount === 1
-                        ? _('Successfully imported 1 command')
-                        : _('Successfully imported %d commands').format(commandCount)
+                        ? _('Successfully imported 1 entry')
+                        : _('Successfully imported %d entries').format(commandCount)
                 );
                 toast.set_timeout(3);
                 window.add_toast(toast);
@@ -264,7 +237,6 @@ export default class CustomCommandListPreferences extends ExtensionPreferences {
             subtitle: _(
                         'Enter the display names and associated commands for the drop-down menu.\n' +
                         'Drag and drop to reorder, and use the checkbox to show/hide commands.\n' +
-                        //'•  Toggle the checkbox to show or hide a command.\n' +
                         '\n' +
                         'Separators\n' +
                         '•  Enter --- or ~~~ in the name field to insert a separator line.\n' +
@@ -458,6 +430,7 @@ export default class CustomCommandListPreferences extends ExtensionPreferences {
                 if (response === 'reset') {
                     try {
                         for (const key of window._settings.list_keys()) {
+                            if (key === 'v13-migration-complete') continue;
                             window._settings.reset(key);
                         }
                         page.refreshCommandList();

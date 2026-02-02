@@ -99,9 +99,10 @@ export default class commandsUI extends Adw.PreferencesPage {
         row._entryRowCommand = entryRowCommand;
         row._entryRowIcon = entryRowIcon;        
 
-        this._settings.bind(`entryrow${rowNumber}a-setting`, entryRowName, 'text', Gio.SettingsBindFlags.DEFAULT);
-        this._settings.bind(`entryrow${rowNumber}b-setting`, entryRowCommand, 'text', Gio.SettingsBindFlags.DEFAULT);
-        this._settings.bind(`entryrow${rowNumber}c-setting`, entryRowIcon, 'text', Gio.SettingsBindFlags.DEFAULT);
+        const [name, command, icon] = this._settings.get_value(`command${rowNumber}`).deep_unpack();
+        entryRowName.text = name;
+        entryRowCommand.text = command;
+        entryRowIcon.text = icon;
 
         row.title = entryRowName.text.replace(/&/g, '&amp;');
 
@@ -127,10 +128,12 @@ export default class commandsUI extends Adw.PreferencesPage {
             for (const child of this._commandBoxList) {
                 if (child instanceof Adw.ExpanderRow && !child.visible) {
 
-                    this._settings.set_string(`entryrow${child._rowNumber}a-setting`, "");
-                    this._settings.set_string(`entryrow${child._rowNumber}b-setting`, "");
-                    this._settings.set_string(`entryrow${child._rowNumber}c-setting`, "");
-                    this._settings.set_boolean(`visible${child._rowNumber}-setting`, true);
+                    this._settings.set_value(`command${child._rowNumber}`, new GLib.Variant('(sssb)', ["", "", "", true]));
+                    child._entryRowName.text = '';
+                    child._entryRowCommand.text = '';
+                    child._entryRowIcon.text = '';
+                    child.title = '';
+
                     child._checkButton.get_child().set_from_icon_name("checkbox-checked-symbolic");
                     child.remove_css_class('dim-label');
                     
@@ -163,10 +166,16 @@ export default class commandsUI extends Adw.PreferencesPage {
             for (const child of this._commandBoxList) {
                 if (child instanceof Adw.ExpanderRow && !child.visible) {
 
-                    this._settings.set_string(`entryrow${child._rowNumber}a-setting`, this._settings.get_string(`entryrow${row._rowNumber}a-setting`) + ' (copy)');
-                    this._settings.set_string(`entryrow${child._rowNumber}b-setting`, this._settings.get_string(`entryrow${row._rowNumber}b-setting`));
-                    this._settings.set_string(`entryrow${child._rowNumber}c-setting`, this._settings.get_string(`entryrow${row._rowNumber}c-setting`));
-                    this._settings.set_boolean(`visible${child._rowNumber}-setting`, true);
+                    const [name, command, icon] = this._settings.get_value(`command${row._rowNumber}`).deep_unpack();
+                    const newName = `${name} (copy)`;
+
+                    this._settings.set_value(`command${child._rowNumber}`, new GLib.Variant('(sssb)', [newName, command, icon, true]));
+
+                    child._entryRowName.text = newName;
+                    child._entryRowCommand.text = command;
+                    child._entryRowIcon.text = icon;
+                    child.title = newName.replace(/&/g, '&amp;');                    
+
                     child._checkButton.get_child().set_from_icon_name("checkbox-checked-symbolic");
                     child.remove_css_class('dim-label');
                     
@@ -200,11 +209,13 @@ export default class commandsUI extends Adw.PreferencesPage {
             const scrollValue = adjustment.get_value();
             draggedRow = null;
 
+            row._entryRowName.text = '';
+            row._entryRowCommand.text = '';
+            row._entryRowIcon.text = '';
+            row.title = '';
+
             row.visible = false;
-            this._settings.set_string(`entryrow${rowNumber}a-setting`, '');
-            this._settings.set_string(`entryrow${rowNumber}b-setting`, '');
-            this._settings.set_string(`entryrow${rowNumber}c-setting`, '');
-            this._settings.set_boolean(`visible${rowNumber}-setting`, true);
+            this._settings.set_value(`command${rowNumber}`, new GLib.Variant('(sssb)', ["", "", "", true]));
 
             GLib.idle_add(GLib.PRIORITY_DEFAULT_IDLE, () => {
                 adjustment.set_value(scrollValue);
@@ -230,7 +241,7 @@ export default class commandsUI extends Adw.PreferencesPage {
 
 
         //#region (checkbox)
-        let checkButtonIcon = this._settings.get_boolean(`visible${rowNumber}-setting`) ? 'checkbox-checked-symbolic' : 'checkbox-symbolic';
+        let checkButtonIcon = this._settings.get_value(`command${rowNumber}`).deep_unpack()[3] ? 'checkbox-checked-symbolic' : 'checkbox-symbolic';
         const checkButton = new Gtk.Button({
             child: new Gtk.Image({ icon_name: checkButtonIcon, pixel_size: 14 }),
             has_frame: false,
@@ -247,7 +258,18 @@ export default class commandsUI extends Adw.PreferencesPage {
             const image = checkButton.get_child();
             const newIcon = image.icon_name === 'checkbox-checked-symbolic' ? 'checkbox-symbolic' : 'checkbox-checked-symbolic';
             image.set_from_icon_name(newIcon);
-            this._settings.set_boolean(`visible${rowNumber}-setting`, newIcon === 'checkbox-checked-symbolic');
+
+            const [name, command, icon] = this._settings.get_value(`command${rowNumber}`).deep_unpack();
+
+            this._settings.set_value(
+                `command${rowNumber}`,
+                new GLib.Variant('(sssb)', [
+                    name,
+                    command,
+                    icon,
+                    newIcon === 'checkbox-checked-symbolic',
+                ])
+            );
 
             if (newIcon === 'checkbox-checked-symbolic')
                 row.remove_css_class('dim-label');
@@ -264,11 +286,48 @@ export default class commandsUI extends Adw.PreferencesPage {
 
         entryRowName.connect('notify::text', () => {
             row.title = entryRowName.text.replace(/&/g, '&amp;');
+            const [, , , visible] = this._settings.get_value(`command${rowNumber}`).deep_unpack();
+            this._settings.set_value(
+                `command${rowNumber}`,
+                new GLib.Variant('(sssb)', [
+                    entryRowName.text,
+                    entryRowCommand.text,
+                    entryRowIcon.text,
+                    visible,
+                ])
+            );
+
             GLib.idle_add(GLib.PRIORITY_DEFAULT_IDLE, () => {
                 this._refreshMenuTitles();
                 return GLib.SOURCE_REMOVE;
             });            
         });
+
+        entryRowCommand.connect('notify::text', () => {
+            const [name, , icon, visible] = this._settings.get_value(`command${rowNumber}`).deep_unpack();
+            this._settings.set_value(
+                `command${rowNumber}`,
+                new GLib.Variant('(sssb)', [
+                    name,
+                    entryRowCommand.text,
+                    icon,
+                    visible,
+                ])
+            );           
+        });
+        
+        entryRowIcon.connect('notify::text', () => {
+            const [name, command, , visible] = this._settings.get_value(`command${rowNumber}`).deep_unpack();
+            this._settings.set_value(
+                `command${rowNumber}`,
+                new GLib.Variant('(sssb)', [
+                    name,
+                    command,
+                    entryRowIcon.text,
+                    visible,
+                ])
+            );
+        });        
 
         row.add_prefix(new Gtk.Image({
             icon_name: 'list-drag-handle-symbolic',
@@ -380,10 +439,8 @@ export default class commandsUI extends Adw.PreferencesPage {
             for (const child of this._commandBoxList) {
                 if (child instanceof Adw.ExpanderRow && !child.visible) {
 
-                    this._settings.set_string(`entryrow${child._rowNumber}a-setting`, "");
-                    this._settings.set_string(`entryrow${child._rowNumber}b-setting`, "");
-                    this._settings.set_string(`entryrow${child._rowNumber}c-setting`, "");
-                    this._settings.set_boolean(`visible${child._rowNumber}-setting`, true);
+                    this._settings.set_value(`command${child._rowNumber}`, new GLib.Variant('(sssb)', ["", "", "", true]));
+
                     child._checkButton.get_child().set_from_icon_name("checkbox-checked-symbolic");
                     child.remove_css_class('dim-label');
 
@@ -562,11 +619,9 @@ export default class commandsUI extends Adw.PreferencesPage {
                 continue;
             } 
 
-            if (!this._settings.get_boolean(`visible${n}-setting`)) continue;
+            if (!this._settings.get_value(`command${n}`).deep_unpack()[3]) continue;
 
-            const entryA = this._settings.get_string(`entryrow${n}a-setting`).trim();
-            const entryB = this._settings.get_string(`entryrow${n}b-setting`).trim();
-            const entryC = this._settings.get_string(`entryrow${n}c-setting`).trim();
+            const [entryA, entryB, entryC] = this._settings.get_value(`command${n}`).deep_unpack().slice(0, 3).map(s => s.trim());
 
             if (entryA === '' && entryB === '' && entryC === '') continue;
 
@@ -577,12 +632,9 @@ export default class commandsUI extends Adw.PreferencesPage {
                     const nextRowNum = order[j];
 
                     if (nextRowNum < 1 || nextRowNum > numberOfCommands) continue;
-                    if (!this._settings.get_boolean(`visible${nextRowNum}-setting`)) continue;
+                    if (!this._settings.get_value(`command${nextRowNum}`).deep_unpack()[3]) continue;
 
-                    const nextA = this._settings.get_string(`entryrow${nextRowNum}a-setting`).trim();
-                    const nextB = this._settings.get_string(`entryrow${nextRowNum}b-setting`).trim();
-                    const nextC = this._settings.get_string(`entryrow${nextRowNum}c-setting`).trim();
-
+                    const [nextA, nextB, nextC] = this._settings.get_value(`command${nextRowNum}`).deep_unpack().slice(0, 3).map(s => s.trim());
                     if (nextA === '' && nextB === '' && nextC === '') continue;
 
                     nextValid = nextA;

@@ -32,6 +32,8 @@ import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
 import GLib from 'gi://GLib';
 import St from 'gi://St';
 
+import {migrateSettings} from "./migration.js";
+
 let numberOfCommands = 99;
 
 class CommandMenu extends PanelMenu.Button {
@@ -77,11 +79,9 @@ class CommandMenu extends PanelMenu.Button {
         for (let j of commandOrder) {
             
             if (j < 1 || j > numberOfCommands) continue;
-            if (!mySettings.get_boolean(`visible${j}-setting`)) continue;
+            if (!mySettings.get_value(`command${j}`).deep_unpack()[3]) continue;
 
-            let entryRowA = mySettings.get_string(`entryrow${j}a-setting`);
-            let entryRowB = mySettings.get_string(`entryrow${j}b-setting`);
-            let entryRowC = mySettings.get_string(`entryrow${j}c-setting`);
+            const [entryRowA, entryRowB, entryRowC] = mySettings.get_value(`command${j}`).deep_unpack();
 
             if (entryRowA === '' && entryRowB === '' && entryRowC === '') continue;
 
@@ -92,15 +92,13 @@ class CommandMenu extends PanelMenu.Button {
                 let nextId = commandOrder[m];
 
                 if (nextId < 1 || nextId > numberOfCommands) continue;
-                if (!mySettings.get_boolean(`visible${nextId}-setting`)) continue;
+                if (!mySettings.get_value(`command${nextId}`).deep_unpack()[3]) continue;
 
-                const nextEntryRowA = mySettings.get_string(`entryrow${nextId}a-setting`);
-                const nextEntryRowB = mySettings.get_string(`entryrow${nextId}b-setting`);
-                const nextEntryRowC = mySettings.get_string(`entryrow${nextId}c-setting`);
+                const [nextEntryRowA, nextEntryRowB, nextEntryRowC, nextVisible] = mySettings.get_value(`command${nextId}`).deep_unpack();
                 
                 if (nextEntryRowA === '' && nextEntryRowB === '' && nextEntryRowC === '') continue;
 
-                const nextRow = mySettings.get_string(`entryrow${nextId}a-setting`).trim();
+                const nextRow = mySettings.get_value(`command${nextId}`).deep_unpack()[0].trim();
 
                 if (nextRow.startsWith('*')) {
                     if (subMenuStatus === 0) subMenuStatus = 1;
@@ -220,12 +218,7 @@ class CommandMenu extends PanelMenu.Button {
 export default class CommandMenuExtension extends Extension {
     enable() {
         this._settings = this.getSettings();
-
-        // Update comand-order length from 30 to 99 for existing users
-        let order = this._settings.get_value('command-order').deep_unpack();
-        for (let i = order.length + 1; i <= 99; i++) order.push(i);
-        this._settings.set_value('command-order', new GLib.Variant('ai', order));
-
+        migrateSettings(this._settings);
 
         this._indicator = new CommandMenu(this._settings);
         let location = this._settings.get_int('menulocation-setting') === 2 ? 'right' : 'left';
@@ -233,19 +226,18 @@ export default class CommandMenuExtension extends Extension {
         if (this._settings.get_int('menulocation-setting') === 0) {Main.panel.addToStatusArea('command-menu', this._indicator, Main.sessionMode.panel.left.length, 'left');}
         else {Main.panel.addToStatusArea('command-menu', this._indicator, pos, location);}
 
-        // Watch for changes to text entry fields:
+        this._commandRefreshTimeout = null;
         for (let k = 1; k <= numberOfCommands; k++) {
-            this._settings.connect(`changed::entryrow${k}a-setting`, (settings, key) => {
-                refreshIndicator.call(this);
-            });
-            this._settings.connect(`changed::entryrow${k}b-setting`, (settings, key) => {
-                refreshIndicator.call(this);
-            });
-            this._settings.connect(`changed::entryrow${k}c-setting`, (settings, key) => {
-                refreshIndicator.call(this);
-            });
-            this._settings.connect(`changed::visible${k}-setting`, (settings, key) => {
-                refreshIndicator.call(this);
+            this._settings.connect(`changed::command${k}`, () => {
+        
+                if (this._commandRefreshTimeout !== null) return;
+
+                this._commandRefreshTimeout = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 200, () => {
+                        this._commandRefreshTimeout = null;
+                        refreshIndicator.call(this);
+                        return GLib.SOURCE_REMOVE;
+                    }
+                );
             });
         }
 
@@ -289,5 +281,10 @@ export default class CommandMenuExtension extends Extension {
         delete this._indicator;
         this._indicator = null;
         this._settings = null;
-    }
+
+        if (this._commandRefreshTimeout !== null) {
+            GLib.Source.remove(this._commandRefreshTimeout);
+            this._commandRefreshTimeout = null;
+        }
+    }   
 }
