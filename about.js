@@ -6,7 +6,7 @@ Version 13 - What's new.
 •  Added setting to reset all commands and extension settings to defaults.
 •  Increased maximum number of entries from 30 to 99.
 •  Improved internal settings handling by significantly reducing the required number of GSettings keys.
-•  Added translations into Japanese, Chinese, Portuguese and Polish by IlCraccatore2011
+•  Added translations into Japanese, Chinese, Portuguese and Polish by IlCraccatore2011.
 •  [Support for GNOME 50]
 
 
