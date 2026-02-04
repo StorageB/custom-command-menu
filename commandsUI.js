@@ -616,7 +616,6 @@ export default class commandsUI extends Adw.PreferencesPage {
                 row._entryRowCommand.hide();
                 row._entryRowIcon.hide();
                 row._entryRowName.title = _('Separator Row');
-                continue;
             } 
 
             if (!this._settings.get_value(`command${n}`).deep_unpack()[3]) continue;
