@@ -1,4 +1,4 @@
-# Italian translations for PACKAGE package.
+# Japanese translations for PACKAGE package.
 # Copyright (C) 2026 THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # Il Craccatore 2011, 2026.
@@ -8,54 +8,54 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-02-04 15:25+0100\n"
-"PO-Revision-Date: 2026-02-04 15:27+0100\n"
+"PO-Revision-Date: 2026-02-04 16:12+0100\n"
 "Last-Translator: Il Craccatore 2011\n"
-"Language-Team: Italian none\n"
-"Language: it\n"
+"Language-Team: none\n"
+"Language: ja_JA\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 
 #: commandsUI.js:90 commandsUI.js:607
 msgid "Name:"
-msgstr "Nome:"
+msgstr "名前:"
 
 #: commandsUI.js:91
 msgid "Command:"
-msgstr "Comando:"
+msgstr "コマンド:"
 
 #: commandsUI.js:92
 msgid "Icon:"
-msgstr "Icona:"
+msgstr "アイコン:"
 
 #: commandsUI.js:111
 msgid "Insert new"
-msgstr "Inserisci nuovo"
+msgstr "新規追加"
 
 #: commandsUI.js:112
 msgid "Duplicate"
-msgstr "Duplica"
+msgstr "複製"
 
 #: commandsUI.js:113
 msgid "Delete"
-msgstr "Elimina"
+msgstr "削除"
 
 #: commandsUI.js:153 commandsUI.js:195 commandsUI.js:463
 msgid "Maximum row limit reached"
-msgstr "Raggiunto il numero massimo di righe"
+msgstr "最大行数に達しました"
 
 #: commandsUI.js:618
 msgid "Separator Row"
-msgstr "Riga separatore"
+msgstr "区切り行"
 
 #: commandsUI.js:644
 msgid "Submenu Title:"
-msgstr "Titolo sottomenu:"
+msgstr "サブメニューのタイトル:"
 
 #: extension.js:45 extension.js:64 prefs.js:45 prefs.js:237
 msgid "Commands"
-msgstr "Comandi"
+msgstr "コマンド"
 
 #: extension.js:198
 #, javascript-format
@@ -63,7 +63,7 @@ msgid ""
 "[Custom Command Menu] Attempting to execute command:\n"
 "%s"
 msgstr ""
-"[Menu comandi personalizzati] Tentativo di esecuzione del comando:\n"
+"[カスタムコマンドメニュー] コマンドの実行を試みています:\n"
 "%s"
 
 #: extension.js:201
@@ -72,38 +72,38 @@ msgid ""
 "[Custom Command Menu] Error running command:\n"
 "%s"
 msgstr ""
-"[Menu comandi personalizzati] Errore nell'esecuzione del comando:\n"
+"[カスタムコマンドメニュー] コマンド実行中にエラーが発生しました:\n"
 "%s"
 
 #: prefs.js:52
 msgid "Configuration"
-msgstr "Configurazione"
+msgstr "設定"
 
 #: prefs.js:58
 msgid "Backup and Restore"
-msgstr "Backup e ripristino"
+msgstr "バックアップと復元"
 
 #: prefs.js:64
 msgid "Export Command List"
-msgstr "Esporta elenco comandi"
+msgstr "コマンド一覧をエクスポート"
 
 #: prefs.js:65
 #, javascript-format
 msgid "Click to export %s configuration file to user's home directory"
-msgstr "Clicca per esportare il file di configurazione %s nella directory home dell'utente"
+msgstr "%s 設定ファイルをユーザーのホームディレクトリにエクスポートするにはクリックしてください"
 
 #: prefs.js:92
 #, javascript-format
 msgid "Commands exported to: %s"
-msgstr "Comandi esportati in: %s"
+msgstr "コマンドが次の場所にエクスポートされました: %s"
 
 #: prefs.js:94
 msgid "Open"
-msgstr "Apri"
+msgstr "開く"
 
 #: prefs.js:104
 msgid "Application Not Found"
-msgstr "Applicazione non trovata"
+msgstr "アプリケーションが見つかりません"
 
 #: prefs.js:106
 msgid ""
@@ -118,24 +118,23 @@ msgid ""
 "3. Choose a default text editor, and select the option \"Always use for this "
 "file type\""
 msgstr ""
-"Nessuna applicazione predefinita trovata per aprire i file .ini.\n"
+".ini ファイルを開くための既定のアプリケーションが見つかりません。\n"
 "\n"
-"Il file di configurazione commands.ini può essere aperto e modificato con qualsiasi "
-"editor di testo. Per aprire il file, potrebbe essere necessario associare manualmente "
-"il file .ini all'editor di testo predefinito seguendo questi passaggi:\n"
+"commands.ini 設定ファイルは、任意のテキストエディターで開いて編集できます。"
+"ファイルを開くには、以下の手順で .ini ファイルを既定のテキストエディターに"
+"手動で関連付ける必要がある場合があります:\n"
 "\n"
-"1. Apri la directory home e individua il file commands.ini\n"
-"2. Fai clic destro sul file e seleziona \"Apri con...\"\n"
-"3. Scegli un editor di testo predefinito e seleziona l'opzione \"Usa sempre per questo "
-"tipo di file\""
+"1. ホームディレクトリを開き、commands.ini ファイルを探します\n"
+"2. ファイルを右クリックし、「次で開く...」を選択します\n"
+"3. 既定のテキストエディターを選択し、「この種類のファイルには常に使用する」を選択します"
 
 #: prefs.js:123 prefs.js:130
 msgid "Export Error"
-msgstr "Errore di esportazione"
+msgstr "エクスポートエラー"
 
 #: prefs.js:125 prefs.js:159 prefs.js:213
 msgid "Details"
-msgstr "Dettagli"
+msgstr "詳細"
 
 #: prefs.js:131
 #, javascript-format
@@ -144,7 +143,7 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"Impossibile esportare l'elenco dei comandi\n"
+"コマンド一覧のエクスポートに失敗しました\n"
 "\n"
 "%s"
 
@@ -154,20 +153,20 @@ msgstr "OK"
 
 #: prefs.js:145
 msgid "Import Command List"
-msgstr "Importa elenco comandi"
+msgstr "コマンド一覧をインポート"
 
 #: prefs.js:146
 #, javascript-format
 msgid "Click to import %s configuration file from user's home directory"
-msgstr "Clicca per importare il file di configurazione %s dalla directory home dell'utente"
+msgstr "%s 設定ファイルをユーザーのホームディレクトリからインポートするにはクリックしてください"
 
 #: prefs.js:157
 msgid "File not found"
-msgstr "File non trovato"
+msgstr "ファイルが見つかりません"
 
 #: prefs.js:164
 msgid "File Not Found"
-msgstr "File non trovato"
+msgstr "ファイルが見つかりません"
 
 #: prefs.js:165
 #, javascript-format
@@ -177,23 +176,23 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"Il file di configurazione %s non è stato trovato nella directory home dell'utente. "
-"Verifica che il seguente file esista:\n"
+"ユーザーのホームディレクトリに %s 設定ファイルが見つかりませんでした。"
+"次のファイルが存在することを確認してください:\n"
 "\n"
 "%s"
 
 #: prefs.js:204
 msgid "Successfully imported 1 entry"
-msgstr "1 voce importata con successo"
+msgstr "1 件のエントリを正常にインポートしました"
 
 #: prefs.js:205
 #, javascript-format
 msgid "Successfully imported %d entries"
-msgstr "%d voci importate con successo"
+msgstr "%d 件のエントリを正常にインポートしました"
 
 #: prefs.js:211 prefs.js:218
 msgid "Import Error"
-msgstr "Errore di importazione"
+msgstr "インポートエラー"
 
 #: prefs.js:219
 #, javascript-format
@@ -202,13 +201,13 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
-"Impossibile importare l'elenco dei comandi\n"
+"コマンド一覧のインポートに失敗しました\n"
 "\n"
 "%s"
 
 #: prefs.js:233
 msgid "Setup Information"
-msgstr "Informazioni di configurazione"
+msgstr "設定情報"
 
 #: prefs.js:239
 msgid ""
@@ -223,20 +222,20 @@ msgid ""
 "•  Start a command name with * to place it in a submenu.\n"
 "•  The submenu title is taken from the row above."
 msgstr ""
-"Inserisci i nomi visualizzati e i comandi associati per il menu a discesa.\n"
-"Trascina per riordinare e usa la casella di controllo per mostrare/nascondere i comandi.\n"
+"ドロップダウンメニューに表示する名前と対応するコマンドを入力してください。\n"
+"ドラッグ＆ドロップで並び替えができ、チェックボックスでコマンドの表示/非表示を切り替えられます。\n"
 "\n"
-"Separatori\n"
-"•  Inserisci --- o ~~~ nel campo nome per aggiungere una riga separatore.\n"
-"•  Aggiungi testo dopo --- o ~~~ per creare un separatore con etichetta.\n"
+"区切り\n"
+"•  名前フィールドに --- または ~~~ を入力すると、区切り線を挿入できます。\n"
+"•  --- または ~~~ の後にテキストを追加すると、ラベル付きの区切りを作成できます。\n"
 "\n"
-"Sottomenu\n"
-"•  Inizia il nome di un comando con * per inserirlo in un sottomenu.\n"
-"•  Il titolo del sottomenu viene preso dalla riga precedente."
+"サブメニュー\n"
+"•  コマンド名を * で始めると、サブメニューに配置されます。\n"
+"•  サブメニューのタイトルは、上の行から取得されます。"
 
 #: prefs.js:254
 msgid "Icons"
-msgstr "Icone"
+msgstr "アイコン"
 
 #: prefs.js:256
 msgid ""
@@ -244,139 +243,139 @@ msgid ""
 "name of the icon, or leave blank for no icon. Refer to the Github Homepage "
 "for more icon configuration options."
 msgstr ""
-"Per un elenco delle icone disponibili, fai riferimento al link Elenco icone qui sotto. "
-"Inserisci il nome dell'icona oppure lascia vuoto per nessuna icona. Consulta la homepage "
-"GitHub per ulteriori opzioni di configurazione delle icone."
+"利用可能なアイコンの一覧については、以下の「アイコン一覧」リンクを参照してください。"
+"アイコン名を入力するか、アイコンを使用しない場合は空白のままにしてください。"
+"その他のアイコン設定オプションについては、GitHub のホームページを参照してください。"
 
 #: prefs.js:264
 msgid "Icon List"
-msgstr "Elenco icone"
+msgstr "アイコン一覧"
 
 #: prefs.js:265
 msgid "List of default symbolic icons"
-msgstr "Elenco delle icone simboliche predefinite"
+msgstr "既定のシンボリックアイコン一覧"
 
 #: prefs.js:278
 msgid "About"
-msgstr "Informazioni"
+msgstr "情報"
 
 #: prefs.js:282
 msgid "What's New"
-msgstr "Novità"
+msgstr "新機能"
 
 #: prefs.js:283
 msgid "List of recent changes and improvements"
-msgstr "Elenco delle modifiche e dei miglioramenti recenti"
+msgstr "最近の変更点と改善点の一覧"
 
 #: prefs.js:290
 msgid "Release Notes"
-msgstr "Note di rilascio"
+msgstr "リリースノート"
 
 #: prefs.js:301
 msgid "Homepage"
-msgstr "Homepage"
+msgstr "ホームページ"
 
 #: prefs.js:302
 msgid "GitHub page for additional information and bug reporting"
-msgstr "Pagina GitHub per informazioni aggiuntive e segnalazione bug"
+msgstr "追加情報およびバグ報告のための GitHub ページ"
 
 #: prefs.js:312
 msgid "Extension Page"
-msgstr "Pagina dell'estensione"
+msgstr "拡張機能ページ"
 
 #: prefs.js:313
 msgid "GNOME extension page"
-msgstr "Pagina dell'estensione GNOME"
+msgstr "GNOME 拡張機能ページ"
 
 #: prefs.js:326
 msgid "Settings"
-msgstr "Impostazioni"
+msgstr "設定"
 
 #: prefs.js:330 prefs.js:383
 msgid "Default"
-msgstr "Predefinito"
+msgstr "既定"
 
 #: prefs.js:330
 msgid "Text"
-msgstr "Testo"
+msgstr "テキスト"
 
 #: prefs.js:330
 msgid "Icon"
-msgstr "Icona"
+msgstr "アイコン"
 
 #: prefs.js:333
 msgid "Menu Type"
-msgstr "Tipo di menu"
+msgstr "メニューの種類"
 
 #: prefs.js:334
 msgid "Select menu type to be text or an icon"
-msgstr "Seleziona se il menu deve essere testo o icona"
+msgstr "メニューをテキストまたはアイコンとして表示するか選択してください"
 
 #: prefs.js:340 prefs.js:350
 msgid "Icon name:"
-msgstr "Nome icona:"
+msgstr "アイコン名:"
 
 #: prefs.js:340 prefs.js:354
 msgid "Menu title:"
-msgstr "Titolo menu:"
+msgstr "メニュータイトル:"
 
 #: prefs.js:383
 msgid "Left"
-msgstr "Sinistra"
+msgstr "左"
 
 #: prefs.js:383
 msgid "Right"
-msgstr "Destra"
+msgstr "右"
 
 #: prefs.js:386
 msgid "Menu Location"
-msgstr "Posizione del menu"
+msgstr "メニューの位置"
 
 #: prefs.js:387
 msgid "Select location for the menu in the top bar"
-msgstr "Seleziona la posizione del menu nella barra superiore"
+msgstr "トップバー内のメニュー位置を選択してください"
 
 #: prefs.js:399
 msgid "Menu Position"
-msgstr "Posizione del menu"
+msgstr "メニューの位置調整"
 
 #: prefs.js:400
 msgid "Adjust position of the menu in the top bar"
-msgstr "Regola la posizione del menu nella barra superiore"
+msgstr "トップバー内でのメニュー位置を調整します"
 
 #: prefs.js:413
 msgid "Reset to Defaults"
-msgstr "Ripristina impostazioni predefinite"
+msgstr "既定値にリセット"
 
 #: prefs.js:414
 msgid "Click to restore all commands and settings to their default values"
-msgstr "Clicca per ripristinare tutti i comandi e le impostazioni ai valori predefiniti"
+msgstr "すべてのコマンドと設定を既定値に戻します"
 
 #: prefs.js:420
 msgid "Confirm Reset"
-msgstr "Conferma ripristino"
+msgstr "リセットの確認"
 
 #: prefs.js:421
 msgid ""
 "All commands and extension settings will be reset to their default values. "
 "This action cannot be undone."
 msgstr ""
-"Tutti i comandi e le impostazioni dell'estensione verranno ripristinati ai valori predefiniti. "
-"Questa azione non può essere annullata."
+"すべてのコマンドと拡張機能の設定が既定値にリセットされます。"
+"この操作は元に戻せません。"
 
 #: prefs.js:426
 msgid "Cancel"
-msgstr "Annulla"
+msgstr "キャンセル"
 
 #: prefs.js:427
 msgid "Reset"
-msgstr "Ripristina"
+msgstr "リセット"
 
 #: prefs.js:438
 msgid "All settings reset to defaults"
-msgstr "Tutte le impostazioni sono state ripristinate ai valori predefiniti"
+msgstr "すべての設定が既定値にリセットされました"
 
 #: prefs.js:440
 msgid "Failed to reset settings"
-msgstr "Impossibile ripristinare le impostazioni"
+msgstr "設定のリセットに失敗しました"
 

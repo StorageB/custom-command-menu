@@ -1,14 +1,14 @@
 # French translations for PACKAGE package.
-# Copyright (C) 2025 THE PACKAGE'S COPYRIGHT HOLDER
+# Copyright (C) 2026 THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# Il Craccatore 2011, 2025.
+# Il Craccatore 2011, 2026.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-20 17:24+0200\n"
-"PO-Revision-Date: 2025-09-20 17:24+0200\n"
+"POT-Creation-Date: 2026-02-04 15:25+0100\n"
+"PO-Revision-Date: 2026-02-04 15:57+0100\n"
 "Last-Translator: Il Craccatore 2011\n"
 "Language-Team: none\n"
 "Language: fr\n"
@@ -17,293 +17,365 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: commandsUI.js:97 commandsUI.js:125
+#: commandsUI.js:90 commandsUI.js:607
 msgid "Name:"
 msgstr "Nom :"
 
-#: commandsUI.js:98
+#: commandsUI.js:91
 msgid "Command:"
 msgstr "Commande :"
 
-#: commandsUI.js:99
+#: commandsUI.js:92
 msgid "Icon:"
 msgstr "Icône :"
 
-#: commandsUI.js:121
-msgid "Separator Row"
-msgstr "Ligne séparatrice"
-
-#: commandsUI.js:133
+#: commandsUI.js:111
 msgid "Insert new"
 msgstr "Insérer nouveau"
 
-#: commandsUI.js:134
+#: commandsUI.js:112
 msgid "Duplicate"
 msgstr "Dupliquer"
 
-#: commandsUI.js:135
+#: commandsUI.js:113
 msgid "Delete"
 msgstr "Supprimer"
 
-#: commandsUI.js:173 commandsUI.js:205 commandsUI.js:408
+#: commandsUI.js:153 commandsUI.js:195 commandsUI.js:463
 msgid "Maximum row limit reached"
-msgstr "Limite maximale de lignes atteinte"
+msgstr "Nombre maximal de lignes atteint"
 
-#: extension.js:43 extension.js:62 prefs.js:43 prefs.js:238
+#: commandsUI.js:618
+msgid "Separator Row"
+msgstr "Ligne séparatrice"
+
+#: commandsUI.js:644
+msgid "Submenu Title:"
+msgstr "Titre du sous-menu :"
+
+#: extension.js:45 extension.js:64 prefs.js:45 prefs.js:237
 msgid "Commands"
 msgstr "Commandes"
 
-#: extension.js:136
+#: extension.js:198
 #, javascript-format
-msgid "[Custom Command Menu] Attempting to execute command:\n%s"
-msgstr "[Menu de commandes personnalisées] Tentative d'exécution de la commande :\n%s"
+msgid ""
+"[Custom Command Menu] Attempting to execute command:\n"
+"%s"
+msgstr ""
+"[Menu de commandes personnalisées] Tentative d’exécution de la commande :\n"
+"%s"
 
-#: extension.js:139
+#: extension.js:201
 #, javascript-format
-msgid "[Custom Command Menu] Error running command:\n%s"
-msgstr "[Menu de commandes personnalisées] Erreur lors de l'exécution de la commande :\n%s"
+msgid ""
+"[Custom Command Menu] Error running command:\n"
+"%s"
+msgstr ""
+"[Menu de commandes personnalisées] Erreur lors de l’exécution de la commande :\n"
+"%s"
 
-#: prefs.js:50
+#: prefs.js:52
 msgid "Configuration"
 msgstr "Configuration"
 
-#: prefs.js:56
+#: prefs.js:58
 msgid "Backup and Restore"
 msgstr "Sauvegarde et restauration"
 
-#: prefs.js:62
+#: prefs.js:64
 msgid "Export Command List"
 msgstr "Exporter la liste des commandes"
 
-#: prefs.js:63
+#: prefs.js:65
 #, javascript-format
 msgid "Click to export %s configuration file to user's home directory"
-msgstr "Cliquez pour exporter le fichier de configuration %s dans le répertoire personnel de l'utilisateur"
+msgstr "Cliquez pour exporter le fichier de configuration %s dans le répertoire personnel de l’utilisateur"
 
-#: prefs.js:94
+#: prefs.js:92
 #, javascript-format
 msgid "Commands exported to: %s"
 msgstr "Commandes exportées vers : %s"
 
-#: prefs.js:96
+#: prefs.js:94
 msgid "Open"
 msgstr "Ouvrir"
 
-#: prefs.js:106
+#: prefs.js:104
 msgid "Application Not Found"
 msgstr "Application introuvable"
 
-#: prefs.js:108
+#: prefs.js:106
 msgid ""
 "No default application found to open .ini files.\n"
 "\n"
-"The commands.ini configuration file can be opened and modified in any text editor. To open the file, it may first be required to manually associate the .ini file with the default text editor by doing the following:\n"
+"The commands.ini configuration file can be opened and modified in any text "
+"editor. To open the file, it may first be required to manually associate "
+"the .ini file with the default text editor by doing the following:\n"
 "\n"
 "1. Open the home directory and locate the commands.ini file\n"
 "2. Right-click on the file and select \"Open with...\"\n"
-"3. Choose a default text editor, and select the option \"Always use for this file type\""
+"3. Choose a default text editor, and select the option \"Always use for this "
+"file type\""
 msgstr ""
 "Aucune application par défaut trouvée pour ouvrir les fichiers .ini.\n"
 "\n"
-"Le fichier de configuration commands.ini peut être ouvert et modifié avec n'importe quel éditeur de texte. Pour ouvrir le fichier, il peut être nécessaire d'associer manuellement le fichier .ini à l'éditeur de texte par défaut en procédant comme suit :\n"
+"Le fichier de configuration commands.ini peut être ouvert et modifié avec n’importe quel "
+"éditeur de texte. Pour ouvrir le fichier, il peut être nécessaire d’associer manuellement "
+"le fichier .ini à l’éditeur de texte par défaut en suivant les étapes suivantes :\n"
 "\n"
 "1. Ouvrez le répertoire personnel et localisez le fichier commands.ini\n"
-"2. Faites un clic droit sur le fichier et sélectionnez \"Ouvrir avec...\"\n"
-"3. Choisissez un éditeur de texte par défaut, et sélectionnez l'option \"Toujours utiliser pour ce type de fichier\""
+"2. Cliquez avec le bouton droit sur le fichier et sélectionnez « Ouvrir avec… »\n"
+"3. Choisissez un éditeur de texte par défaut et sélectionnez l’option « Toujours utiliser "
+"pour ce type de fichier »"
 
-#: prefs.js:125 prefs.js:132
+#: prefs.js:123 prefs.js:130
 msgid "Export Error"
-msgstr "Erreur d'exportation"
+msgstr "Erreur d’exportation"
 
-#: prefs.js:127 prefs.js:161 prefs.js:214
+#: prefs.js:125 prefs.js:159 prefs.js:213
 msgid "Details"
 msgstr "Détails"
 
-#: prefs.js:133
+#: prefs.js:131
 #, javascript-format
-msgid "Failed to export command list\n\n%s"
-msgstr "Échec de l'exportation de la liste des commandes\n\n%s"
+msgid ""
+"Failed to export command list\n"
+"\n"
+"%s"
+msgstr ""
+"Échec de l’exportation de la liste des commandes\n"
+"\n"
+"%s"
 
-#: prefs.js:135 prefs.js:170 prefs.js:222
+#: prefs.js:133 prefs.js:168 prefs.js:221
 msgid "OK"
 msgstr "OK"
 
-#: prefs.js:147
+#: prefs.js:145
 msgid "Import Command List"
 msgstr "Importer la liste des commandes"
 
-#: prefs.js:148
+#: prefs.js:146
 #, javascript-format
 msgid "Click to import %s configuration file from user's home directory"
-msgstr "Cliquez pour importer le fichier de configuration %s depuis le répertoire personnel de l'utilisateur"
+msgstr "Cliquez pour importer le fichier de configuration %s depuis le répertoire personnel de l’utilisateur"
 
-#: prefs.js:159
+#: prefs.js:157
 msgid "File not found"
 msgstr "Fichier introuvable"
 
-#: prefs.js:166
+#: prefs.js:164
 msgid "File Not Found"
 msgstr "Fichier introuvable"
 
-#: prefs.js:167
+#: prefs.js:165
 #, javascript-format
-msgid "The %s configuration file could not be found in the user's home directory. Verify the following file exists:\n\n%s"
-msgstr "Le fichier de configuration %s est introuvable dans le répertoire personnel de l'utilisateur. Vérifiez que le fichier suivant existe :\n\n%s"
+msgid ""
+"The %s configuration file could not be found in the user's home directory. "
+"Verify the following file exists:\n"
+"\n"
+"%s"
+msgstr ""
+"Le fichier de configuration %s est introuvable dans le répertoire personnel de l’utilisateur. "
+"Vérifiez que le fichier suivant existe :\n"
+"\n"
+"%s"
+
+#: prefs.js:204
+msgid "Successfully imported 1 entry"
+msgstr "1 entrée importée avec succès"
 
 #: prefs.js:205
-msgid "Successfully imported 1 command"
-msgstr "1 commande importée avec succès"
-
-#: prefs.js:206
 #, javascript-format
-msgid "Successfully imported %d commands"
-msgstr "%d commandes importées avec succès"
+msgid "Successfully imported %d entries"
+msgstr "%d entrées importées avec succès"
 
-#: prefs.js:212 prefs.js:219
+#: prefs.js:211 prefs.js:218
 msgid "Import Error"
-msgstr "Erreur d'importation"
+msgstr "Erreur d’importation"
 
-#: prefs.js:220
+#: prefs.js:219
 #, javascript-format
-msgid "Failed to import command list\n\n%s"
-msgstr "Échec de l'importation de la liste des commandes\n\n%s"
+msgid ""
+"Failed to import command list\n"
+"\n"
+"%s"
+msgstr ""
+"Échec de l’importation de la liste des commandes\n"
+"\n"
+"%s"
 
-#: prefs.js:234
+#: prefs.js:233
 msgid "Setup Information"
 msgstr "Informations de configuration"
 
-#: prefs.js:240
+#: prefs.js:239
 msgid ""
 "Enter the display names and associated commands for the drop-down menu.\n"
-"•  Type --- or ~~~ in the name field to create a visual separator line in the menu.\n"
-"•  Adding text after --- or ~~~ creates a labeled separator.\n"
-"•  Toggle the checkbox to show or hide a command.\n"
-"•  Drag and drop to reorder commands."
+"Drag and drop to reorder, and use the checkbox to show/hide commands.\n"
+"\n"
+"Separators\n"
+"•  Enter --- or ~~~ in the name field to insert a separator line.\n"
+"•  Add text after --- or ~~~ to create a labeled separator.\n"
+"\n"
+"Submenus\n"
+"•  Start a command name with * to place it in a submenu.\n"
+"•  The submenu title is taken from the row above."
 msgstr ""
-"Entrez les noms affichés et les commandes associées pour le menu déroulant.\n"
-"•  Tapez --- ou ~~~ dans le champ du nom pour créer une ligne séparatrice visuelle dans le menu.\n"
-"•  Ajouter du texte après --- ou ~~~ crée un séparateur étiqueté.\n"
-"•  Cochez ou décochez la case pour afficher ou masquer une commande.\n"
-"•  Glissez-déposez pour réorganiser les commandes."
+"Saisissez les noms d’affichage et les commandes associées pour le menu déroulant.\n"
+"Glissez-déposez pour réorganiser et utilisez la case à cocher pour afficher/masquer les commandes.\n"
+"\n"
+"Séparateurs\n"
+"•  Saisissez --- ou ~~~ dans le champ nom pour insérer une ligne de séparation.\n"
+"•  Ajoutez du texte après --- ou ~~~ pour créer un séparateur avec libellé.\n"
+"\n"
+"Sous-menus\n"
+"•  Commencez le nom d’une commande par * pour la placer dans un sous-menu.\n"
+"•  Le titre du sous-menu est repris de la ligne précédente."
 
-#: prefs.js:250
+#: prefs.js:254
 msgid "Icons"
 msgstr "Icônes"
 
-#: prefs.js:252
+#: prefs.js:256
 msgid ""
-"For a list of available icons, refer to the Icon List link below. Enter the name of the icon, or leave blank for no icon. Refer to the Github Homepage for more icon configuration options."
+"For a list of available icons, refer to the Icon List link below. Enter the "
+"name of the icon, or leave blank for no icon. Refer to the Github Homepage "
+"for more icon configuration options."
 msgstr ""
-"Pour une liste d'icônes disponibles, consultez le lien Liste des icônes ci-dessous. Entrez le nom de l'icône ou laissez vide pour aucune icône. Reportez-vous à la page d'accueil Github pour plus d'options de configuration des icônes."
+"Pour obtenir la liste des icônes disponibles, consultez le lien Liste des icônes ci-dessous. "
+"Saisissez le nom de l’icône ou laissez vide pour n’en afficher aucune. Consultez la page d’accueil "
+"GitHub pour davantage d’options de configuration des icônes."
 
-#: prefs.js:260
+#: prefs.js:264
 msgid "Icon List"
 msgstr "Liste des icônes"
 
-#: prefs.js:261
+#: prefs.js:265
 msgid "List of default symbolic icons"
 msgstr "Liste des icônes symboliques par défaut"
 
-#: prefs.js:271
-msgid "Local Icons"
-msgstr "Icônes locales"
-
-#: prefs.js:272
-msgid "Local icon directory (/usr/share/icons)"
-msgstr "Répertoire local des icônes (/usr/share/icons)"
-
-#: prefs.js:285
+#: prefs.js:278
 msgid "About"
 msgstr "À propos"
 
-#: prefs.js:289
+#: prefs.js:282
 msgid "What's New"
 msgstr "Nouveautés"
 
-#: prefs.js:290
+#: prefs.js:283
 msgid "List of recent changes and improvements"
-msgstr "Liste des changements et améliorations récentes"
+msgstr "Liste des changements et améliorations récents"
 
-#: prefs.js:297
+#: prefs.js:290
 msgid "Release Notes"
 msgstr "Notes de version"
 
-#: prefs.js:308
+#: prefs.js:301
 msgid "Homepage"
-msgstr "Page d'accueil"
+msgstr "Page d’accueil"
 
-#: prefs.js:309
+#: prefs.js:302
 msgid "GitHub page for additional information and bug reporting"
-msgstr "Page GitHub pour informations supplémentaires et rapports de bugs"
+msgstr "Page GitHub pour plus d’informations et le signalement de bugs"
 
-#: prefs.js:319
+#: prefs.js:312
 msgid "Extension Page"
-msgstr "Page de l'extension"
+msgstr "Page de l’extension"
 
-#: prefs.js:320
+#: prefs.js:313
 msgid "GNOME extension page"
-msgstr "Page de l'extension GNOME"
+msgstr "Page de l’extension GNOME"
 
-#: prefs.js:333
+#: prefs.js:326
 msgid "Settings"
 msgstr "Paramètres"
 
-#: prefs.js:337
-msgid "Custom Menu Title"
-msgstr "Titre personnalisé du menu"
-
-#: prefs.js:338
-msgid "Use custom text or a custom icon for the menu title"
-msgstr "Utiliser un texte personnalisé ou une icône personnalisée pour le titre du menu"
-
-#: prefs.js:342 prefs.js:395
+#: prefs.js:330 prefs.js:383
 msgid "Default"
 msgstr "Par défaut"
 
-#: prefs.js:342
+#: prefs.js:330
 msgid "Text"
 msgstr "Texte"
 
-#: prefs.js:342
+#: prefs.js:330
 msgid "Icon"
 msgstr "Icône"
 
-#: prefs.js:345
+#: prefs.js:333
 msgid "Menu Type"
 msgstr "Type de menu"
 
-#: prefs.js:346
+#: prefs.js:334
 msgid "Select menu type to be text or an icon"
-msgstr "Sélectionnez le type de menu : texte ou icône"
+msgstr "Sélectionnez si le menu doit être en texte ou sous forme d’icône"
 
-#: prefs.js:352 prefs.js:362
+#: prefs.js:340 prefs.js:350
 msgid "Icon name:"
-msgstr "Nom de l'icône :"
+msgstr "Nom de l’icône :"
 
-#: prefs.js:352 prefs.js:366
+#: prefs.js:340 prefs.js:354
 msgid "Menu title:"
 msgstr "Titre du menu :"
 
-#: prefs.js:395
+#: prefs.js:383
 msgid "Left"
 msgstr "Gauche"
 
-#: prefs.js:395
+#: prefs.js:383
 msgid "Right"
 msgstr "Droite"
 
-#: prefs.js:398
+#: prefs.js:386
 msgid "Menu Location"
 msgstr "Emplacement du menu"
 
-#: prefs.js:399
+#: prefs.js:387
 msgid "Select location for the menu in the top bar"
-msgstr "Sélectionnez l'emplacement du menu dans la barre supérieure"
+msgstr "Sélectionnez l’emplacement du menu dans la barre supérieure"
 
-#: prefs.js:411
+#: prefs.js:399
 msgid "Menu Position"
 msgstr "Position du menu"
 
-#: prefs.js:412
+#: prefs.js:400
 msgid "Adjust position of the menu in the top bar"
 msgstr "Ajustez la position du menu dans la barre supérieure"
+
+#: prefs.js:413
+msgid "Reset to Defaults"
+msgstr "Rétablir les paramètres par défaut"
+
+#: prefs.js:414
+msgid "Click to restore all commands and settings to their default values"
+msgstr "Cliquez pour restaurer toutes les commandes et paramètres à leurs valeurs par défaut"
+
+#: prefs.js:420
+msgid "Confirm Reset"
+msgstr "Confirmer la réinitialisation"
+
+#: prefs.js:421
+msgid ""
+"All commands and extension settings will be reset to their default values. "
+"This action cannot be undone."
+msgstr ""
+"Toutes les commandes et les paramètres de l’extension seront réinitialisés à leurs valeurs par défaut. "
+"Cette action est irréversible."
+
+#: prefs.js:426
+msgid "Cancel"
+msgstr "Annuler"
+
+#: prefs.js:427
+msgid "Reset"
+msgstr "Réinitialiser"
+
+#: prefs.js:438
+msgid "All settings reset to defaults"
+msgstr "Tous les paramètres ont été réinitialisés aux valeurs par défaut"
+
+#: prefs.js:440
+msgid "Failed to reset settings"
+msgstr "Échec de la réinitialisation des paramètres"
