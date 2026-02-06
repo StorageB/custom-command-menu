@@ -9,7 +9,7 @@
  * command entries in 99 keys. 
  * 
  * This migration function will be modified in the next release to clear 
- * legacy keys, and then removed in the release after that.
+ * legacy keys if necessary, and then removed in the release after that.
  * 
  */
 
@@ -25,15 +25,15 @@ export function migrateSettings(settings) {
     const OLD_MAX = 30;
     const NEW_MAX = 99;
 
-    console.log("[Custom Command Menu] Checking if legacy keys exist");
-
 
     // begin migration
-    console.log("[Custom Command Menu] Copying legacy keys to new format");
+
     let count = 0;
 
     for (let i = 1; i <= OLD_MAX; i++) {
+
         if (!settings.settings_schema.has_key(`entryrow${i}a-setting`)) continue;
+        
         try {
             const name = settings.get_string(`entryrow${i}a-setting`);
             const cmd   = settings.get_string(`entryrow${i}b-setting`);
@@ -52,12 +52,14 @@ export function migrateSettings(settings) {
     console.log(`[Custom Command Menu] Migrated ${count} legacy commands to new format`);
     
 
-    // set new order list
-    console.log("[Custom Command Menu] Adding entries to command-order.");
+    // update existing command order array to handle additional command entries
+    
     let order = settings.get_value('command-order').deep_unpack();
-    for (let j = order.length + 1; j <= NEW_MAX; j++) order.push(j);
-    settings.set_value('command-order',new GLib.Variant('ai', order));
-
+    if (order.length < NEW_MAX) {
+        console.log("[Custom Command Menu] Adding entries to command-order.");
+        for (let j = order.length + 1; j <= NEW_MAX; j++) order.push(j);
+        settings.set_value('command-order',new GLib.Variant('ai', order));
+    }
 
     // migration complete
     settings.set_boolean('v13-migration-complete', true);
