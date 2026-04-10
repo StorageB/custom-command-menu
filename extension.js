@@ -139,7 +139,7 @@ class CommandMenu extends PanelMenu.Button {
                 });
 
                 const label = new St.Label({
-                    text: entryRowA.trimStart().slice(matchingSeparator.length).trim(),
+                    text: this._resolveLabel(entryRowA.trimStart().slice(matchingSeparator.length).trim()),
                     style_class: 'popup-subtitle-menu-item',
                     x_expand: true,
                     x_align: Clutter.ActorAlign.START,
@@ -181,7 +181,25 @@ class CommandMenu extends PanelMenu.Button {
     }
 
 
+    _resolveLabel(label) {
+        // Dynamic: $(command) - runs a shell command and substitutes stdout
+        label = label.replace(/\$\(([^)]+)\)/g, (_match, cmd) => {
+            try {
+                let [ok, stdout] = GLib.spawn_command_line_sync(cmd);
+                if (ok && stdout) {
+                    return new TextDecoder().decode(stdout).trim();
+                }
+            } catch (e) {
+                console.log(`[Custom Command Menu] Error resolving dynamic label: ${cmd}: ${e}`);
+            }
+            return _match;
+        });
+
+        return label;
+    }
+
     _addMenuItem(label, command, icon, targetMenu = this.menu) {
+        label = this._resolveLabel(label);
         let newItem = new PopupMenu.PopupMenuItem('');
         if (icon) {
             let commandIcon = new St.Icon({
