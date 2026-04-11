@@ -185,7 +185,7 @@ class CommandMenu extends PanelMenu.Button {
         // Dynamic: $(command) - runs a shell command and substitutes stdout
         label = label.replace(/\$\(([^)]+)\)/g, (_match, cmd) => {
             try {
-                let [ok, stdout] = GLib.spawn_command_line_sync(cmd);
+                let [ok, stdout] = GLib.spawn_command_line_sync(`timeout 1 ${cmd}`);
                 if (ok && stdout) {
                     return new TextDecoder().decode(stdout).trim();
                 }
