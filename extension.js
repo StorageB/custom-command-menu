@@ -44,6 +44,8 @@ class CommandMenu extends PanelMenu.Button {
 
     constructor(mySettings) {
         super(0.5, _('Commands'));
+        this._pendingTimeouts = [];
+        this._pendingCancellables = [];
         let labelText;
 
         if (mySettings.get_int('menuoptions-setting') === 2) {
@@ -184,6 +186,16 @@ class CommandMenu extends PanelMenu.Button {
     }
 
 
+    destroy() {
+        for (const id of this._pendingTimeouts)
+            GLib.source_remove(id);
+        for (const c of this._pendingCancellables)
+            c.cancel();
+        this._pendingTimeouts = [];
+        this._pendingCancellables = [];
+        super.destroy();
+    }
+
     _resolveLabelAsync(labelWidget, text) {
         const pattern = /\$\(([^)]+)\)/g;
         let match;
@@ -191,10 +203,12 @@ class CommandMenu extends PanelMenu.Button {
             const fullMatch = match[0];
             const cmd = match[1];
             const cancellable = new Gio.Cancellable();
+            this._pendingCancellables.push(cancellable);
             const timeoutId = GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT, 2, () => {
                 cancellable.cancel();
                 return GLib.SOURCE_REMOVE;
             });
+            this._pendingTimeouts.push(timeoutId);
             try {
                 const proc = Gio.Subprocess.new(
                     ['sh', '-c', cmd],
