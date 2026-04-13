@@ -29,6 +29,7 @@ import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 import * as PanelMenu from 'resource:///org/gnome/shell/ui/panelMenu.js';
 import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
 
+import Gio from 'gi://Gio';
 import GLib from 'gi://GLib';
 import St from 'gi://St';
 
@@ -43,6 +44,8 @@ class CommandMenu extends PanelMenu.Button {
 
     constructor(mySettings) {
         super(0.5, _('Commands'));
+        this._pendingTimeouts = [];
+        this._pendingCancellables = [];
         let labelText;
 
         if (mySettings.get_int('menuoptions-setting') === 2) {
@@ -138,8 +141,9 @@ class CommandMenu extends PanelMenu.Button {
                     style_class: 'section-label-menu-item',
                 });
 
+                const labelText = entryRowA.trimStart().slice(matchingSeparator.length).trim();
                 const label = new St.Label({
-                    text: entryRowA.trimStart().slice(matchingSeparator.length).trim(),
+                    text: labelText,
                     style_class: 'popup-subtitle-menu-item',
                     x_expand: true,
                     x_align: Clutter.ActorAlign.START,
@@ -147,6 +151,7 @@ class CommandMenu extends PanelMenu.Button {
                 });
 
                 label.set_style('font-size: 0.8em; padding: 0em; margin: 0em; line-height: 1em;');
+                this._resolveLabelAsync(label, labelText);
                 sectionLabel.actor.set_style('padding-top: 0px; padding-bottom: 0px; min-height: 0;');
                 sectionLabel.actor.add_child(label);
 
@@ -181,6 +186,53 @@ class CommandMenu extends PanelMenu.Button {
     }
 
 
+    destroy() {
+        for (const id of this._pendingTimeouts)
+            GLib.source_remove(id);
+        for (const c of this._pendingCancellables)
+            c.cancel();
+        this._pendingTimeouts = [];
+        this._pendingCancellables = [];
+        super.destroy();
+    }
+
+    _resolveLabelAsync(labelWidget, text) {
+        const pattern = /\$\(([^)]+)\)/g;
+        let match;
+        while ((match = pattern.exec(text)) !== null) {
+            const fullMatch = match[0];
+            const cmd = match[1];
+            const cancellable = new Gio.Cancellable();
+            this._pendingCancellables.push(cancellable);
+            const timeoutId = GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT, 2, () => {
+                cancellable.cancel();
+                return GLib.SOURCE_REMOVE;
+            });
+            this._pendingTimeouts.push(timeoutId);
+            try {
+                const proc = Gio.Subprocess.new(
+                    ['bash', '-c', cmd],
+                    Gio.SubprocessFlags.STDOUT_PIPE | Gio.SubprocessFlags.STDERR_SILENCE
+                );
+                proc.communicate_utf8_async(null, cancellable, (proc, res) => {
+                    GLib.source_remove(timeoutId);
+                    try {
+                        const [, stdout] = proc.communicate_utf8_finish(res);
+                        if (stdout) {
+                            const current = labelWidget.get_text();
+                            labelWidget.set_text(current.replace(fullMatch, stdout.trim()));
+                        }
+                    } catch (e) {
+                        console.log(`[Custom Command Menu] Error resolving dynamic label: ${cmd}: ${e}`);
+                    }
+                });
+            } catch (e) {
+                GLib.source_remove(timeoutId);
+                console.log(`[Custom Command Menu] Error spawning command: ${cmd}: ${e}`);
+            }
+        }
+    }
+
     _addMenuItem(label, command, icon, targetMenu = this.menu) {
         let newItem = new PopupMenu.PopupMenuItem('');
         if (icon) {
@@ -192,6 +244,7 @@ class CommandMenu extends PanelMenu.Button {
         }
         let commandLabel = new St.Label({ text: label });
         newItem.add_child(commandLabel);
+        this._resolveLabelAsync(commandLabel, label);
         
         newItem.connect('activate', () => {
             // Run associated command when a menu item is clicked
