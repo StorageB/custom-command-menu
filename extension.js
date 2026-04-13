@@ -29,6 +29,7 @@ import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 import * as PanelMenu from 'resource:///org/gnome/shell/ui/panelMenu.js';
 import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
 
+import Gio from 'gi://Gio';
 import GLib from 'gi://GLib';
 import St from 'gi://St';
 
@@ -138,8 +139,9 @@ class CommandMenu extends PanelMenu.Button {
                     style_class: 'section-label-menu-item',
                 });
 
+                const labelText = entryRowA.trimStart().slice(matchingSeparator.length).trim();
                 const label = new St.Label({
-                    text: this._resolveLabel(entryRowA.trimStart().slice(matchingSeparator.length).trim()),
+                    text: labelText,
                     style_class: 'popup-subtitle-menu-item',
                     x_expand: true,
                     x_align: Clutter.ActorAlign.START,
@@ -147,6 +149,7 @@ class CommandMenu extends PanelMenu.Button {
                 });
 
                 label.set_style('font-size: 0.8em; padding: 0em; margin: 0em; line-height: 1em;');
+                this._resolveLabelAsync(label, labelText);
                 sectionLabel.actor.set_style('padding-top: 0px; padding-bottom: 0px; min-height: 0;');
                 sectionLabel.actor.add_child(label);
 
@@ -181,25 +184,45 @@ class CommandMenu extends PanelMenu.Button {
     }
 
 
-    _resolveLabel(label) {
-        // Dynamic: $(command) - runs a shell command and substitutes stdout
-        label = label.replace(/\$\(([^)]+)\)/g, (_match, cmd) => {
+    _resolveLabelAsync(labelWidget, text) {
+        const pattern = /\$\(([^)]+)\)/g;
+        let match;
+        while ((match = pattern.exec(text)) !== null) {
+            const fullMatch = match[0];
+            const cmd = match[1];
+            console.log(`[Custom Command Menu] Resolving dynamic label: ${cmd}`);
+            const cancellable = new Gio.Cancellable();
+            const timeoutId = GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT, 2, () => {
+                console.log(`[Custom Command Menu] Timeout for: ${cmd}`);
+                cancellable.cancel();
+                return GLib.SOURCE_REMOVE;
+            });
             try {
-                let [ok, stdout] = GLib.spawn_command_line_sync(`timeout 1 ${cmd}`);
-                if (ok && stdout) {
-                    return new TextDecoder().decode(stdout).trim();
-                }
+                const proc = Gio.Subprocess.new(
+                    ['sh', '-c', cmd],
+                    Gio.SubprocessFlags.STDOUT_PIPE | Gio.SubprocessFlags.STDERR_SILENCE
+                );
+                proc.communicate_utf8_async(null, cancellable, (proc, res) => {
+                    GLib.source_remove(timeoutId);
+                    try {
+                        const [, stdout] = proc.communicate_utf8_finish(res);
+                        console.log(`[Custom Command Menu] Got output for ${cmd}: '${stdout}'`);
+                        if (stdout) {
+                            const current = labelWidget.get_text();
+                            labelWidget.set_text(current.replace(fullMatch, stdout.trim()));
+                        }
+                    } catch (e) {
+                        console.log(`[Custom Command Menu] Error resolving dynamic label: ${cmd}: ${e}`);
+                    }
+                });
             } catch (e) {
-                console.log(`[Custom Command Menu] Error resolving dynamic label: ${cmd}: ${e}`);
+                GLib.source_remove(timeoutId);
+                console.log(`[Custom Command Menu] Error spawning command: ${cmd}: ${e}`);
             }
-            return _match;
-        });
-
-        return label;
+        }
     }
 
     _addMenuItem(label, command, icon, targetMenu = this.menu) {
-        label = this._resolveLabel(label);
         let newItem = new PopupMenu.PopupMenuItem('');
         if (icon) {
             let commandIcon = new St.Icon({
@@ -210,6 +233,7 @@ class CommandMenu extends PanelMenu.Button {
         }
         let commandLabel = new St.Label({ text: label });
         newItem.add_child(commandLabel);
+        this._resolveLabelAsync(commandLabel, label);
         
         newItem.connect('activate', () => {
             // Run associated command when a menu item is clicked
