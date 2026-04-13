@@ -77,6 +77,10 @@ Enter a name and command for each entry to include it in the drop-down menu.
 - For sudo commands that require a password, use `pkexec` before the command to get a password prompt. For example, `pkexec sudo command` prompts for your password and then runs the command. Alternatively, use `gnome-terminal -- sudo command` to open a terminal where you can enter your password.
 - To open the command configuration window for this extension directly, use the command `gnome-extensions prefs custom-command-list@storageb.github.com`.
 
+**Dynamic labels:**
+- Use `$(command)` in a name to substitute the output of a command. For example, `---$(hostname)` shows the hostname as a separator label.
+- Commands that take longer than 2 seconds are cancelled.
+
 ### Icons
 
 Enter the name of a system icon. 
