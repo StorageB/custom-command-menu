@@ -211,7 +211,7 @@ class CommandMenu extends PanelMenu.Button {
             this._pendingTimeouts.push(timeoutId);
             try {
                 const proc = Gio.Subprocess.new(
-                    ['sh', '-c', cmd],
+                    ['/usr/bin/env', 'bash', '-c', cmd],
                     Gio.SubprocessFlags.STDOUT_PIPE | Gio.SubprocessFlags.STDERR_SILENCE
                 );
                 proc.communicate_utf8_async(null, cancellable, (proc, res) => {
