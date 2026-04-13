@@ -190,10 +190,8 @@ class CommandMenu extends PanelMenu.Button {
         while ((match = pattern.exec(text)) !== null) {
             const fullMatch = match[0];
             const cmd = match[1];
-            console.log(`[Custom Command Menu] Resolving dynamic label: ${cmd}`);
             const cancellable = new Gio.Cancellable();
             const timeoutId = GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT, 2, () => {
-                console.log(`[Custom Command Menu] Timeout for: ${cmd}`);
                 cancellable.cancel();
                 return GLib.SOURCE_REMOVE;
             });
@@ -206,7 +204,6 @@ class CommandMenu extends PanelMenu.Button {
                     GLib.source_remove(timeoutId);
                     try {
                         const [, stdout] = proc.communicate_utf8_finish(res);
-                        console.log(`[Custom Command Menu] Got output for ${cmd}: '${stdout}'`);
                         if (stdout) {
                             const current = labelWidget.get_text();
                             labelWidget.set_text(current.replace(fullMatch, stdout.trim()));
