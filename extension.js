@@ -33,7 +33,6 @@ import Gio from 'gi://Gio';
 import GLib from 'gi://GLib';
 import St from 'gi://St';
 
-import {migrateSettings} from "./migration.js";
 
 let numberOfCommands = 99;
 
@@ -271,7 +270,7 @@ class CommandMenu extends PanelMenu.Button {
 export default class CommandMenuExtension extends Extension {
     enable() {
         this._settings = this.getSettings();
-        migrateSettings(this._settings);
+        this._settingsSignals = [];
 
         this._indicator = new CommandMenu(this._settings);
         let location = this._settings.get_int('menulocation-setting') === 2 ? 'right' : 'left';

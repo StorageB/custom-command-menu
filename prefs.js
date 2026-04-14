@@ -28,7 +28,6 @@ import GLib from 'gi://GLib';
 import { ExtensionPreferences, gettext as _ } from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js';
 import {releaseNotes} from './about.js';
 import commandsUI from "./commandsUI.js";
-import {migrateSettings} from "./migration.js";
 
 let numberOfCommands = 99;
 let fileName = 'commands.ini';
@@ -39,7 +38,6 @@ export default class CustomCommandListPreferences extends ExtensionPreferences {
     fillPreferencesWindow(window) {
         window.set_default_size(700, 850);
         window._settings = this.getSettings();
-        migrateSettings(window._settings);
 
         let page = new commandsUI({
             title: _('Commands'),
@@ -431,7 +429,6 @@ export default class CustomCommandListPreferences extends ExtensionPreferences {
                 if (response === 'reset') {
                     try {
                         for (const key of window._settings.list_keys()) {
-                            if (key === 'v13-migration-complete') continue;
                             window._settings.reset(key);
                         }
                         page.refreshCommandList();
