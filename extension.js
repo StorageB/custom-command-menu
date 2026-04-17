@@ -43,7 +43,6 @@ class CommandMenu extends PanelMenu.Button {
 
     constructor(mySettings) {
         super(0.5, _('Commands'));
-        this._pendingTimeouts = [];
         this._pendingCancellables = [];
         let labelText;
 
@@ -186,11 +185,8 @@ class CommandMenu extends PanelMenu.Button {
 
 
     destroy() {
-        for (const id of this._pendingTimeouts)
-            GLib.source_remove(id);
         for (const c of this._pendingCancellables)
             c.cancel();
-        this._pendingTimeouts = [];
         this._pendingCancellables = [];
         super.destroy();
     }
@@ -203,18 +199,23 @@ class CommandMenu extends PanelMenu.Button {
             const cmd = match[1];
             const cancellable = new Gio.Cancellable();
             this._pendingCancellables.push(cancellable);
-            const timeoutId = GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT, 2, () => {
-                cancellable.cancel();
+            let timeoutId = GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT, 2, () => {
+                if (timeoutId > 0) {
+                    cancellable.cancel();
+                    timeoutId = 0;
+                }
                 return GLib.SOURCE_REMOVE;
             });
-            this._pendingTimeouts.push(timeoutId);
             try {
                 const proc = Gio.Subprocess.new(
                     ['bash', '-c', cmd],
                     Gio.SubprocessFlags.STDOUT_PIPE | Gio.SubprocessFlags.STDERR_SILENCE
                 );
                 proc.communicate_utf8_async(null, cancellable, (proc, res) => {
-                    GLib.source_remove(timeoutId);
+                    if (timeoutId > 0) {
+                        GLib.Source.remove(timeoutId);
+                        timeoutId = 0;
+                    }
                     try {
                         const [, stdout] = proc.communicate_utf8_finish(res);
                         if (stdout) {
@@ -226,7 +227,10 @@ class CommandMenu extends PanelMenu.Button {
                     }
                 });
             } catch (e) {
-                GLib.source_remove(timeoutId);
+                if (timeoutId > 0) {
+                    GLib.Source.remove(timeoutId);
+                    timeoutId = 0;
+                }
                 console.log(`[Custom Command Menu] Error spawning command: ${cmd}: ${e}`);
             }
         }
@@ -280,46 +284,51 @@ export default class CommandMenuExtension extends Extension {
 
         this._commandRefreshTimeout = null;
         for (let k = 1; k <= numberOfCommands; k++) {
-            this._settings.connect(`changed::command${k}`, () => {
+            this._settingsSignals.push(this._settings.connect(`changed::command${k}`, () => {
         
                 if (this._commandRefreshTimeout !== null) return;
 
-                this._commandRefreshTimeout = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 200, () => {
+                this._commandRefreshTimeout = GLib.timeout_add(GLib.PRIORITY_DEFAULT, 300, () => {
                         this._commandRefreshTimeout = null;
                         refreshIndicator.call(this);
                         return GLib.SOURCE_REMOVE;
                     }
                 );
-            });
+            }));
         }
 
         // Watch for changes to menu display settings
-        this._settings.connect('changed::menuoptions-setting', () => {
+        this._settingsSignals.push(this._settings.connect('changed::menuoptions-setting', () => {
             refreshIndicator.call(this);
-        });
-        this._settings.connect('changed::menutitle-setting', () => {
+        }));
+        this._settingsSignals.push(this._settings.connect('changed::menutitle-setting', () => {
             let newLabelText = this._settings.get_string('menutitle-setting');
             this._indicator.updateLabel(newLabelText);
-        });
-        this._settings.connect('changed::menuicon-setting', () => {
+        }));
+        this._settingsSignals.push(this._settings.connect('changed::menuicon-setting', () => {
             let newLabelText = this._settings.get_string('menuicon-setting');
             this._indicator.updateLabel(newLabelText);
-        });
-        this._settings.connect('changed::command-order', () => {
+        }));
+        this._settingsSignals.push(this._settings.connect('changed::command-order', () => {
             refreshIndicator.call(this);
             const newCommandOrder = this._settings.get_value('command-order').deep_unpack();
-            //console.log('[Custom Command Menu] command-order settings changed:\n', newCommandOrder.join(', '));  
-        });
-        this._settings.connect('changed::menulocation-setting', () => {
+        }));
+        this._settingsSignals.push(this._settings.connect('changed::menulocation-setting', () => {
             refreshIndicator.call(this);
-        });
-        this._settings.connect('changed::menuposition-setting', () => {
+        }));
+        this._settingsSignals.push(this._settings.connect('changed::menuposition-setting', () => {
             refreshIndicator.call(this);
-        });        
+        }));        
 
         function refreshIndicator() {
-            this._indicator.destroy();
-            delete this._indicator;
+            if (this._commandRefreshTimeout !== null) {
+                GLib.Source.remove(this._commandRefreshTimeout);
+                this._commandRefreshTimeout = null;
+            }
+            if (this._indicator) {
+                this._indicator.destroy();
+                this._indicator = null;
+            }
             this._indicator = new CommandMenu(this._settings);
             let location = this._settings.get_int('menulocation-setting') === 2 ? 'right' : 'left';
             let pos = this._settings.get_int('menuposition-setting');
@@ -329,9 +338,19 @@ export default class CommandMenuExtension extends Extension {
     }
 
     disable() {
-        this._indicator.destroy();
-        delete this._indicator;
-        this._indicator = null;
+        
+        if (this._settingsSignals) {
+            for (const id of this._settingsSignals) {
+                this._settings.disconnect(id);
+            }
+            this._settingsSignals = null;
+        }
+        
+        if (this._indicator) {
+            this._indicator.destroy();
+            this._indicator = null;
+        }
+        
         this._settings = null;
 
         if (this._commandRefreshTimeout !== null) {
