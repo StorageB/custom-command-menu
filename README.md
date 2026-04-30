@@ -81,6 +81,9 @@ Enter a name and command for each entry to include it in the drop-down menu.
 - Use `$(command)` in a name to substitute the output of a command. For example, `---$(hostname)` shows the hostname as a separator label.
 - Commands that take longer than 2 seconds are cancelled.
 
+**Special commands:**
+- Use `##ShowApplications;` as a command to open the GNOME applications view.
+
 ### Icons
 
 Enter the name of a system icon. 
