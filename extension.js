@@ -251,7 +251,7 @@ class CommandMenu extends PanelMenu.Button {
         this._resolveLabelAsync(commandLabel, label);
         
         newItem.connect('activate', () => {
-            if (command === '##ShowApplications;') {
+            if (command.trim().toLowerCase() === '##showapplications') {
                 Main.overview.show(OverviewControls.ControlsState.APP_GRID);
                 return;
             }

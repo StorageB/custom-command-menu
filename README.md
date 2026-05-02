@@ -82,7 +82,7 @@ Enter a name and command for each entry to include it in the drop-down menu.
 - Commands that take longer than 2 seconds are cancelled.
 
 **Special commands:**
-- Use `##ShowApplications;` as a command to open the GNOME applications view.
+- Use `##ShowApplications` as a command to open the GNOME applications view.
 
 ### Icons
 
