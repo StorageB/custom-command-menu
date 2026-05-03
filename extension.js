@@ -28,6 +28,7 @@ import {Extension, gettext as _} from 'resource:///org/gnome/shell/extensions/ex
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 import * as PanelMenu from 'resource:///org/gnome/shell/ui/panelMenu.js';
 import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
+import * as OverviewControls from 'resource:///org/gnome/shell/ui/overviewControls.js';
 
 import Gio from 'gi://Gio';
 import GLib from 'gi://GLib';
@@ -250,6 +251,11 @@ class CommandMenu extends PanelMenu.Button {
         this._resolveLabelAsync(commandLabel, label);
         
         newItem.connect('activate', () => {
+            if (command.trim().toLowerCase() === '##showapplications') {
+                Main.overview.show(OverviewControls.ControlsState.APP_GRID);
+                return;
+            }
+
             // Run associated command when a menu item is clicked
             console.log(_('[Custom Command Menu] Attempting to execute command:\n%s').replace('%s', command));
             let [success, pid] = GLib.spawn_async(null, ["/usr/bin/env", "bash", "-c", command], null, GLib.SpawnFlags.SEARCH_PATH, null);
