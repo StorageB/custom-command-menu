@@ -317,7 +317,6 @@ export default class CommandMenuExtension extends Extension {
         }));
         this._settingsSignals.push(this._settings.connect('changed::command-order', () => {
             refreshIndicator.call(this);
-            const newCommandOrder = this._settings.get_value('command-order').deep_unpack();
         }));
         this._settingsSignals.push(this._settings.connect('changed::menulocation-setting', () => {
             refreshIndicator.call(this);
@@ -336,6 +335,7 @@ export default class CommandMenuExtension extends Extension {
                 this._indicator = null;
             }
             this._indicator = new CommandMenu(this._settings);
+            if (this._settings.get_int('menuoptions-setting') === 2) this._indicator.updateLabel(this._settings.get_string('menuicon-setting'));
             let location = this._settings.get_int('menulocation-setting') === 2 ? 'right' : 'left';
             let pos = this._settings.get_int('menuposition-setting');
             if (this._settings.get_int('menulocation-setting') === 0) {Main.panel.addToStatusArea('command-menu', this._indicator, Main.sessionMode.panel.left.length, 'left');}

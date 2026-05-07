@@ -432,6 +432,8 @@ export default class CustomCommandListPreferences extends ExtensionPreferences {
                             window._settings.reset(key);
                         }
                         page.refreshCommandList();
+                        menuComboRow.selected = window._settings.get_int('menuoptions-setting');
+                        menuComboRow.notify('selected');
                         window.add_toast(Adw.Toast.new(_('All settings reset to defaults')));
                     } catch (e) {
                         window.add_toast(Adw.Toast.new(_('Failed to reset settings')));
