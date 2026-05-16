@@ -86,15 +86,17 @@ Enter a name and command for each entry to include it in the drop-down menu.
 
 ### Icons
 
-Enter the name of a system icon. 
+Enter the name of a system icon (without the file extension). 
 
-**For a list of available symbolic icons refer to:**
+**For a list of default symbolic icons refer to:**
 - [GNOME default icons](https://github.com/StorageB/icons/blob/main/GNOME48Adwaita/icons.md)
 - [Ubuntu Yaru icons](https://github.com/StorageB/icons/blob/main/Yaru/icons.md)
+- Or browse the icon directory for your system’s theme (typically /usr/share/icons) and enter the name of an icon (without the file extension).
 
-Alternatively, browse the icon directory for your system’s theme (typically /usr/share/icons) and enter the name of an icon (without the file extension).
+** Custom icons**
 
-To use a custom icon, place an SVG icon in: `~/.local/share/icons`. Reboot and then enter the icon name (without the file extension). 
+- Place an SVG icon in: `~/.local/share/icons`
+- Reboot and then enter the icon name (without the file extension). 
 
 
 <br>
