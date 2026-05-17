@@ -93,7 +93,7 @@ Enter the name of a system icon (without the file extension).
 - [Ubuntu Yaru icons](https://github.com/StorageB/icons/blob/main/Yaru/icons.md)
 - Or browse the icon directory for your system’s theme (typically /usr/share/icons) and enter the name of an icon (without the file extension).
 
-** Custom icons**
+**Custom icons**
 
 - Place an SVG icon in: `~/.local/share/icons`
 - Reboot and then enter the icon name (without the file extension). 
