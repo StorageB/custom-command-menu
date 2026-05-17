@@ -88,10 +88,10 @@ Enter a name and command for each entry to include it in the drop-down menu.
 
 Enter the name of a system icon (without the file extension). 
 
-**For a list of default symbolic icons refer to:**
+**For available symbolic icons refer to:**
 - [GNOME default icons](https://github.com/StorageB/icons/blob/main/GNOME48Adwaita/icons.md)
 - [Ubuntu Yaru icons](https://github.com/StorageB/icons/blob/main/Yaru/icons.md)
-- Or browse the icon directory for your system’s theme (typically /usr/share/icons) and enter the name of an icon (without the file extension).
+- Or browse the icon directory for your system’s theme (typically `/usr/share/icons`) and enter the name of an icon (without the file extension).
 
 **Custom icons**
 
@@ -103,9 +103,9 @@ Enter the name of a system icon (without the file extension).
 
 ## Backup and Restore
 
-Use the import/export buttons in the preferences window to save or load the command list. Exporting will create an editable commands.ini file in your home directory.
+Use the import/export buttons in the preferences window to save or load the command list. Exporting will create an editable `commands.ini` file in your home directory.
 
-Example commands.ini entry:
+Example `commands.ini` entry:
 ```
 [Command 1]
 Name=Hello world!
