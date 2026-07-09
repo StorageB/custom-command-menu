@@ -167,7 +167,7 @@ export default class commandsUI extends Adw.PreferencesPage {
                 if (child instanceof Adw.ExpanderRow && !child.visible) {
 
                     const [name, command, icon] = this._settings.get_value(`command${row._rowNumber}`).deep_unpack();
-                    const newName = `${name} (copy)`;
+                    const newName = `${name} ${_('(copy)')}`;
 
                     this._settings.set_value(`command${child._rowNumber}`, new GLib.Variant('(sssb)', [newName, command, icon, true]));
 
