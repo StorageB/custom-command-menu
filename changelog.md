@@ -8,6 +8,7 @@
 
 **Improvements**
 
+- Improved translation support and updated translations by IlCraccatore2011.
 - Fixed menu icon update and reset issues affecting Bluefin/Dakota.
 
 ## Version 14 (2026-05-02)
