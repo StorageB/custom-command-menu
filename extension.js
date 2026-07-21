@@ -312,8 +312,6 @@ export default class CommandMenuExtension extends Extension {
             this._indicator.updateLabel(newLabelText);
         }));
         this._settingsSignals.push(this._settings.connect('changed::menuicon-setting', () => {
-            //let newLabelText = this._settings.get_string('menuicon-setting');
-            //this._indicator.updateLabel(newLabelText);
             refreshIndicator.call(this);
         }));
         this._settingsSignals.push(this._settings.connect('changed::command-order', () => {
