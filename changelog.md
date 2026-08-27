@@ -1,10 +1,18 @@
 <!-- changelog.md -->
 
-## Version 15 (not yet released)
+## Version 16 (2026-08-27)
+
+**New Features**
+
+- Support added for GNOME 51.
+
+## Version 15 (2026-07-21)
 
 **New Features**
 
 - Use special command ##ShowApplications to open application overview. Feature contributed by Dylan M. Taylor.
+- Improved translation support and updated translations by IlCraccatore2011.
+- Fixed menu icon update and reset issues affecting Bluefin/Dakota.
 
 **Improvements**
 
